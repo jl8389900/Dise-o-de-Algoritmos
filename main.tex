@@ -174,7 +174,7 @@ Los emparejamientos y los emparejamientos perfectos son objetos a los que recurr
 
 Ahora podemos agregar la noción de preferencias en este conjunto. Cada hombre $m \in M$  clasifica en orden de preferencia a todas las mujeres; diremos que $m$ prefiere a $w$ antes que $w'$, si $m$ clasificó antes a $w$ que a $w'$. Nos referiremos a la clasificación ordenada de $m$ como su lista de preferencias. No permitiremos empates dentro de una clasificación. Cada mujer, análogamente, clasifica a los hombres. 
 
-Si se da un emparejamiento perfecto $S$, ¿qué podría salir mal? Guiados por nuestra motivación inicial en termino de empleadores y postulantes, nos puede preocupar la siguiente situación: hay dos pares $(m, w)$ y $(m', w')$ en $S$ con la característica de que $m$ prefiere a $w'$ y $w'$ prefiere a $m$ antes que a $m'$. En este caso, no hay nada que impida que $m$ y $w'$ abandonen sus actuales parejas y se junten entre ellos; el conjunto de matrimonios no es auto-obligable. Diremos, entonces, que el par $(m,w')$ es una inestabilidad respecto a $S$: $(m,w')$ no pertenece a $S$, pero $m$ y $w'$ entre si como su compañero en $S$. 
+Si se da un emparejamiento perfecto $S$, ¿qué podría salir mal? Guiados por nuestra motivación inicial en termino de empleadores y postulantes, nos puede preocupar la siguiente situación: hay dos pares $(m, w)$ y $(m', w')$ en $S$ con la característica de que $m$ prefiere a $w'$ y $w'$ prefiere a $m$ antes que a $m'$. En este caso, no hay nada que impida que $m$ y $w'$ abandonen sus actuales parejas y se junten entre ellos; el conjunto de matrimonios no es auto-obligable. Diremos, entonces, que el par $(m,w')$ es una inestabilidad respecto a $S$: $(m,w')$ no pertenece a $S$, pero $m$ y $w'$ se prefieren entre si antes que sus compañeros en $S$. 
    
 Nuestra meta es un conjunto de matrimonios que no tenga inestabilidades. \textbf{Diremos que un emparejamiento $S$ es estable si}: (i) es perfecto, y (ii) no existen inestabilidades con respecto a $S$. Dos preguntas surgen inmediatamente:
 
@@ -820,6 +820,9 @@ Uno puede traducir directamente entre logaritmos de diferentes bases usando la s
 $$\log_an = \frac{\log_bn}{\log_ba}$$
 
 Esta ecuación explica por qué a menudo notarás personas escribiendo cotas como $O(\log(n))$ sin indicar la base del logaritmo. Este no es un uso descuidado: la identidad anterior dice que $\log_an = \frac{1}{\log_ba}\cdot\log_bn$ entonces el punto es que $\log_an = \Theta(\log_bn)$, y la base del logaritmo no es importante cuando se escriben cotas usando notación asintótica.
+
+\todo[inline]{revisado hasta acá}
+
 
 \textbf{Exponenciales} Las funciones exponenciales son funciones de la forma $f(n) = r^n$ para alguna base constante $r$. Aquí nos ocuparemos del caso en el que $r>1$, que da como resultado una función de crecimiento muy rápido.\\
 

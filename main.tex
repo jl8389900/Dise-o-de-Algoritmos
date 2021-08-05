@@ -102,6 +102,7 @@
 
 % H que ponga la imagen justo aquí, similar a h! y con muchas papeletas de hacer cosas rarunas
 
+
 \chapter*{}
 
 Bajo ningún concepto estas notas pretender ser un sustituto del libro ``Algorithm Design'' de Jon Kleinberg y Éva Tardos, sino una simple traducción adaptada al curso de Programación 3 de la Facultad de Ingeniería de la UDELAR. 
@@ -247,19 +248,17 @@ Aquí hay una descripción concreta del algoritmo de Gale-Shapley, la Figura \re
     \includegraphics[width=0.8\textwidth]{Imagenes-Seccion2/Imagen1_2.PNG}
 \end{figure}
 
-Algo intrigante es que, aunque el algoritmo G-S es bastante simple de declarar, no es inmediatamente obvio que devuelve un emparejamiento estable, o incluso una emparejamiento perfecto. Procedemos a probar esto ahora, a través de una secuencia de hechos intermedios.
+Algo intrigante es que, aunque el algoritmo G-S es bastante simple de declarar, no es inmediatamente obvio que devuelve un emparejamiento estable, o incluso un emparejamiento perfecto. Procedemos a probar esto ahora, a través de una secuencia de hechos intermedios.
 
 \subsection*{Analizando el algoritmo}  
 
-Primero consideremos el punto de vista de una mujer durante la ejecución del algoritmo. Por un momento, nadie se le ha propuesto, y está soletera. Entonces, un hombre $m$ puede proponerle matrimonio, y ella se compromete. A medida que pasa el tiempo, ella puede recibir propuestas adicionales, aceptando aquellas que vienen de un hombre con mayor preferencia en su lista que el actual compañero. Descubrimos lo siguiente:
+Primero consideremos el punto de vista de una mujer durante la ejecución del algoritmo. Por un momento, nadie se le ha propuesto, y está soltera. Entonces, un hombre $m$ puede proponerle matrimonio, y ella se compromete. A medida que pasa el tiempo, ella puede recibir propuestas adicionales, aceptando aquellas que vienen de un hombre con mayor preferencia en su lista que el actual compañero. Descubrimos lo siguiente:
 
-\vspace{0.2cm}
-%
-\noindent\textbf{(1.1)} \textit{$w$ permanece comprometida desde el momento que recibe su primera proposición; y la secuencia de parejas irá mejorando (en términos de preferencia).}
-%
-\vspace{0.2cm}
-%
-El punto de vista de un hombre durante la ejecución del algoritmo, es bastante diferente. Él está soltero hasta que se le propone a la mujer mejor clasificada en su lista; en este punto él puede o no comprometerse. A medida que pasa el tiempo, su estado se puede alterar, entre soltero y comprometido. Sin embargo, la siguiente propiedad se sostiene:
+\begin{theorem}
+$w$ permanece comprometida desde el momento que recibe su primera proposición; y la secuencia de parejas irá mejorando (en términos de preferencia).
+\end{theorem}
+
+El punto de vista de un hombre durante la ejecución del algoritmo, es bastante diferente. Él está soltero hasta que se le propone a la mujer mejor clasificada en su lista; en este punto él puede o no comprometerse. A medida que pasa el tiempo, su estado se puede alterar, entre soltero y comprometido. Sin embargo, la siguiente propiedad se cumple:
 \vspace{0.2cm}
 
 \noindent\textbf{(1.2)} \textit{La secuencia de mujeres a las que $m$ se le propone, irá empeorando (en términos de preferencia).}

@@ -59,13 +59,12 @@
 \renewcommand{\headrulewidth}{0pt} % remove lines as well
 \renewcommand{\footrulewidth}{0pt}
 
+\newtheoremstyle{dotless}{}{}{\itshape}{}{\bfseries}{}{ }{}
+\theoremstyle{dotless}
 \newtheorem{theorem}{}%[section]
 \renewcommand*\thetheorem{\bfseries(\arabic{chapter}.\arabic{theorem})}
 \renewcommand{\qedsymbol}{$\blacksquare$}
-\let\oldproofname=\proofname
-\renewcommand{\proofname}{\rm\bf{\oldproofname}}
-
-
+\renewenvironment{proof}{{\noindent\bfseries Demostración.}}{\qed\vspace{12pt}}
 
 % \usepackage{fontspec}
 % \setmainfont[
@@ -261,17 +260,27 @@ $w$ permanece comprometida desde el momento que recibe su primera proposición; 
 El punto de vista de un hombre durante la ejecución del algoritmo, es bastante diferente. Él está soltero hasta que se le propone a la mujer mejor clasificada en su lista; en este punto él puede o no comprometerse. A medida que pasa el tiempo, su estado se puede alterar, entre soltero y comprometido. Sin embargo, la siguiente propiedad se cumple:
 \vspace{0.2cm}
 
-\noindent\textbf{(1.2)} \textit{La secuencia de mujeres a las que $m$ se le propone, irá empeorando (en términos de preferencia).}
+\begin{theorem}
+La secuencia de mujeres a las que $m$ se le propone, irá empeorando (en términos de preferencia).
+\end{theorem}
+ 
 \vspace{0.2cm}
 
 Ahora mostraremos que el algoritmo termina, y daremos un límite al máximo número de iteraciones necesarias para que finalice.
-\vspace{0.2cm}
-
-\noindent\colorbox{mygray}{\parbox{0.98\textwidth}{\textbf{(1.3)} \textit{El algoritmo G-S finaliza después de un máximo de $n^2$ iteraciones en el ciclo del} \texttt{While}.}}
 
 \vspace{0.2cm}
 
-\textbf{Demostración:} Una estrategia útil para acotar el tiempo de ejecución de un algoritmo, es encontrar una medida de progreso. Esto es, buscamos una forma precisa de decir que cada paso dado por el algoritmo lo lleva más cerca de su finalización. En el caso del algoritmo actual, cada iteración consiste en que un hombre se le propone (por única vez) a una mujer a la que nunca se le ha propuesto. Entonces, si denotamos $P(t)$ al conjunto de pares $(m, w)$ tal que $m$ se le ha propuesto a $w$ al final de la iteración $t$, vemos que para todo $t$ el tamaño de $P(t+1)$ es estrictamente mayor que el tamaño de $P(t)$. Pero solo hay $n^2$ pares posibles de hombres y mujeres en total; entonces, el valor de $P(\cdot)$ puede aumentar como mucho $n^2$ veces en el transcurso del algoritmo. Se deduce que puede haber como máximo $n^2$ iteraciones. $\blacksquare$ 
+\noindent\colorbox{mygray}{\parbox{\textwidth}{
+\begin{theorem}
+El algoritmo G-S finaliza después de un máximo de $n^2$ iteraciones en el ciclo del \texttt{While}.
+\end{theorem}
+}}
+
+\vspace{0.2cm}
+
+\begin{proof}
+Una estrategia útil para acotar el tiempo de ejecución de un algoritmo, es encontrar una medida de progreso. Esto es, buscamos una forma precisa de decir que cada paso dado por el algoritmo lo lleva más cerca de su finalización. En el caso del algoritmo actual, cada iteración consiste en que un hombre se le propone (por única vez) a una mujer a la que nunca se le ha propuesto. Entonces, si denotamos $P(t)$ al conjunto de pares $(m, w)$ tal que $m$ se le ha propuesto a $w$ al final de la iteración $t$, vemos que para todo $t$ el tamaño de $P(t+1)$ es estrictamente mayor que el tamaño de $P(t)$. Pero solo hay $n^2$ pares posibles de hombres y mujeres en total; entonces, el valor de $P(\cdot)$ puede aumentar como mucho $n^2$ veces en el transcurso del algoritmo. Se deduce que puede haber como máximo $n^2$ iteraciones. 
+\end{proof} 
 
 Vale la pena destacar dos puntos sobre el hecho anterior y su prueba. Primero, hay ejecuciones del algoritmo (con ciertas listas de preferencias) que pueden implicar cerca de $n^2$ iteraciones, por lo que este análisis no está lejos de ser el mejor posible.
 En segundo lugar, hay muchas cantidades que no habrían funcionado correctamente como medida de progreso para el algoritmo, ya que no necesariamente se incrementan en cada iteración. Por ejemplo, el número de individuos solteros podría permanecer constante de una iteración a la siguiente, al igual que el número de pares comprometidos. Así, estas cantidades no pueden usarse directamente para dar un cota superior en el número máximo posible de iteraciones,como en el párrafo anterior.
@@ -282,33 +291,41 @@ Esencialmente, tenemos que demostrar que ningún hombre puede ``caerse'' del fin
 En este caso, el conjunto de parejas comprometidas sería efectivamente un emparejamiento perfecto.
 Así que lo más importante que tenemos que demostrar es lo siguiente.
 
-\vspace{0.2cm}\noindent
-\textbf{(1.4)} \textit{Si $m$ esta soltero en algún punto de la ejecución del algoritmo, entonces hay una mujer a la que aún no se le ha propuesto.}
-\vspace{0.2cm}
+\begin{theorem}
+Si $m$ esta soltero en algún punto de la ejecución del algoritmo, entonces hay una mujer a la que aún no se le ha propuesto.
+\end{theorem}
 
-\textbf{Demostración:} Supongamos que se llega al punto en que $m$ esta soltero, pero ya se le propuso a todas las mujeres. Luego, por (1.1), cada una de las $n$ mujeres esta comprometida en este momento. Dado que el conjunto de pares comprometidos forma un emparejamiento, también debe haber $n$ hombres comprometidos. Pero solo hay $n$ hombres en total, y $m$ no esta comprometido, con lo cual se llega a una contradicción. 
+\begin{proof}
+Supongamos que se llega al punto en que $m$ esta soltero, pero ya se le propuso a todas las mujeres. Luego, por (1.1), cada una de las $n$ mujeres esta comprometida en este momento. Dado que el conjunto de pares comprometidos forma un emparejamiento, también debe haber $n$ hombres comprometidos. Pero solo hay $n$ hombres en total, y $m$ no esta comprometido, con lo cual se llega a una contradicción. 
+\end{proof}
 
-\vspace{0.2cm}\noindent
-\textbf{(1.5)}\textit{El conjunto devuelto $S$ es un emparejamiento 	 perfecto}
-\vspace{0.2cm}
+\begin{theorem}
+El conjunto devuelto $S$ es un emparejamiento perfecto
+\label{thm:1.5}
+\end{theorem}
 
-\textbf{Demostración:} El conjunto de pares comprometidos siempre forma un emparejamiento. Supongamos que el algoritmo termina con un hombre $m$ libre. Al finalizar, este debe ser el caso en que $m$ se propuso a todas las mujeres, ya que sino el ciclo while no hubiera terminado. Sin embargo esto contradice (1.4), que dice que no puede haber un hombre libre luego de haberse propuesto a todas las mujeres.
+\begin{proof}
+El conjunto de pares comprometidos siempre forma un emparejamiento. Supongamos que el algoritmo termina con un hombre $m$ libre. Al finalizar, este debe ser el caso en que $m$ se propuso a todas las mujeres, ya que sino el ciclo while no hubiera terminado. Sin embargo esto contradice (1.4), que dice que no puede haber un hombre libre luego de haberse propuesto a todas las mujeres.
+\end{proof}
 
 Finalmente probamos la propiedad principal del algoritmo, es decir, que resulta en un emparejamiento estable.
 
-\vspace{0.2cm}\noindent
-\colorbox{mygray}{\parbox{0.98\textwidth}{
-\textbf{(1.6)} \textit{ Consideremos una ejecución del algoritmo G-S, que devuelve un conjunto S de pares. El conjunto S es un emparejamiento estable.}}}
-\vspace{0.2cm}
+\noindent\colorbox{mygray}{\parbox{0.98\textwidth}{
+\begin{theorem}
+Consideremos una ejecución del algoritmo G-S, que devuelve un conjunto S de pares. El conjunto S es un emparejamiento estable.
+\end{theorem}
+}}
 
-\textbf{Demostración:} Ya vimos en (1.5), que $S$ es un emparejamiento perfecto. De esta forma, para probar que S es un emparejamiento estable, asumiremos que hay una inestabilidad con respecto a $S$, y obtener una contradicción. Como definimos anteriormente, dicha inestabilidad abarca dos pares, $(m,w)$ y $(m',w')$, en $S$, con las propiedades de que:
+\begin{proof}
+Ya vimos en \ref{thm:1.5}, que $S$ es un emparejamiento perfecto. De esta forma, para probar que S es un emparejamiento estable, asumiremos que hay una inestabilidad con respecto a $S$, y obtener una contradicción. Como definimos anteriormente, dicha inestabilidad abarca dos pares, $(m,w)$ y $(m',w')$, en $S$, con las propiedades de que:
 
 \begin{itemize}
     \item $m$ prefiere a $w'$ antes que a $w$ 
     \item $w'$ prefiere a $m$ antes que a $m'$
 \end{itemize}
     
-En la ejecución del algoritmo que generó $S$, la ultima propuesta de $m'$ fue, por definición, a $w$. Ahora nos preguntamos, ¿$m$ le propuso a $w'$ en algún punto anterior en esta ejecución? Si no lo hizo, entonces $w$ está más adelante en la lista de preferencias de $m$, contradiciendo nuestra suposición de que $m$ prefiere a $w'$ antes que a $w$. Si lo hizo, entonces $m$ fue rechazado por $w$, a favor de otro hombre $m''$, a quien $w$ prefiere antes que a $m$; $m'$ es la pareja final de $w'$, entonces, o $m'$ = $m''$, o por (1.1), $w'$ prefiere a $m'$ antes que a $m''$. Cualquiera de estas dos situaciones contradice nuestra suposición de que $w'$ prefiere a $m$ antes que a $m'$. Luego, $S$ es un emparejamiento estable. $\blacksquare$ 
+En la ejecución del algoritmo que generó $S$, la ultima propuesta de $m'$ fue, por definición, a $w$. Ahora nos preguntamos, ¿$m$ le propuso a $w'$ en algún punto anterior en esta ejecución? Si no lo hizo, entonces $w$ está más adelante en la lista de preferencias de $m$, contradiciendo nuestra suposición de que $m$ prefiere a $w'$ antes que a $w$. Si lo hizo, entonces $m$ fue rechazado por $w$, a favor de otro hombre $m''$, a quien $w$ prefiere antes que a $m$; $m'$ es la pareja final de $w'$, entonces, o $m'$ = $m''$, o por (1.1), $w'$ prefiere a $m'$ antes que a $m''$. Cualquiera de estas dos situaciones contradice nuestra suposición de que $w'$ prefiere a $m$ antes que a $m'$. Luego, $S$ es un emparejamiento estable. 
+\end{proof} 
 
 \subparagraph{Extensiones}
 
@@ -334,20 +351,23 @@ Para empezar, nuestro ejemplo refuerza el punto de que el algoritmo G-S está re
 
 En el presente contexto, veremos que la respuesta a nuestra pregunta es sorprendentemente limpia: todas las ejecuciones del algoritmo G-S producen la misma coincidencia. Procedemos a demostrarlo ahora.
 
-\textbf{Todas las ejecuciones producen el mismo ajuste.}
+\textbf{Todas las ejecuciones producen el mismo emparejamiento.}
 Hay varias maneras posibles de probar una afirmación como esta, muchas de las cuales resultarían en argumentos bastante complicados. Resulta que el enfoque más fácil y más informativo para nosotros será caracterizar de forma única la coincidencia que se obtiene y luego mostrar que todas las ejecuciones dan como resultado el emparejamiento con esta caracterización.
-¿Cuál es la caracterización? Mostraremos que cada hombre termina con la "mejor pareja posible" en un sentido concreto. (Recuerde que esto es cierto si todos los hombres prefieren mujeres diferentes). Primero, diremos que una mujer $w$ es una pareja válida de un hombre $m$ si hay una pareja estable que contiene el par $(m, w)$. Diremos que $w$ es la mejor pareja válida de $m$ si $w$ es una pareja válida de $m$, y ninguna mujer con un rango $m$ superior a $w$ es una pareja válida de $m$. Utilizaremos el mejor $(m)$ para denotar la mejor pareja válida de $m$. Ahora, deje que $S*$ denote el conjunto de pares ${(m, mejor (m)): m  \in  M}$. Vamos a probar el siguiente hecho
+¿Cuál es la caracterización? Mostraremos que cada hombre termina con la ``mejor pareja posible'' en un sentido concreto. (Recuerde que esto es cierto si todos los hombres prefieren mujeres diferentes). Primero, diremos que una mujer $w$ es una pareja válida de un hombre $m$ si hay una pareja estable que contiene el par $(m, w)$. Diremos que $w$ es la mejor pareja válida de $m$ si $w$ es una pareja válida de $m$, y ninguna mujer con un rango $m$ superior a $w$ es una pareja válida de $m$. Utilizaremos el mejor $(m)$ para denotar la mejor pareja válida de $m$. Ahora, deje que $S*$ denote el conjunto de pares $\{(m, mejor (m)): m  \in  M\}$. Vamos a probar el siguiente hecho
 
 \vspace{2mm}\noindent
 \colorbox{mygray}{\parbox{\textwidth}{
-\textbf{(1.7)} \textit{Cada ejecución del algoritmo $G-S$ da como resultado el conjunto $S^*$.}}}
+\begin{theorem}
+Cada ejecución del algoritmo $G-S$ da como resultado el conjunto $S^*$.
+\end{theorem}
+}}
 \vspace{2mm}
 
-Esta afirmación es sorprendente en varios niveles. En primer lugar, tal y como está definido, no hay ninguna razón para creer que S∗ sea un emparejamiento, y mucho menos un emparejamiento estable. Después de todo, ¿por qué no podría ocurrir que dos hombres tengan la misma mejor pareja válida? En segundo lugar, el resultado muestra que el algoritmo G-S da el mejor resultado posible para todos los hombres simultáneamente; no hay emparejamiento estable en el que cualquiera de los hombres podría haber esperado obtener un resultado mejor. Y por último, responde a nuestra pregunta anterior mostrando que el orden de las propuesta que se hacen en el algoritmo G-S no tiene absolutamente ningún efecto en el resultado final.
+Esta afirmación es sorprendente en varios niveles. En primer lugar, tal y como está definido, no hay ninguna razón para creer que $S^*$ sea un emparejamiento, y mucho menos un emparejamiento estable. Después de todo, ¿por qué no podría ocurrir que dos hombres tengan la misma mejor pareja válida? En segundo lugar, el resultado muestra que el algoritmo G-S da el mejor resultado posible para todos los hombres simultáneamente; no hay emparejamiento estable en el que cualquiera de los hombres podría haber esperado obtener un resultado mejor. Y por último, responde a nuestra pregunta anterior mostrando que el orden de las propuesta que se hacen en el algoritmo G-S no tiene absolutamente ningún efecto en el resultado final.
 
 A pesar de todo esto, la prueba no es tan difícil.
 
-\textbf{Demostración}. 
+\begin{proof}
 Supongamos, a modo de contradicción, que alguna ejecución $\mathcal{E}$ del algoritmo algoritmo G-S da lugar a un emparejamiento $S$ en el que algún hombre es emparejado con una mujer que no es su mejor pareja válida. Dado que los hombres proponen en orden decreciente de preferencia, esto significa que algún hombre es rechazado por una pareja válida durante la ejecución $\mathcal{E}$ del algoritmo. Así pues, consideremos el primer momento durante la ejecución $\mathcal{E}$ en el que algún hombre, digamos $m$, es rechazado por una pareja válida $w$. De nuevo, dado que los hombres proponen en orden decreciente de preferencia, y dado que esta es la primera vez que se produce un rechazo de este tipo, debe ser que $w$ es la mejor pareja válida de $m$ \textit{best(m)}. 
 
 El rechazo de $m$ por parte de $w$ puede deberse a que $m$ se propuso y fue rechazado en favor del actual comprometido de $w$, o porque $w$ rompió su compromiso con $m$ en favor de una propuesta mejor. Pero en cualquier caso, en este momento $w$ forma o continúa un compromiso con un hombre $m'$ al que ella prefiere en lugar de $m$.
@@ -358,7 +378,8 @@ Dado que el rechazo de $m$ por parte de $w$ fue el primer rechazo de un hombre p
 Dado que se propuso en orden decreciente de preferencia, y puesto que $w'$ es claramente una pareja válida de $m'$, debe ser que $m$ prefiere a $w$ sobre $w'$. 
 Pero ya hemos visto que $w$ prefiere a $m'$, pues en la ejecución $\mathcal{E}$ rechazó a $m$ en favor de $m'$. Como $(m', w) \notin S'$, se se deduce que $(m', w)$ es una inestabilidad en $S'$. 
 
-Esto contradice nuestra afirmación de que $S'$ es estable y, por tanto, contradice nuestra suposición inicial. $\blacksquare$
+Esto contradice nuestra afirmación de que $S'$ es estable y, por tanto, contradice nuestra suposición inicial. 
+\end{proof}
 
 Entonces, para los hombres, el algoritmo $G-S$ es ideal. Desafortunadamente, no se puede decir lo mismo para las mujeres. Para una mujer $w$, decimos que $m$ es una pareja válida si hay un emparejamiento estable que contiene el par $(m, w)$. Decimos que $m$ es la peor pareja válida de $w$ si $m$ es una pareja válida de $w$, y ningún hombre al que $w$ categorice peor que $m$ es una pareja válida de ella.
 
@@ -820,120 +841,113 @@ $$\log_an = \frac{\log_bn}{\log_ba}$$
 
 Esta ecuación explica por qué a menudo notarás personas escribiendo cotas como $O(\log(n))$ sin indicar la base del logaritmo. Este no es un uso descuidado: la identidad anterior dice que $\log_an = \frac{1}{\log_ba}\cdot\log_bn$ entonces el punto es que $\log_an = \Theta(\log_bn)$, y la base del logaritmo no es importante cuando se escriben cotas usando notación asintótica.
 
-\todo[inline]{revisado hasta acá}
 
+\textbf{Exponenciales} Las funciones exponenciales son funciones de la forma $f(n) = r^n$ para alguna base constante $r$. Aquí nos ocuparemos del caso en el que $r>1$, que da como resultado una función de crecimiento muy rápido.
 
-\textbf{Exponenciales} Las funciones exponenciales son funciones de la forma $f(n) = r^n$ para alguna base constante $r$. Aquí nos ocuparemos del caso en el que $r>1$, que da como resultado una función de crecimiento muy rápido.\\
+En particular, cuando los polinomios se elevan a un exponente fijo, los exponenciales elevan un número fijo a $n$ como potencia; esto conduce a tasas de crecimiento mucho más rápidas. Una forma de resumir la relación entre polinomios y exponenciales es la siguiente.
 
-En particular, cuando los polinomios se elevan a un exponente fijo, los exponenciales elevan un número fijo a $n$ como potencia; esto conduce a tasas de crecimiento mucho más rápidas. Una forma de resumir la relación entre polinomios y exponenciales es la siguiente.\\
+\begin{theorem}
+Por cada $r>1$ y cada $d>0$, tenemos que $n^d=O(r^n)$.
+\end{theorem} 
 
-(2.9) Por cada $r>1$ y cada $d>0$, tenemos $n^d=O(r^n)$.\\
+En particular, cualquier exponencial crece más rápido que cualquier polinomio. Y como vimos en la Tabla \ref{tab:tabla2_1}, cuando se consideran instancias concretas de $n$, las diferencias en las tasas de crecimiento son realmente impresionantes.
 
-En particular, cada exponencial crece más rápido que cualquier polinomio. Y como vimos en la Tabla 2.1, cuando se ingresan los valores reales de $n$, las diferencias en las tasas de crecimiento son realmente bastante impresionantes\\
+Del mismo modo que se escribe $O(\log n)$ sin especificar la base, también verán que se escribe ``El tiempo de ejecución de este algoritmo es exponencial'', sin especificar qué función exponencial se tiene en mente. A diferencia del uso ligero de $\log n$, que se justifica ignorando factores constantes, este uso genérico del término ``exponencial'' es algo descuidado. En particular, para diferentes bases $r> s > 1$, nunca es el caso que $r^n = \Theta(s^n)$. De hecho, esto requeriría que para alguna constante $c>0$, tuviéramos $r^n \leq cs^n$ para todos los $n$ suficientemente grandes. Pero reorganizar esta desigualdad daría $(r/s)^n \leq c$ para todos los $n$ suficientemente grandes. Como $r>s$, la expresión $(r/s)^n$ tiende a infinito con $n$, y por lo tanto no puede permanecer limitada por una constante fija $c$.
 
-Del mismo modo que las personas escriben $O(log n)$ sin especificar la base, también verán que las personas escriben "El tiempo de ejecución de este algoritmo es exponencial", sin especificar qué función exponencial tienen en mente. A diferencia del uso liberal de $log n$, que se justifica ignorando factores constantes, este uso genérico del término "exponencial" es algo descuidado. En particular, para diferentes bases $r>s>1$, nunca es el caso que $r^n = \Theta(s^n)$. De hecho, esto requeriría que para alguna constante $c>0$, tendríamos $r^n ≤ cs^n$ para todos los $n$ suficientemente grandes. Pero reorganizar esta desigualdad daría $(r/s)^n ≤ c$ para todos los $n$ suficientemente grandes $n$. Como $r>s$, la expresión $(r/s)^n$ tiende a infinito con $n$, y por lo tanto no puede permanecer limitada por una constante fija $c$.\\
+Así que hablando de manera asintótica, las funciones exponenciales son todas diferentes. Aún así, generalmente está claro lo que las personas quieren decir cuando inexactamente escriben: ``El tiempo de ejecución de este algoritmo es exponencial'' --típicamente quieren decir que el tiempo de ejecución crece al menos tan rápido como una función exponencial, y todas las exponenciales crecen tan rápido que podemos descartar este algoritmo sin meternos en más detalles sobre el tiempo exacto de ejecución. Esto no es del todo justo. Ocasionalmente, ocurren más cosas que las que parecen al principio con un algoritmo exponencial, como veremos, por ejemplo, en el Capítulo 10; pero, como argumentamos en la primera sección de este capítulo, es una razonable regla aproximada.
 
-Así que hablando de manera asintótica, las funciones exponenciales son todas diferentes. Aún así, generalmente está claro lo que las personas quieren decir cuando escriben inexactamente: "El tiempo de ejecución de este algoritmo es exponencial": típicamente significan que el tiempo de ejecución crece al menos tan rápido como una función exponencial, y todas las exponenciales crecen tan rápido que podemos descarte este algoritmo sin resolver más detalles del tiempo exacto de ejecución. Esto no es del todo justo. Ocasionalmente, hay más en juego con un algoritmo exponencial que el primero que aparece, como veremos, por ejemplo, en el Capítulo 10; pero como argumentamos en la primera sección de este capítulo, es una regla general razonable.\\
-
-Tomados en conjunto, entonces, los logaritmos, polinomios y exponenciales sirven como puntos de referencia útiles en el rango de posibles funciones que se encuentran al analizar los tiempos de ejecución. Los logaritmos crecen más lentamente que los polinomios, y los polinomios crecen más lentamente que los exponenciales.\\
+Tomados en conjunto, entonces, los logaritmos, polinomios y exponenciales sirven como puntos de referencia útiles en el rango de posibles funciones que se encuentran al analizar los tiempos de ejecución. Los logaritmos crecen más lentamente que los polinomios, y los polinomios crecen más lentamente que los exponenciales.
 
 \section{Implementando el algoritmo de emparejamiento estable usando listas y arreglos}
 
-Hemos visto un enfoque general para expresar límites en el tiempo de ejecución de un algoritmo. Para analizar de forma asintótica el tiempo de ejecución de un algoritmo expresado en una manera de alto nivel, como expresamos el algoritmo de emparejamiento estable de Gale Shapley en el Capítulo 1, por ejemplo, no es necesario programar, compilar y ejecutar, pero hay que pensar en cómo se representarán y manipularán los datos en una implementación del algoritmo, de modo que se vincule el número de pasos computacionales necesarios..\\
+Ahora hemos visto un enfoque general para expresar cotas en el tiempo de ejecución de un algoritmo. Para analizar asintóticamente el tiempo de ejecución de  un algoritmo expresado en un modo de alto nivel --como expresamos el algoritmo de emparejamiento estable de Gale-Shapley en el Capítulo 1, por ejemplo-- no hay por qué programarlo, compilarlo y ejecutarlo, pero sí hay que pensar en cómo se representarán y manipularán los datos en una implementación del algoritmo, de forma de acotar el número de pasos computacionales que requiere.
 
-La implementación de algoritmos básicos que usan estructuras de datos es algo con lo que probablemente haya tenido alguna experiencia. En este libro, las estructuras de datos se tratarán en el contexto de la implementación de algoritmos específicos, por lo que encontraremos diferentes estructuras de datos basadas en las necesidades de los algoritmos que estamos desarrollando. Para comenzar este proceso,
-consideramos una implementación del algoritmo de emparejamiento estable Gale-Shapley;
-mostramos anteriormente que el algoritmo termina en, como máximo, $n^2$ iteraciones, y nuestra
-implementación aquí proporciona el correspondiente peor tiempo de ejecución de $O (n^2)$, contando los pasos de cálculo reales en lugar de simplemente el número total de iteraciones. Para obtener dicho límite para el algoritmo de emparejamiento estable, solo necesitaremos usar dos de las estructuras de datos más simples: listas y arreglos. Por lo tanto, nuestra implementación también brinda una buena oportunidad para revisar el uso de estas estructuras de datos básicas también. .\\
+La implementación de algoritmos básicos utilizando estructuras de datos es algo con lo que probablemente ya hayas tenido alguna experiencia. En este libro, nos ocuparemos de las estructuras de datos en el contexto de la implementación de algoritmos específicos, por lo que encontraremos diferentes estructuras de datos basadas en las necesidades de los algoritmos que estamos desarrollando. Para empezar este proceso, consideramos una implementación del algoritmo de emparejamiento estable de Gale-Shapley; demostramos anteriormente que el algoritmo termina en un máximo de $n^2$ iteraciones, y nuestra implementación proporciona un tiempo de ejecución en el peor de los casos de O(n2), contando los pasos computacionales reales en lugar de simplemente el número total de iteraciones. Para obtener esta cota para el algoritmo de emparejamiento estable, será suficiente con utilizar dos
+de las estructuras de datos más simples: listas y matrices. Así, nuestra implementación también proporciona una buena oportunidad para revisar el uso de estas estructuras de datos básicas.
 
-En el problema de emparejamiento estable, cada hombre y cada mujer tienen un ranking de todos los miembros del sexo opuesto. La primer pregunta que necesitamos discutir es cómo se representará dicha clasificación. Además, el algoritmo mantiene un emparejamiento y se tendrá que saber en cada paso qué hombres y que mujeres están libres, y quién se empareja con quién. Para implementar el algoritmo, tenemos que decidir qué estructuras de datos utilizaremos para todas estas cosas..\\
+En el problema del emparejamiento estable, cada hombre y cada mujer tiene una clasificación de todos los miembros del sexo opuesto. 
+La primera cuestión que debemos discutir es cómo se representará dicha clasificación. Además, el algoritmo mantiene un emparejamiento y necesitará saber en cada paso qué hombres y mujeres están libres, y quién está emparejado con quién. 
+Para implementar el algoritmo, tenemos que decidir qué estructuras de datos utilizaremos para todas estas cosas.
 
-\subsubsection*{Listas y arreglos}
+Una cuestión importante a tener en cuenta aquí es que la elección de la estructura de datos depende del diseñador del algoritmo; para cada algoritmo elegiremos estructuras de datos que lo hagan eficiente y fácil de implementar. En algunos casos, esto puede implicar preprocesar la entrada para convertirla de su representación de entrada a una estructura de datos que sea más apropiada para el problema que se está resolviendo.
 
+\subsection*{Arreglos y Listas}
 
-Para comenzar nuestra discusión, nos enfocaremos en una sola lista, como la lista de mujeres en orden de preferencia por un solo hombre. Quizás la forma más sencilla de mantener una lista de $n$ elementos es utilizar un arreglo A de longitud $n$, y tener $A[i]$ como el i-ésimo elemento de la lista. \\ 
+Para comenzar nuestra discusión, nos enfocaremos en una sola lista, como la lista de mujeres en orden de preferencia por cada hombre. Quizás la forma más sencilla de mantener una lista de $n$ elementos es utilizar un arreglo $A$ de longitud $n$, y tener $A[i]$ como el i-ésimo elemento de la lista. 
 
-Tal arreglo es simple de implementar en esencialmente todos los lenguajes de programación estándar, y tiene las siguientes propiedades:\\
+Tal arreglo es simple de implementar en cualquier lenguaje de programación estándar, y tiene las siguientes propiedades:
 
 \begin{enumerate}
-    \item  Podemos responder una consulta de la forma "¿Cuál es el elemento i-ésimo en la lista?" en $O(1)$.
-    \item Si queremos determinar si un elemento e pertenece a la lista (es decir, si es igual a $A[i]$ para algún
-i), necesitamos verificar los elementos uno por uno en O(n), asumiendo que no sabemos nada sobre
-el orden en que los elementos aparecen en A.
-    \item  Si los elementos del arreglo se ordenan de forma clara (numérica o alfabéticamente), podemos
-determinar si un elemento e pertenece a la lista en el tiempo O (log n) utilizando la búsqueda
-binaria.
+    \item  Podemos responder una consulta de la forma ``¿Cuál es el elemento i-ésimo en la lista?'' en $O(1)$.
+    \item Si queremos determinar si un elemento e pertenece a la lista (es decir, si es igual a $A[i]$ para algún $i$), necesitamos verificar los elementos uno por uno en tiempo $O(n)$, asumiendo que no sabemos nada sobre el orden en que los elementos aparecen en $A$.
+    \item  Si los elementos del arreglo se ordenan de forma clara (numérica o alfabéticamente), podemos determinar si un elemento e pertenece a la lista en el tiempo $O(\log n)$ utilizando búsqueda binaria; no necesitaremos utilizar la búsqueda binaria en ninguna parte de nuestra implementación de emparejamiento estable, pero tendremos más para decir sobre esto en la próxima sección.
    \end{enumerate}
 
-Un arreglo no es tan bueno para mantener dinámicamente una lista de elementos que cambia con el tiempo, como el conjunto de hombres libres en el algoritmo de emparejamiento estable; dado que los hombres pasan de estar libres a comprometerse, y potencialmente regresar, una lista de hombres libres necesita crecer y reducirse durante la ejecución del algoritmo. En general, es engorroso agregar o eliminar elementos con frecuencia a una lista que se mantiene como un arreglo. \\
+Un arreglo ya no es tan bueno para mantener dinámicamente una lista de elementos que cambia con el tiempo, como el conjunto de hombres libres en el algoritmo de emparejamiento estable; dado que los hombres pasan de estar libres a comprometerse, y potencialmente volver a estar libres, la lista de hombres libres necesita crecer y reducirse durante la ejecución del algoritmo. En general, es engorroso agregar o eliminar elementos con frecuencia a una lista que se mantiene como un arreglo. 
 
-Una manera alternativa y, a menudo preferible, de mantener un conjunto de elementos tan dinámico es a través de una lista enlazada. En una lista enlazada, los elementos se ordenan juntos haciendo que cada elemento apunte al siguiente en la lista. Por lo tanto, para cada elemento $v$ en la lista, necesitamos mantener un puntero al siguiente elemento; establecemos este puntero a nulo si yo soy el último elemento. También tenemos un puntero Primero que apunta al primer elemento. Comenzando en Primero y siguiendo repetidamente los punteros al siguiente elemento hasta que lleguemos a nulo, podemos recorrer todo el contenido de la lista en un tiempo proporcional a su longitud. \\
+Una manera alternativa y, a menudo preferible, de mantener un conjunto de elementos tan dinámico es a través de una lista enlazada. En una lista enlazada, los elementos se ordenan juntos haciendo que cada elemento apunte al siguiente en la lista. Por lo tanto, para cada elemento $v$ en la lista, necesitamos mantener un puntero al siguiente elemento; establecemos este puntero en nulo si $i$ es el último elemento. También tenemos un puntero \texttt{First} que apunta al primer elemento. Comenzando en \texttt{Firs} y repetidamente siguiendo los punteros al siguiente elemento hasta que lleguemos al puntero nulo, podemos recorrer todo el contenido de la lista en un tiempo proporcional a su longitud. 
 
-Una forma genérica de implementar dicha lista enlazada, es asignar un registro e para cada elemento que queremos incluir en la lista. Tal registro contendría un campo e.val que contiene el valor del elemento, y un campo e.Next que contiene un puntero al siguiente elemento en la lista. Podemos crear una lista doblemente enlazada, que es transitable en ambas direcciones, al tener también un campo e.Prev que contiene un puntero al elemento anterior en la lista. (e.Prev = null si e es el primer elemento.) También incluimos un puntero Last, que apunta al último elemento de la lista.\\ 
-
-Una forma genérica de implementar dicha lista enlazada, cuando el conjunto de elementos posibles no se puede arreglar de antemano, es asignar un registro e para cada elemento que queremos incluir en la lista. Tal registro contendría un campo e.val que contiene el valor del elemento y un campo e.Next que contiene un puntero al siguiente elemento en la lista. Podemos crear una lista doblemente enlazada, que es transitable en ambas direcciones, al tener también un campo e. Anterior que contiene un puntero al elemento anterior en la lista. (e.Prev = null si e es el primer elemento.) También incluimos un puntero Last, análogo a First, que apunta al último elemento de la lista. Una ilustración esquemática de parte de tal lista se muestra en la primera línea de la Figura 2.1.\\
+Una forma genérica de implementar dicha lista enlazada, es asignar un registro $e$ para cada elemento que queremos incluir en la lista. 
+Tal registro contiene un campo \textit{e}.\texttt{val} que contiene el valor del elemento, y un campo \textit{e}.\texttt{Next} que contiene un puntero al siguiente elemento en la lista.
+Podemos crear una lista doblemente enlazada, que es transitable en ambas direcciones, al tener también un campo \textit{e}.\texttt{Prev} que contiene un puntero al elemento anterior en la lista. (\textit{e}.\texttt{Prev} = null si \textit{e} es el primer elemento.) 
+También incluimos un puntero \texttt{Last}, que apunta al último elemento de la lista. 
+Una ilustración esquemática de parte de tal lista se muestra en la primera línea de la Figura \ref{fig:Imagenes-Seccion2/fig2_1.PNG}.
 
 Una lista doblemente enlazada se puede modificar de la siguiente manera.
 
 \begin{itemize}
- \item Eliminar. Para eliminar el elemento e de una lista doblemente enlazada, podemos simplemente "empalmarla" teniendo el elemento anterior al que hace referencia el e. Anterior, y el siguiente elemento, referenciado por e. Luego, apunta directamente el uno al otro. La operación de eliminación se ilustra en la Figura 2.1.
-  \item Inserción. Para insertar el elemento e entre los elementos d y f en una lista, lo "empalmamos" al actualizar d. Siguiente y f. Anterior a apuntar a e, y los punteros Siguiente y Anterior de e para apuntar a d y f, respectivamente. Esta operación es esencialmente al revés de la eliminación, y de hecho uno puede ver esta operación en funcionamiento leyendo la Figura 2.1 de abajo hacia arriba. 
+ \item \textit{Eliminación}. Para eliminar el elemento e de una lista doblemente enlazada, podemos simplemente ``desempalmarlo'' haciendo que el elemento anterior, referenciado por \textit{e}.\texttt{Prev}, y el siguiente elemento, referenciado por \textit{e}.\texttt{Next}, apunten directamente el uno al otro. La operación de borrado se ilustra en la Figura \ref{fig:Imagenes-Seccion2/fig2_1.PNG}.
+  \item \textit{Inserción.} Para insertar el elemento \textit{e} entre los elementos \textit{d} y \textit{f} en una lista, lo ``empalmamos'' actualizando \textit{d}.\texttt{Next} y \textit{f}.\texttt{Prev} de forma que apunten a \textit{e}, y los punteros \texttt{Next} y \texttt{Prev} de \textit{e} para que apunten a \textit{d} y \textit{f}, respectivamente. Esta operación es esencialmente al revés de la eliminación, y de hecho uno puede ver esta operación en funcionamiento leyendo la Figura \ref{fig:Imagenes-Seccion2/fig2_1.PNG} de abajo hacia arriba. 
 \end{itemize}
 
 
 \begin{figure}[h] 
   \centering
-    \includegraphics[width=0.8\textwidth]{Imagenes-Seccion2/fig2_1.PNG}
+    \includegraphics[width=0.7\textwidth]{Imagenes-Seccion2/fig2_1.PNG}
+    \caption{Representación esquemática de una lista doblemente enlazada, mostrando la eliminación de un elemento \textit{e}.}
+    \label{fig:Imagenes-Seccion2/fig2_1.PNG}
 \end{figure}
 
 
-Insertar o eliminar e al principio de la lista implica actualizar la Primera
-puntero, en lugar de actualizar el registro del elemento antes e.
-Si bien las listas son buenas para mantener un conjunto dinámicamente cambiante, también tienen desventajas. A diferencia de las matrices, no podemos encontrar el $i$-ésimo elemento de la lista en $O(1)$ hora: para encontrar el $i$-ésimo elemento, tenemos que seguir los siguientes punteros comenzando
-desde el comienzo de la lista, que toma un tiempo total de $O(i)$.
-Dadas las ventajas y desventajas relativas de las matrices y listas, puede
-sucede que recibimos la entrada a un problema en uno de los dos formatos y
-quiero convertirlo en el otro. Como se discutió anteriormente, tal preprocesamiento es
-a menudo útil; y en este caso, es fácil convertir entre la matriz y
-enumerar representaciones en $O(n)$ tiempo. Esto nos permite elegir libremente los datos
-estructura que se adapte mejor al algoritmo y no se vea limitado por el camino
-la información se da como entrada.\\
+Insertar o eliminar e al principio de la lista implica actualizar el puntero \texttt{First} en lugar de actualizar el registro del elemento anterior a \textit{e}.
+Aunque las listas son buenas para mantener un conjunto que cambia dinámicamente, también tienen desventajas. A diferencia de los arreglos, no podemos encontrar el iésimo elemento de la lista en $O(1)$: para encontrar el iésimo elemento, tenemos que seguir los punteros \texttt{Next} empezando desde el principio de la lista, lo que requiere un tiempo total de $O(i)$. Dadas las ventajas e inconvenientes relativos de los arreglos y las listas, puede ocurrir que recibamos la entrada de un problema en uno de los dos formatos y queramos convertirlo en el otro. Como ya se ha dicho, este preprocesamiento suele ser útil; y en este caso, es fácil convertir entre las representaciones de arreglos y listas en tiempo de $O(n)$. Esto nos permite elegir libremente la estructura de datos que se adapte mejor al algoritmo y no estar limitado por la forma en que la información se da como entrada.
 
+\subsection*{Implementando el algoritmo de emparejamiento estable}
 
-\subsubsection*{Implementando el algoritmo de emparejamiento estable}
+A continuación utilizaremos arreglos y listas enlazadas para implementar el algoritmo de emparejamiento estable
+del Capítulo 1. Ya hemos demostrado que el algoritmo termina en en un máximo de $n^2$ iteraciones, y esto proporciona un tipo de cota superior en el tiempo de ejecución. Sin embargo, si realmente queremos implementar el algoritmo G-S para que se ejecute en un tiempo proporcional a $n^2$, necesitamos ser capaces de implementar cada iteración en tiempo constante. Ahora discutiremos cómo hacerlo. 
+Para simplificar, supongamos que el conjunto de hombres y mujeres son ambos $\{1, \dots , n\}$.
+Para asegurar esto, podemos ordenar los hombres y las mujeres (digamos, alfabéticamente), y asociar el número $i$ al iésimo hombre $m_i$ o a la iésima mujer $w_i$ en este orden. 
+Esta suposición (o notación) nos permite definir un arreglo indexado por todos los hombres o todas las mujeres. Necesitamos tener una lista de preferencias para cada hombre y para cada mujer. Para ello, tendremos dos matrices, una para las listas de preferencias de las mujeres y otra para las listas de preferencias de los hombres; utilizaremos \texttt{ManPref[m,i]} para denotar la i-ésima mujer en la lista de preferencias del hombre $m$, y de forma similar \texttt{WomanPref[w,i]} para el i-ésimo hombre de la lista de preferencias de la mujer $w$. Tenga en cuenta que la cantidad de espacio necesario para dar las preferencias de todos los $2n$ individuos es $O(n^2)$, ya que cada persona tiene una lista de longitud $n$.
+Tenemos que considerar cada paso del algoritmo y entender qué estructura de datos nos permite implementarlo de forma eficiente. Básicamente, tenemos que ser capaces de hacer cada una de cuatro cosas en tiempo constante.
 
-A continuación, utilizaremos arreglos y listas enlazadas para implementar el algoritmo de emparejamiento estable del Capítulo 1. Ya hemos demostrado que el algoritmo termina en a lo sumo $n^2$ iteraciones, y esto proporciona un tipo de límite superior en el tiempo de ejecución. Sin embargo, si realmente queremos implementar el algoritmo G-S para que se ejecute en tiempo proporcional a $n^2$, debemos ser capaces de implementar cada iteración en tiempo constante. Discutimos cómo hacer esto ahora.\\
-
-Para simplificar, suponga que el conjunto de hombres y mujeres son ambos $(1 ..... n)$. Para garantizar esto, podemos ordenar a los hombres y a las mujeres (por ejemplo, alfabéticamente) y asociar el número i con el i-ésimo hombre o mujer en este orden. Esta suposición (o notación) nos permite definir un arreglo indexado para todos los hombres o todas las mujeres. Necesitamos tener una lista de preferencias para cada hombre y para cada mujer. Para hacer esto tendremos dos arreglos, uno para las listas de preferencia de las mujeres y otro para las listas de preferencias de los hombres; usaremos ManPref [m, i] para denotar la i-ésima mujer en la preferencia del hombre m, y de manera similar, WomanPref [w, i] para denotar el i-ésimo hombre en la lista de preferencias de la mujer w. Tenga en cuenta que la cantidad de espacio necesaria para guardar las preferencias de todos los $2n$
-individuos es $O(n^2)$, ya que cada persona tiene una lista de longitud n.\\
-
-Necesitamos considerar cada paso del algoritmo y entender qué estructura de datos nos permite implementarlo de manera eficiente. Esencialmente, debemos ser capaces de hacer cada una de las siguientes cuatro cosas en tiempo constante (en O(1)):
-
-
-\begin{itemize}
+\begin{enumerate}
  \item Necesitamos poder identificar a un hombre libre. 
- 
- \item Necesitamos, para un hombre $m$, poder identificar a la mujer mejor clasificada a quien aún no ha propuesto.
- 
- \item Para una mujer $w$, debemos saber si $w$ está comprometida actualmente, y si lo está, necesitamos identificar a su pareja actual.
- 
- \item Para una mujer $w$ y dos hombres $m$ y $m'$, necesitamos saber, nuevamente en tiempo constante, a cuál de los hombres prefiere $w$. \ldots 
-\end{itemize}
+ \item Necesitamos, para un hombre $m$, poder identificar a la mujer mejor clasificada a quien aún no se le ha propuesto.
+ \item Para una mujer $w$, debemos saber si $w$ está comprometida, y si lo está, necesitamos identificar a su pareja actual.
+ \item Para una mujer $w$ y dos hombres $m$ y $m'$, necesitamos saber, nuevamente en tiempo constante, a cuál de los hombres prefiere $w$.
+\end{enumerate}
 
- 
+Primero, seleccionamos un hombre libre. Haremos esto manteniendo el conjunto de hombres libres como una lista enlazada. Cuando necesitamos seleccionar un hombre libre, tomamos el primer hombre $m$ en esta lista. Suprimimos a $m$ de la lista si se compromete, y posiblemente insertamos un hombre $m'$ diferente, si algún otro hombre $m'$ queda libre. En este caso, $m'$ se puede insertar al principio de la lista, nuevamente en tiempo constante.
 
-Primero, seleccionamos un hombre libre. Haremos esto manteniendo el conjunto de hombres libres como una lista enlazada. Cuando necesitamos seleccionar un hombre libre, tomamos el primer hombre m en esta lista. Suprimimos a m de la lista si se compromete, y posiblemente insertamos un hombre $m'$ diferente, si algún otro hombre $m'$ queda libre. En este caso, $m'$ se puede insertar al principio de la lista, nuevamente en tiempo constante.\\
+A continuación, consideramos un hombre $m$. Necesitamos identificar a la mujer mejor clasificada a la que aún no se le ha propuesto. Para hacer esto, necesitaremos mantener un arreglo adicional, \texttt{Next}, que indique para cada hombre la posición de la próxima mujer a la que propondrá en su lista. Inicializamos \texttt{Next[\textit{m}]} = 1 para todos los hombres $m$. Si un hombre $m$ necesita proponerle matrimonio a una mujer, le propondrá a $w$ = \texttt{ManPref[\textit{m}, Next [\textit{m}]]}, y una vez que él le proponga a $w$, incrementaremos el valor de \texttt{Next[m]} en uno, independientemente de si $w$ acepta o no la propuesta.
 
-A continuación, consideramos un hombre $m$. Necesitamos identificar a la mujer mejor calificada a la que aún no ha propuesto. Para hacer esto, necesitaremos mantener un arreglo adicional, Next, que indique para cada hombre la posición de la próxima mujer a la que propondrá en su lista. Inicializamos Next[m] = 1 para todos los hombres m. Si un hombre m necesita proponerle matrimonio a una mujer, le propondrá a $w$ = ManPref $[m, Next [m]]$, y una vez que él le proponga a w, incrementaremos el valor de $Next[m]$ en uno, independientemente de si $w$ acepta o no la propuesta.\\
+Ahora supongamos que el hombre $m$ se le propone a la mujer $w$; necesitamos poder identificar al hombre $m'$ con quien $w$ está comprometida (si existe tal hombre). Podemos hacer esto manteniendo un arreglo llamado \texttt{Current} de longitud $n$, donde \texttt{Current[\textit{w}]} es, $m'$, el compañero actual de la mujer $w$. Indicamos \texttt{Current[\textit{w}]} con un símbolo nulo especial cuando necesitamos indicar que la mujer $w$ no está actualmente comprometida; al comienzo del algoritmo, \texttt{Current[w]} se inicializa con este símbolo nulo para todas las mujeres $w$.
 
-Ahora supongamos que el hombre m propone a la mujer w; necesitamos poder identificar al hombre m' con quien w está comprometida (si existe tal hombre). Podemos hacer esto manteniendo un arreglo llamado actual de longitud n, donde actual [w] es el compañero actual de la mujer $w$, $m'$. Indicamos $actual[w]$ con un símbolo nulo especial cuando necesitamos indicar que la mujer w no está actualmente comprometida; al comienzo del algoritmo, $Actual[w]$ se inicializa con este símbolo nulo para todas las mujeres $w$.\\
+En resumen, las estructuras de datos que hemos creado hasta ahora pueden implementar las operaciones (1)-(3) en tiempo $O(1)$ cada una. 
 
-Quizás la pregunta más difícil es cómo mantener las preferencias de las mujeres para mantener el paso (4) eficiente. Consideremos un paso del algoritmo, cuando el hombre m le propone a una mujer w. Supongamos que w ya está comprometida, y su compañero actual es $m'$ = Actual $[w]$. Nos gustaría saber en $O(1)$ si la mujer $w$ prefiere $m$ o $m'$. Mantener las preferencias de las mujeres en un arreglo WomanPref, análoga a la que usamos para los hombres, no funciona, ya que tendríamos que recorrer la lista de w uno por uno, siendo $O(n)$ el tiempo para encontrar a $m$ y $m'$ en la lista. Podemos hacerlo mucho mejor si construimos una estructura de datos auxiliar al principio.\\
+Quizás la pregunta más difícil de responder es cómo mantener las preferencias de las mujeres para mantener el paso (4) eficiente. Consideremos un paso del algoritmo, cuando el hombre $m$ le propone a una mujer $w$. Supongamos que $w$ ya está comprometida, y su compañero actual es $m'$ = \texttt{Current[\textit{w}]}. Nos gustaría saber en $O(1)$ si la mujer $w$ prefiere $m$ o $m'$. Mantener las preferencias de las mujeres en un arreglo \texttt{WomanPref}, análogo al que usamos para los hombres, no funciona, ya que tendríamos que recorrer la lista de $w$ uno por uno, siendo $O(n)$ el tiempo para encontrar a $m$ y $m'$ en la lista. Podemos hacerlo mucho mejor si construimos una estructura de datos auxiliar al principio.
+
+Al comienzo del algoritmo, creamos una matriz de $n \times n$ llamada \texttt{Ranking}, donde \texttt{Ranking[\textit{w,m}]} contiene la clasificación del hombre $m$ según el orden de las preferencias de $w$. Mediante una única pasada a través de la lista de preferencias de $w$, podemos crear esta matriz en tiempo lineal para cada mujer, con una inversión de tiempo inicial total proporcional a $n^2$. Entonces, para decidir cuál de los hombres $m$ o $m'$ es preferido por $w$, simplemente comparamos los valores \texttt{Ranking[\textit{w, m}]} y \texttt{Ranking[\textit{w, m}]}. Esto nos permite ejecutar el paso (4) en tiempo constante y, por lo tanto, tenemos todo lo que necesitamos para obtener el tiempo de ejecución deseado.
+
+\noindent\colorbox{mygray}{\parbox{\textwidth}{
+\begin{theorem}
+Las estructuras de datos descritas anteriormente nos permiten implementar el algoritmo G-S en tiempo $O(n^2)$.
+\end{theorem}
+}}
 
 
-Al comienzo del algoritmo, creamos una matriz $n x n$ Ranking, donde Ranking$[w, m]$ contiene el rango del hombre m en el orden de las preferencias de$w$. Mediante una única pasada a través de la lista de preferencias de $w$, podemos crear esta matriz en tiempo lineal para cada mujer, para una inversión de tiempo inicial total proporcional a $n^2$. Entonces, para decidir cuál de los hombres m o m' es preferido por w, simplemente comparamos los valores Ranking $[w, m]$ y Ranking $[w, m']$. Esto nos permite ejecutar el paso (4) en tiempo constante y, por lo tanto, tenemos todo lo que necesitamos para obtener el tiempo de ejecución deseado.\\
-
-Las estructuras de datos descritas anteriormente nos permiten implementar el algoritmo G-S en tiempo $O(n^2)$.\\
+\todo[inline]{revisado hasta acá}
 
 \section{Una compilación de tiempos de ejecución comunes.}
 
@@ -948,7 +962,6 @@ Un algoritmo que se ejecuta en $O(n)$, o tiempo lineal, tiene una propiedad muy 
 \subsubsection*{Calculando el máximo}
 
 Calculando el máximo de $n$ números, por ejemplo, se puede realizar en el estilo básico "one-pass". Supongamos que los números se proporcionan como entrada en una lista o en una matriz. Procesamos los números $a_1, a_2,. . ., a_n$ en orden, manteniendo un estimado del máximo a medida que avanzamos. Cada vez que encontramos un número $a_i$, comprobamos si $a_i$ es más grande que nuestra estimación actual, y si es así, actualizamos la estimación del máximo.\\
-
 
 \begin{lstlisting}
 	max = a[1];

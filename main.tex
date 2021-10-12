@@ -61,10 +61,14 @@
 
 \newtheoremstyle{dotless}{}{}{\itshape}{}{\bfseries}{}{ }{}
 \theoremstyle{dotless}
-\newtheorem{theorem}{}%[section]
+\newtheorem{theorem}{}[section]
 \renewcommand*\thetheorem{\bfseries(\arabic{chapter}.\arabic{theorem})}
 \renewcommand{\qedsymbol}{$\blacksquare$}
 \renewenvironment{proof}{{\noindent\bfseries Demostración.}}{\qed\vspace{12pt}}
+
+\usepackage{titlesec}
+\titleformat{\subsection}
+  {\normalfont\large\bfseries}{\includegraphics[width=1cm]{subsection.PNG}}{0em}{}
 
 %% para definir los forEach
 \algnewcommand\algorithmicforeach{\textbf{for each}}
@@ -124,6 +128,7 @@ Sólo resta agradecer por el apoyo en traducción y escritura de las siguientes 
 \label{cap:intro}
 
 \section{Primer Problema: Emparejamiento Estable}
+\label{sec:emparejamientoestable}
 
 Como tema de apertura, nos centraremos en un problema algorítmico que representa muy bien muchos de los temas que van a ser tratados. Motivado por algunas preocupaciones, a partir de las cuales formulamos una clara y simple solución. El algoritmo para resolver el problema es muy claro,  y gran parte de nuestro trabajo será ocupado en probar que es correcto, y dando un límite aceptable en el tiempo que le toma llegar a una respuesta- El problema en si mismo, tiene diversos orígenes.
 
@@ -133,7 +138,7 @@ El problema de Emparejamiento Estable tiene sus orígenes, en parte, en 1962, cu
 
 Para establecer la pregunta, pensemos primero informalmente sobre el tipo de situación que puede surgir cuando un grupo de amigos, todos estudiantes de Ciencias de la Computación, comienzan a postularse a trabajos todos a la vez. El quid del proceso de postulación es la interacción entre dos grupos diferentes: las compañías (empleadores) y los estudiantes (postulantes). Cada postulante tiene un orden de preferencias sobre las compañías, y cada compañía, una vez que reciben la postulación, crea una lista de preferencia de los postulantes ordenada. Basándose en estas preferencias, las empresas le hacen ofertas a algunos de sus postulantes, los postulantes eligen que oferta aceptar, y todos comienzan sus trabajos.  
 
-Gale y Shapley consideraron la clase de cosas que pueden ir mal en este proceso, en la ausencia de algún mecanismo que haga cumplir el \textit{status quo}. Supongamos que tu amigo Raj, ha aceptado un trabajo en CluNet, una gran empresa de telecomunicaciones. Unos días después, la pequeña start-up WebExodus, que tuvo un retraso en las decisiones finales, decide llamar a Raj y también ofrecerle un puesto de trabajo. Ahora Raj, que prefiere WebExodus antes que CluNet -- seducido quizás por la atmósfera relajada y de ``todo puede pasar'' --, podría rechazar la oferta de CluNet y aceptar el puesto en WebExodus. Rápidamente, ante la pérdida del postulante, CluNet le hace una oferta a uno de sus otros postulantes en lista de espera, que a su vez rechaza la oferta anterior de la gigante del Software Babelsoft, y la situación se transforma en un espiral fuera de control.
+Gale y Shapley consideraron la clase de cosas que pueden ir mal en este proceso, en la ausencia de algún mecanismo que haga cumplir el \textit{status quo}. Supongamos que tu amigo Raj, ha aceptado un trabajo en CluNet, una gran empresa de telecomunicaciones. Unos días después, la pequeña start-up WebExodus, que tuvo un retraso en las decisiones finales, decide llamar a Raj y también ofrecerle un puesto de trabajo. Ahora Raj, que prefiere WebExodus antes que CluNet -- seducido quizás por la atmósfera relajada y de ``todo puede pasar''--, podría rechazar la oferta de CluNet y aceptar el puesto en WebExodus. Rápidamente, ante la pérdida del postulante, CluNet le hace una oferta a uno de sus otros postulantes en lista de espera, que a su vez rechaza la oferta anterior de la gigante del Software Babelsoft, y la situación se transforma en un espiral fuera de control.
 
 Las cosas se ven igual de mal, o peor, desde la otra perspectiva. Supongamos que una amiga de Raj, Chelsea, destinada a ir a Babelsoft, pero habiendo escuchado la historia de Raj, llama a la gente de WebExodus y les dice, ``Saben, prefiero trabajar con ustedes que en Babelsoft''. Ellos encontraron esto fácil de creer, y, mirando la postulación de Chelsea, se dieron cuenta que era preferible contratarla a ella que a otro de los que estaban ya programados para trabajar ahí. En este caso, si WebExodus fuera una empresa con menos escrúpulos, buscarían la forma de retractar su oferta a otro estudiante, y contratar a Chelsea.
 
@@ -143,10 +148,10 @@ Bien podríamos preferir la siguiente situación, más estable, en la cual el in
 
 Entonces esta es la pregunta que Gale y Shapley se hicieron: Dado un conjunto de preferencias sobre empleadores y postulantes, ¿podemos asignar postulantes a empleadores de forma que para cada empleador E, y para cada postulante P que no esté asignado para trabajar con E, se dé al menos de una de las siguientes situaciones?
 
-    \begin{enumerate}
-       \item E prefiere a uno de sus postulantes aceptados antes que a P, o
-       \item P prefiere su situación actual antes que trabajar para E.
-    \end{enumerate}
+\begin{enumerate}
+   \item E prefiere a uno de sus postulantes aceptados antes que a P, o
+   \item P prefiere su situación actual antes que trabajar para E.
+\end{enumerate}
 
 Si esto se cumple, el resultado de la asignación es estable: los intereses personales evitarán que ocurra cualquier trato entre empresas y postulantes entre bambalinas.
 	
@@ -236,7 +241,7 @@ Aquí hay una descripción concreta del algoritmo de Gale-Shapley, la Figura \re
 
 \begin{figure}[h] 
     \centering
-    \includegraphics[width=0.8\textwidth]{Imagenes-Seccion2/Imagen1_2.PNG}
+    \includegraphics[width=0.9\textwidth]{Imagenes-Seccion2/Imagen1_2.PNG}
 \end{figure}
 
 Algo intrigante es que, aunque el algoritmo G-S es bastante simple de declarar, no es inmediatamente obvio que devuelve un emparejamiento estable, o incluso un emparejamiento perfecto. Procedemos a probar esto ahora, a través de una secuencia de hechos intermedios.
@@ -375,17 +380,22 @@ Esto contradice nuestra afirmación de que $S'$ es estable y, por tanto, contrad
 
 Entonces, para los hombres, el algoritmo $G-S$ es ideal. Desafortunadamente, no se puede decir lo mismo para las mujeres. Para una mujer $w$, decimos que $m$ es una pareja válida si hay un emparejamiento estable que contiene el par $(m, w)$. Decimos que $m$ es la peor pareja válida de $w$ si $m$ es una pareja válida de $w$, y ningún hombre al que $w$ categorice peor que $m$ es una pareja válida de ella.
 
-\vspace{3mm}
-\noindent\textbf{(1.8)} \textit{En el conjunto $S*$, cada mujer está emparejada con su peor pareja válida.}
+\vspace{2mm}
+\begin{theorem}
+En el conjunto $S*$, cada mujer está emparejada con su peor pareja válida.
+\end{theorem}
 \vspace{2mm}
 
-\textbf{Demostración}. Supongamos que hay un par $(m, w)$ en $S*$ tal que $m$ no es la peor pareja válida de $w$. Luego, hay un emparejamiento estable $S'$ en el que $w$ forma pareja con un hombre $m'$ que le gusta menos que $m$. En $S'$ , $m$ está emparejado con una mujer $w'\neq w$; ya que $w$ es la mejor pareja válida de $m$, y $w'$ es una pareja válida de $m$, vemos que $m$ prefiere $w$ a $w'$.
+\begin{proof}
+Supongamos que hay un par $(m, w)$ en $S*$ tal que $m$ no es la peor pareja válida de $w$. Luego, hay un emparejamiento estable $S'$ en el que $w$ forma pareja con un hombre $m'$ que le gusta menos que $m$. En $S'$ , $m$ está emparejado con una mujer $w'\neq w$; ya que $w$ es la mejor pareja válida de $m$, y $w'$ es una pareja válida de $m$, vemos que $m$ prefiere $w$ a $w'$.
 
-Pero de esto se deduce que $(m, w)$ es una inestabilidad en $S'$, lo que contradice la afirmación de que $S'$ es estable y, por lo tanto, contradice nuestra suposición inicial.$ \blacksquare $
+Pero de esto se deduce que $(m, w)$ es una inestabilidad en $S'$, lo que contradice la afirmación de que $S'$ es estable y, por lo tanto, contradice nuestra suposición inicial.
+\end{proof}
 
 Por lo tanto, encontramos que nuestro sencillo ejemplo anterior, en el que las preferencias de los hombres chocan con las de las mujeres, insinúa un fenómeno general: para cualquier entrada, el lado que hace la propuesta en el algoritmo $G-S$ termina con el mejor emparejamiento estable posible (desde su perspectiva), mientras que el lado que no propone, en consecuencia, termina con el peor emparejamiento estable posible.
 
 \section{Cinco problemas Representativos}
+\label{sec:cincoproblemasrep}
 
 El problema del emparejamiento estable nos proporciona un rico ejemplo del proceso de diseño de algoritmos. Para muchos problemas, este proceso implica unos cuantos pasos significativos: formular el problema con suficiente precisión matemática como para poder plantear una pregunta concreta y empezar a pensar en algoritmos para resolverlo; diseñar un algoritmo para el problema; y analizar el algoritmo demostrando que es correcto y dando una cota al tiempo de ejecución para establecer la eficiencia del algoritmo.
 
@@ -494,8 +504,7 @@ Uno puede resolver esto mirando la figura por un tiempo; pero requiere cierta ca
 Esto contrasta con el Problema del Conjunto Independiente, donde creemos que encontrar una solución grande es difícil, pero sabemos que es fácil verificar una solución propuesta, aunque sea grande. Este contraste se puede formalizar en la clase de problemas \textit{PSPACE-completo}, de la cual la Ubicación de Instalaciones Competitivas es un ejemplo. Se cree que los problemas \textit{PSPACE-completo} son estrictamente más difíciles que los problemas \textit{NP-completos}, y que esta supuesta falta de ``pruebas'' breves para sus soluciones es un indicio esta mayor dificultad. Resulta que la noción de \textit{PSPACE-completitud} captura una gran colección de problemas que involucran juegos y planificación; muchos de estos son problemas fundamentales en el área de la inteligencia artificial.
 
 \section*{Ejercicios Resueltos}
-\vspace{-16pt}
-\par\noindent\rule{\textwidth}{2pt}
+\vspace{-16pt}\par\noindent\rule{\textwidth}{2pt}
 %
 \subsection*{Ejercicio Resuelto 1}
 
@@ -507,8 +516,7 @@ Todos preferirían casarse con una persona buena que con una mala. Formalmente, 
 
 Demuestre que en cada emparejamiento estable, todo hombre bueno está casado con una mujer buena.
 
-\paragraph{Solución} Una forma natural de empezar a pensar en este problema es
-suponer que la afirmación es falsa y tratar de obtener una contradicción.
+\paragraph{Solución} Una forma natural de empezar a pensar en este problema es suponer que la afirmación es falsa y tratar de obtener una contradicción.
 ¿Qué significaría que la afirmación fuera falsa? Existiría algún emparejamiento estable $M$ en el que un hombre bueno $m$ estuviera casado con una mujer mala $w$.
 
 Ahora, consideremos cómo son los otros pares en $M$. Hay $k$ hombres buenos y $k$ mujeres buenas. ¿Podría ser el caso de que cada mujer buena está casada
@@ -2530,7 +2538,7 @@ En resumen, tenemos\\
 \colorbox{mygray}{\parbox{15cm}{
 \textbf{(4.25)}El algoritmo de Kruskal se puede implementar en un grafo con $n$ nodos y $m$ aristas para ejecutar en el tiempo $O(mlogn)$.}}\\
 
-\subsection{Ejecricios resueltos}
+\subsection{Ejercicios resueltos}
 
 \subsubsection{Ejercicio 1}
 
@@ -2860,7 +2868,7 @@ Consideremos comparar su clasificación y la clasificación de un extraño del m
 
 Una forma natural de cuantificar esta noción es contar el número de inversiones. Decimos que dos índices $i<j$ forman una inversión si $a_i> a_j$, es decir, si los dos elementos $a_i$ y $a_j$ están "fuera de orden". Intentaremos determinar el número de inversiones en la secuencia $a_1, ... , u_n$.\\
 
-Solo para precisar esta definición, considere un ejemplo en el que la secuencia es $2$, $4$, $1$, $3$, $5$. Hay tres inversiones en esta secuencia: $(2, 1), (4, 1) y (4, 3)$ ) También existe una forma geométrica atractiva de visualizar las inversiones, ilustrada en la figura 5.4: dibujamos la secuencia de los números ingresados ​​en el orden en que se proporcionan, y debajo de eso en orden ascendente. Luego dibujamos un segmento de línea entre cada número en la lista superior y su copia en la lista inferior. Cada par de segmentos de línea cruzados corresponde a un par que está en el orden opuesto en las dos listas; en otras palabras, una inversión.\\
+Solo para precisar esta definición, considere un ejemplo en el que la secuencia es $2$, $4$, $1$, $3$, $5$. Hay tres inversiones en esta secuencia: $(2, 1), (4, 1) y (4, 3)$ ) También existe una forma geométrica atractiva de visualizar las inversiones, ilustrada en la figura 5.4: dibujamos la secuencia de los números ingresados en el orden en que se proporcionan, y debajo de eso en orden ascendente. Luego dibujamos un segmento de línea entre cada número en la lista superior y su copia en la lista inferior. Cada par de segmentos de línea cruzados corresponde a un par que está en el orden opuesto en las dos listas; en otras palabras, una inversión.\\
 
 Observe que el número de inversiones es una medida que interpola suavemente entre el acuerdo completo (cuando la secuencia está en orden ascendente, luego no hay inversiones) y el desacuerdo completo (si la secuencia está en orden descendente, entonces cada par forma una inversión, y entonces hay $n/2$ de ellos).\\
 
@@ -2928,133 +2936,212 @@ Dado que nuestro procedimiento Merge-and-Count toma O (n) tiempo, el tiempo de e
 \colorbox{mygray}{\parbox{15cm}{
 \textbf{(5.7)} El algoritmo Sort-and-Count ordena correctamente la lista de entrada y cuenta el número de inversiones; se ejecuta en el tiempo $O (n log n)$ para una lista con n elementos.}}\\
 
-\newpage
+\section*{Ejercicios Resueltos}
+
+\subsection*{Ejercicio 2}
+
+You’re consulting for a small computation-intensive investment company, and
+they have the following type of problem that they want to solve over and over.
+A typical instance of the problem is the following. They’re doing a simulation
+in which they look at n consecutive days of a given stock, at some point in
+the past. Let’s number the days i = 1, 2, . . . , n; for each day i, they have a
+price p(i) per share for the stock on that day. (We’ll assume for simplicity that
+the price was fixed during each day.) Suppose during this time period, they
+wanted to buy 1,000 shares on some day and sell all these shares on some
+(later) day. They want to know: When should they have bought and when
+should they have sold in order to have made as much money as possible? (If
+there was no way to make money during the n days, you should report this
+instead.)
+For example, suppose n = 3, p(1) = 9, p(2) = 1, p(3) = 5. Then you should
+return “buy on 2, sell on 3” (buying on day 2 and selling on day 3 means they
+would have made USD4 per share, the maximum possible for that period).
+Clearly, there’s a simple algorithm that takes time O(n2): try all possible
+pairs of buy/sell days and see which makes them the most money. Your
+investment friends were hoping for something a little better.
+Show how to find the correct numbers i and j in time O(n log n).
+
+
 
 \chapter{Programación Dinámica}
 
-Hemos visto que un algoritmo codicioso en particular produce una solución óptima para el problema de programación de intervalos, donde el objetivo es aceptar un conjunto tan grande de intervalos de superposición como sea posible. El problema de programación de intervalos ponderados es una versión estrictamente más general, en la que cada intervalo tiene un cierto valor (o peso), y queremos aceptar un conjunto de valores máximos.\\
+\todo[inline]{Empezando a revisar desde acá de nuevo.}
+
+Comenzamos nuestro estudio de las técnicas algorítmicas con los algoritmos codiciosos, que en cierto sentido constituyen el enfoque más natural para el diseño de algoritmos. Enfrentados a un nuevo problema de computación, hemos visto que no es difícil proponer múltiples algoritmos codiciosos posibles; el reto consiste entonces en determinar si alguno de estos algoritmos proporciona una solución correcta al problema en todos los casos.
+
+Los problemas que vimos en el Capítulo \ref{cap:greedy} estaban todos unidos por el hecho de que, a fin de cuentas, había realmente un algoritmo codicioso que funcionaba. Desgraciadamente, esto está lejos de ser de ser cierto en general; para la mayoría de los problemas que uno encuentra, la dificultad real no estriba en determinar cuál de varias estrategias codiciosas es la correcta, sino en el hecho de que no hay un algoritmo codicioso que funcione.
+Para estos problemas, es importante tener a mano otros enfoques. La estrategia de \textit{Divide y Vencerás} puede servir a veces como un enfoque alternativo, pero las versiones de divide y vencerás que vimos en el capítulo anterior a menudo no son lo suficientemente potentes para reducir la búsqueda exponencial de fuerza bruta a un tiempo polinómico.
+Más bien, como observamos en el Capítulo \ref{cap:dyv}, las aplicaciones que allí se hicieron tendían a reducir un tiempo de ejecución que era innecesariamente grande, pero ya polinómico, a un tiempo de ejecución más rápido.
+
+Ahora pasamos a una técnica de diseño más potente y sutil, la \textit{programación dinámica}.
+Será más fácil decir exactamente lo que caracteriza a la programación dinámica después de que la hayamos visto en acción, pero la idea básica se extrae de la intuición del divide y vencerás y es esencialmente lo contrario de la estrategia codiciosa: en este caso, se explora implícitamente el espacio de todas las soluciones posibles, descomponiendo cuidadosamente las cosas en una serie de subproblemas, y luego construyendo soluciones correctas para subproblemas cada vez más grandes. 
+En cierto modo, la programación dinámica se acerca peligrosamente al límite de la búsqueda por fuerza bruta: aunque trabaja sistemáticamente a través de un conjunto exponencialmente grande de posibles soluciones al problema, lo hace sin examinarlas todas explícitamente. 
+Debido a este cuidadoso acto de equilibrio, la programación dinámica puede ser una técnica complicada de manejar.
+Normalmente se necesita una cantidad razonable de práctica antes de sentirse totalmente cómodo o cómoda con ella.
+Teniendo esto en cuenta, pasamos a un primer ejemplo de programación dinámica:
+el problema de programación por intervalos ponderados que definimos en la
+Sección \ref{sec:intervalosponderados}. 
+Vamos a desarrollar un algoritmo de programación dinámica para resolver este problema en dos etapas: primero como un procedimiento recursivo que se asemeja al de fuerza bruta; y luego, reinterpretando este procedimiento, como un algoritmo iterativo que trabaja construyendo soluciones a subproblemas cada vez más grandes.
+
+\section[Planificación de tareas por intervalos ponderados: Un procedimiento recursivo]{Planificación de tareas por intervalos\\ponderados: Un procedimiento recursivo}
+
+Hemos visto que un algoritmo codicioso particular produce una solución óptima
+del Problema de Planificación de Tareas por Intervalos, donde el objetivo es aceptar un conjunto de intervalos no superpuestos como sea posible. 
+El Problema de Planificación de Tareas por Intervalos Ponderados es una versión más general, en la que cada intervalo tiene un determinado \textit{valor} (o \textit{peso}), y queremos aceptar un conjunto de intervalos de valor máximo.
 
 \subsection{Diseñando un algoritmo recursivo}
 
-Dado que el Problema de programación de intervalos original es simplemente el caso especial en el que todos los valores son iguales a 1, ya sabemos que la mayoría de los algoritmos codiciosos no resolverán este problema de manera óptima. Pero incluso el algoritmo que funcionó antes (elegir repetidamente el intervalo que termina antes) ya no es óptimo en esta configuración más general, como lo muestra el ejemplo simple en la Figura 6.1.\\
+Dado que el Problema de programación de intervalos original es simplemente el caso especial en el que todos los valores son iguales a 1, ya sabemos que la mayoría de los algoritmos codiciosos no resolverán este problema de manera óptima. Pero incluso el algoritmo que funcionó antes (elegir repetidamente el intervalo que termina antes) ya no es óptimo en esta configuración más general, como lo muestra el ejemplo simple en la Figura \ref{fig:Imagenes-Seccio6/fig6_1.PNG}.
 
-De hecho, no se conoce ningún algoritmo codicioso natural para este problema, que es lo que motiva nuestro cambio a la programación dinámica. Como se mencionó anteriormente, comenzaremos nuestra introducción a la programación dinámica con un tipo de algoritmo recursivo para este problema, y luego en la siguiente sección pasaremos a un método más iterativo que se acerca al estilo que utilizamos en el resto de este capítulo.\\
-
-\begin{figure}[h]
-\centering
-\includegraphics[scale=1]{Imagenes-Seccion6/fig6_1.PNG}
-\caption{Figura 6.1 Una instancia simple de la programación de intervalos ponderados.}
-\end{figure}
-
-Usamos la notación de nuestra discusión de Programación de intervalos en la Sección 1.2. Tenemos n solicitudes etiquetadas 1,. . . , n, con cada solicitud i especificando una hora de inicio si y una hora de finalización fi. Cada intervalo i ahora también tiene un valor, o peso vi. Dos intervalos son compatibles si no se superponen. El objetivo de nuestro problema actual es seleccionar un subconjunto S ⊆ {1,. . . , n} de intervalos mutuamente compatibles, para maximizar la suma de los valores de los intervalos seleccionados,? $i \in S vi$.\\
-
-Supongamos que las solicitudes se ordenan en orden de no finalización: f1 ≤ f2 ≤ ... ≤ fn. Diremos una solicitud i viene antes que una j si i <j. Este será el orden natural de izquierda a derecha en el que consideraremos los intervalos. Para ayudar a hablar sobre este orden, definimos p (j), para un intervalo j, para que sea el índice más grande i <j, de tal manera que los intervalos i y j estén separados. En otras palabras, i es el intervalo más a la izquierda que termina antes de que comience j. Definimos p (j) = 0 si ninguna solicitud i <j está separada de j. Un ejemplo de la definición de p (j) se muestra en la Figura 6.2.\\
-
-Ahora, dada una instancia del problema de programación de intervalos ponderados, consideremos una solución óptima O, ignorando por ahora que no tenemos idea de lo que es. Aquí hay algo completamente obvio que podemos decir acerca de O: el intervalo n (el último) pertenece a O, o no lo hace. Supongamos que exploramos ambos lados de esta dicotomía un poco más lejos. Si $n  \in  O$, entonces claramente no hay intervalo indexado estrictamente entre p (n) yn puede pertenecer a O, porque según la definición de p (n), sabemos que los intervalos p (n) + 1, p (n) + 2 ,. . . , n - 1 todos los intervalos de superposición n. Además, si $n  \in  O$, entonces O debe incluir una solución óptima al problema que consiste en las solicitudes {1,. . . , p (n)}: si no fuera así, podríamos reemplazar la selección de solicitudes de O de {1,. . . , p (n)} con una mejor, sin peligro de
-solicitud superpuesta n.\\
+De hecho, no se conoce ningún algoritmo codicioso natural para este problema, que es lo que motiva que pasemos a la programación dinámica. Como se mencionó anteriormente, comenzaremos nuestra introducción a la programación dinámica con un tipo de algoritmo recursivo para este problema, y luego en la siguiente sección pasaremos a un método iterativo que se acerca al estilo que utilizamos en el resto de este capítulo.
 
 \begin{figure}[h]
 \centering
-\includegraphics[scale=1]{Imagenes-Seccion6/fig6_2.PNG}
-\caption{Figura 6.2 Una instancia de la programación de intervalos ponderados con las funciones p (j) definidas para cada intervalo j.}
+\includegraphics[width=\textwidth]{Imagenes-Seccion6/fig6_1.PNG}
+\caption{Una instancia simple de la planificación de tareas por intervalos ponderados.}
+\label{fig:Imagenes-Seccio6/fig6_1.PNG}
 \end{figure}
 
-Por otro lado, si $n \not  \in  O$, entonces O es simplemente igual a la solución óptima al problema que consiste en las solicitudes {1,. . . , n - 1}. Esto es por un razonamiento completamente análogo: suponemos que O no incluye la solicitud n; así que si no elige el conjunto óptimo de solicitudes de {1,. . . , n - 1}, podríamos reemplazarlo por uno mejor.\\
+Usamos la notación de nuestra discusión sobre la planificación de tareas en la Sección \ref{sec:intervalschedulling}. Tenemos $n$ solicitudes etiquetadas $1,\dots n$, cada solicitud $i$ especifica una hora de inicio $s_i$ y una hora de finalización $f_i$. Cada intervalo $i$ ahora también tiene un valor, o peso $v_i$. Dos intervalos son compatibles si no se superponen. Esta vez, el objetivo de nuestro problema es seleccionar un subconjunto $S \subseteq \{1,. . . , n\}$ de intervalos mutuamente compatibles, de tal forma que se maximice la suma de los valores de los intervalos seleccionados, $\sum_{i \in S} v_i$.
 
-Todo esto sugiere que encontrar la solución óptima en intervalos {1, 2,. . . , n} implica observar las soluciones óptimas de problemas más pequeños de la forma {1, 2,. . . , j}. Por lo tanto, para cualquier valor de j entre 1 y n, permita que Oj denote la solución óptima al problema que consiste en las solicitudes {1,. . . , j}, y deje que OPT (j) denote el valor de esta solución. (Definimos OPT (0) = 0, según la convención de que este es el óptimo en un conjunto vacío de intervalos). La solución óptima que estamos buscando es precisamente On, con el valor OPT (n). Para la solución óptima Oj en {1, 2,. . . , j}, nuestro razonamiento anterior (generalizando desde el caso en el que j = n) dice que o $j  \in  Oj$, en cuyo caso OPT (j) = vj + OPT (p (j)), o j? Oj, en en qué caso OPT (j) = OPT (j - 1). Dado que estas son precisamente las dos opciones posibles ($j  \in  Oj o j?  \in  Oj$), podemos decir además que\\
+Supongamos que las solicitudes se ordenan en orden decreciente de finalización: $f_1 \leq f2 \leq \dots \leq f_n$. Diremos que una solicitud $i$ viene \textit{antes} que una $j$ si $i<j$. Este será el orden natural de izquierda a derecha en el que consideraremos los intervalos. Para ayudarnos a hablar sobre este orden, definimos $p(j)$, de un intervalo $j$, como el índice $i<j$ más grande, tal que los intervalos $i$ y $j$ están separados. En otras palabras, $i$ es el intervalo más a la derecha de los que terminan antes de que comience $j$. Definimos $p(j) = 0$ si ninguna solicitud $i<j$ está separada de $j$. Un ejemplo de la definición de $p(j)$ se muestra en la Figura \ref{fig:Imagenes-Seccion6/fig6_2.PNG}.
 
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.9\textwidth]{Imagenes-Seccion6/fig6_2.PNG}
+\caption{Una instancia del problema de planificación de intervalos ponderados con las funciones $p(j)$ definidas para cada intervalo $j$.}
+\label{fig:Imagenes-Seccion6/fig6_2.PNG}
+\end{figure}
 
-\colorbox{mygray}{\parbox{15cm}{
-\textbf{(6.1)} OPT(j) = max(vj + OPT(p(j)), OPT(j − 1))}}\\
+Ahora, dada una instancia del problema de programación de intervalos ponderados, consideremos una solución óptima $\mathcal{O}$, ignorando por ahora que no tenemos idea de cuál es. Aquí hay algo completamente obvio que podemos decir acerca de $\mathcal{O}$: el intervalo $n$ (el último) o bien pertenece a $\mathcal{O}$, o no. 
+Supongamos que exploramos ambos lados de esta dicotomía un poco más. Si $n \in \mathcal{O}$, entonces claramente no hay un intervalo indexado estrictamente entre $p(n)$ y $n$ que pueda pertenecer a $\mathcal{O}$, porque según la definición de $p(n)$, sabemos que todos los intervalos $p(n)+1,p(n)+2,\dots,n-1$ se superponen con $n$.
+Además, si $n \in \mathcal{O}$, entonces $\mathcal{O}$ debe incluir una solución óptima al problema que consiste de las solicitudes $\{1,\dots, p(n)\}$: si no fuera así, podríamos reemplazar la selección de solicitudes de $\mathcal{O}$ de $\{1,\dots,p(n)\}$ por una selección mejor, sin peligro de superponernos con la solicitud $n$.
 
-¿Y cómo decidimos si n pertenece a la solución óptima Oj? Esto también es fácil: pertenece a la solución óptima si y solo si la primera de las opciones anteriores es al menos tan buena como la segunda; en otras palabras,\\
+Por otro lado, si $n\notin \mathcal{O}$, entonces $\mathcal{O}$ es, simplemente, igual a la solución óptima al problema que consiste en las solicitudes $\{1,\dots,n-1\}$. Esto es por un razonamiento completamente análogo: suponemos que $\mathcal{O}$ no incluye la solicitud $n$; así que si no elige el conjunto óptimo de las solicitudes $\{1,\dots,n-1\}$, podríamos reemplazarlo por uno mejor.
 
-\colorbox{mygray}{\parbox{15cm}{
-\textbf{(6.2)} La solicitud j pertenece a una solución óptima en el conjunto {1, 2,. . . , j} si y solo si
-vj + OPT(p(j)) ≥ OPT(j − 1).
-}}\\
+Todo esto sugiere que encontrar la solución óptima en intervalos $\{1,2,\dots,n\}$ implica observar las soluciones óptimas de problemas más pequeños de la forma $\{1,2,\dots,j\}$. Entonces, para cualquier valor de $j$ entre $1$ y $n$, digamos que $\mathcal{O}_j$ denota la solución óptima al problema que consiste en las solicitudes $\{1,\dots,j\}$, y sea $OPT(j)$ el valor de esta solución. (Definimos $OPT(0) = 0$, según la convención de que este es el óptimo en un conjunto vacío de intervalos). La solución óptima que estamos buscando es precisamente $\mathcal{O}_n$, con el valor $OPT(n)$. Para la solución óptima $\mathcal{O}_j$ en $\{1,2,\dots,j\}$, nuestro razonamiento anterior (generalizando desde el caso en el que $j = n$) dice que o bien $j \in \mathcal{O}_j$, en cuyo caso $OPT(j) = v_j + OPT(p(j))$, o bien $j \notin \mathcal{O}_j$, y por lo tanto $OPT(j) = OPT(j-1)$. Dado que éstas son precisamente las dos opciones posibles ($j\in \mathcal{O}_j$ o $j \notin \mathcal{O}_j$), podemos decir además que 
 
-Estos hechos forman el primer componente crucial en el que se basa una solución de programación dinámica: una ecuación de recurrencia que expresa la solución óptima (o su valor) en términos de las soluciones óptimas para subproblemas más pequeños. A pesar del simple razonamiento que llevó a este punto, (6.1) ya es un desarrollo significativo. Nos da directamente un algoritmo recursivo para calcular OPT (n), asumiendo que ya hemos ordenado las solicitudes por tiempo de finalización y computamos los valores de p (j) para cada j.\\
+\vspace{8pt}
+\noindent\colorbox{mygray}{\parbox{\textwidth}{
+\begin{theorem}
+$OPT(j) = max(v_j + OPT(p(j)), OPT(j − 1))$
+\label{thm:6.1}
+\end{theorem}
+}}
+\vspace{8pt}
+
+¿Y cómo decidimos si $n$ pertenece a la solución óptima $\mathcal{O}_j$? Esto también es fácil: pertenece a la solución óptima si y solo si la primera de las opciones anteriores es al menos tan buena como la segunda; en otras palabras,
+
+\vspace{8pt}
+\noindent\colorbox{mygray}{\parbox{\textwidth}{
+\begin{theorem}
+La solicitud $j$ pertenece a una solución óptima en el conjunto $\{1,2,\dots,j\}$ si y solo si
+$$v_j + OPT(p(j)) \geq OPT(j−1)$$
+\vspace{-20pt}
+\end{theorem}
+}}
+\vspace{8pt}
+
+Estos hechos forman el primer componente crucial en el que se basa una solución de programación dinámica: una ecuación de recurrencia que expresa la solución óptima (o su valor) en términos de las soluciones óptimas para subproblemas más pequeños. A pesar del simple razonamiento que llevó a este punto, \ref{thm:6.1} ya es un logro significativo. Nos da directamente un algoritmo recursivo para calcular $OPT(n)$, asumiendo que ya hemos ordenado las solicitudes por tiempo de finalización y computado los valores de $p(j)$ para cada $j$.
 
 \begin{figure}[h]
 \centering
 \includegraphics[scale=1.2]{Imagenes-Seccion6/cod6_1.PNG}
 \end{figure}
 
-La corrección del algoritmo sigue directamente por inducción en j:
+Que el algoritmo es correcto se muestra por inducción en $j$:
 
-\colorbox{mygray}{\parbox{15cm}{
-\textbf{(6.3)} Compute-Opt (j) calcula correctamente OPT (j) para cada j = 1, 2,. . . , n.}}\\
+\noindent\colorbox{mygray}{\parbox{\textwidth}{
+\begin{theorem}
+\texttt{Compute-Opt(j)} calcula correctamente $OPT(j)$ para cada $j = 1, 2,\dots,n.$
+\end{theorem}
+}}
 
-Prueba. Por definición, OPT (0) = 0. Ahora, tome algo de j> 0, y suponga, a modo de inducción, que Compute-Opt (i) calcula correctamente OPT (i) para todos i <j. Por la hipótesis de la inducción, sabemos que Compute-Opt (p (j)) = OPT (p (j)) y Compute-Opt (j - 1) = OPT (j - 1); y por lo tanto de (6.1) se deduce que\\
+\begin{proof}
+Por definición, $OPT(0) = 0$. Ahora, tomamos $j>0$, y suponemos, a modo de inducción, que \texttt{Compute-Opt(i)} calcula correctamente $OPT(i)$ para todo $i<j$. Por la hipótesis inductiva, sabemos que \texttt{Compute-Opt(p(j))} = $OPT(p(j))$ y \texttt{Compute-Opt(j-1)} = $OPT(j-1)$; y por lo tanto de \ref{thm:6.1} se deduce que
 
-OPT(j) = max(vj + Compute-Opt(p(j)), Compute-Opt(j − 1))
-= Compute-Opt(j).
+\begin{equation*}
+\begin{split}
+OPT(j) & = max(vj + \texttt{Compute-Opt(p(j))}, \texttt{Compute-Opt(j−1))}\\ 
+ & = Compute-Opt(j).
+\end{split}
+\end{equation*}
+\end{proof}
 
-Desafortunadamente, si realmente implementamos el algoritmo Compute-Opt como se acaba de escribir, tomaría un tiempo exponencial para ejecutarse en el peor de los casos. Por ejemplo, consulte la Figura 6.3 para ver el árbol de llamadas emitidas para la instancia de la Figura 6.2: el árbol se ensancha muy rápidamente debido a la ramificación recursiva. Para tomar un ejemplo más extremo, en una instancia muy bien en capas como la de la Figura 6.4, donde p (j) = j - 2 para cada j = 2, 3, 4,. . . , n, vemos que Compute-Opt (j) genera llamadas recursivas separadas en problemas de tamaños j - 1 y j - 2. En otras palabras, el número total de llamadas hechas a Compute-Opt en esta instancia aumentará\\
+
+Desafortunadamente, si realmente implementamos el algoritmo\\ \texttt{Compute-Opt} como se acaba de escribir, en el peor de los casos tomaría un tiempo exponencial para ejecutarse. 
+Por ejemplo, consulte la Figura \ref{fig:Imagenes-Seccion6/fig6_3.PNG} para ver el árbol de llamadas para la instancia de la Figura \ref{fig:Imagenes-Seccion6/fig6_2.PNG}: el árbol se ensancha muy rápidamente debido a las ramificaciones recursivas. 
+Para dar un ejemplo más extremo, en una instancia en capas muy bien definidas como la de la Figura \ref{fig:Imagenes-Seccion6/fig6_4.PNG}, donde $p(j) = j-2$ para cada $j = 2,3,4,\dots,n$, vemos que \texttt{Compute-Opt(j)} genera llamadas recursivas separadas en problemas de tamaños $j - 1$ y $j - 2$. En otras palabras, el número total de llamadas hechas a \texttt{Compute-Opt} en esta instancia aumentará como los números de Fibonacci, que aumentan exponencialmente. Por lo tanto, no hemos logrado una solución de tiempo polinomial.
+
 
 \begin{figure}[h]
 \centering
-\includegraphics[scale=1]{Imagenes-Seccion6/fig6_3.PNG}
-\caption{Figura 6.3 El árbol de subproblemas llamado por Compute-Opt en la instancia de problema de la Figura 6.2.}
+\includegraphics[width=0.7\textwidth]{Imagenes-Seccion6/fig6_3.PNG}
+\caption{El árbol de subproblemas tal como es llamado por \texttt{Compute-Opt} en la instancia de problema de la Figura \ref{fig:Imagenes-Seccion6/fig6_2.PNG}.}
+\label{fig:Imagenes-Seccion6/fig6_3.PNG}
 \end{figure}
 
-
 \begin{figure}[h]
 \centering
-\includegraphics[scale=1.2]{Imagenes-Seccion6/fig6_4.PNG}
-\caption{Figura 6.4 Una instancia de la programación de intervalos ponderados en la que la recursión ComputeOpt simple tomará tiempo exponencial. Los valores de todos los intervalos en este caso son 1.}
+\includegraphics[width=0.8\textwidth]{Imagenes-Seccion6/fig6_4.PNG}
+\caption{Una instancia de la planificación de tareas por intervalos ponderados en la que la recursión \texttt{ComputeOpt} simple tomará tiempo exponencial. Los valores de todos los intervalos en este caso son 1.}
+\label{fig:Imagenes-Seccion6/fig6_4.PNG}
 \end{figure}
 
-Al igual que los números de Fibonacci, que aumentan exponencialmente. Por lo tanto, no hemos logrado una solución de tiempo polinomial.\\
+\subsection*{Memoizando la recursión}
 
+Sin embargo, no estamos tan lejos de tener un algoritmo de tiempo polinomial. Una observación fundamental, que forma el segundo componente crucial de una solución de programación dinámica, es que nuestro algoritmo recursivo \texttt{Compute-Opt} en realidad solo resuelve $n + 1$ subproblemas diferentes: \texttt{Compute-Opt(0)}, \texttt{Compute-Opt(1)}, \dots, \texttt{Compute-Opt(n)}. El hecho de que se ejecute en tiempo exponencial como está escrito se debe simplemente a la espectacular redundancia en el número de veces que realiza cada una de estas llamadas.
 
-\subsection{Memorizando la recursion}
+¿Cómo podríamos eliminar toda esta redundancia? Podríamos almacenar el valor de \texttt{Compute-Opt} en un lugar accesible globalmente la primera vez que lo computamos y luego simplemente usar este valor precomputado en lugar de todas las llamadas recursivas futuras. Esta técnica de guardar valores que ya se han calculado se denomina \textit{memoización}\footnote{N. del T.: no encuentro mejor traducción. Así figura también en la Wikipedia en español.}.
 
-De hecho, sin embargo, no estamos tan lejos de tener un algoritmo de tiempo polinomial. Una observación fundamental, que forma el segundo componente crucial de una solución de programación dinámica, es que nuestro algoritmo recursivo ComputeOpt en realidad solo resuelve n + 1 subproblemas diferentes: Compute-Opt (0), Compute-Opt (1), ..., Compute-Opt (n). El hecho de que se ejecute en tiempo exponencial como está escrito se debe simplemente a la espectacular redundancia en el número de veces que emite cada una de estas llamadas.\\
+Implementamos la estrategia anterior en el procedimiento más ``inteligente'' \texttt{M-Compute-Opt}. Este procedimiento hará uso del array  $M[0\dots n]$; $M[j]$ comenzará con el valor ``vacío'', pero tendrá el valor de \texttt{Compute-Opt(j)} tan pronto como se determine por primera vez. Para determinar $OPT(n)$, invocamos \texttt{M-ComputeOpt(n)}.
 
-¿Cómo podríamos eliminar toda esta redundancia? Podríamos almacenar el valor de Compute-Opt en un lugar accesible globalmente la primera vez que lo computamos y luego simplemente usar este valor precomputado en lugar de todas las llamadas recursivas futuras. Esta técnica de guardar valores que ya se han calculado se denomina memorización.\\
-
-Implementamos la estrategia anterior en el procedimiento más "inteligente" MCompute-Opt. Este procedimiento hará uso de una matriz M [0. . . norte]; M [j] comenzará con el valor "vacío", pero mantendrá el valor de Compute-Opt (j) tan pronto como se determine por primera vez. Para determinar OPT (n), invocamos M-ComputeOpt (n).\\
-
-
-\begin{figure}[h]
-\centering
 \includegraphics[scale=1]{Imagenes-Seccion6/cod6_2.PNG}
-\end{figure}
 
-\subsubsection*{Analizando la versión memorizada}
+\subsection{Analizando la versión memoizada}
 
-Claramente, esto se ve muy similar a nuestra implementación previa del algoritmo; Sin embargo, la memoria ha reducido el tiempo de ejecución.
+Claramente, esto se ve muy similar a nuestra implementación previa del algoritmo; Sin embargo, la memoización ha reducido el tiempo de ejecución.
 
+\noindent\colorbox{mygray}{\parbox{\textwidth}{
+\begin{theorem}
+El tiempo de ejecución de \texttt{M-Compute-Opt(n)} es $O(n)$ (suponiendo que los intervalos de entrada están ordenados por sus tiempos de finalización).
+\end{theorem}
+}}
+\vspace{8pt}
 
-\colorbox{mygray}{\parbox{15cm}{
-\textbf{(6.4)} El tiempo de ejecución de M-Compute-Opt (n) es O (n) (suponiendo que los intervalos de entrada están ordenados por sus tiempos de finalización).}}\\
+\begin{proof}
+El tiempo empleado en una sola llamada a \texttt{M-Compute-Opt} es $O(1)$, excluyendo el tiempo empleado en las llamadas recursivas que genera. Por lo tanto, el tiempo de ejecución está limitado por una cantidad constante de veces el número de llamadas emitidas a \texttt{M-Compute-Opt}. Dado que la implementación en sí misma no proporciona un límite superior explícito a este número de llamadas, intentamos encontrar un límite buscando una buena medida del ``progreso''.
 
-Prueba. El tiempo empleado en una sola llamada a M-Compute-Opt es O (1), excluyendo el tiempo empleado en las llamadas recursivas que genera. Por lo tanto, el tiempo de ejecución está limitado por una cantidad constante de veces el número de llamadas emitidas a M-Compute-Opt. Dado que la implementación en sí misma no proporciona un límite superior explícito en este número de llamadas, intentamos encontrar un límite buscando una buena medida del "progreso".\\
+La medida de progreso más útil aquí es el número de entradas en $M$ que no están ``vacías''. Inicialmente, este número es 0; pero cada vez que el procedimiento invoca la recurrencia, emite dos llamadas recursivas a \texttt{M-Compute-Opt}, llena una nueva entrada y, por lo tanto, aumenta el número de entradas completadas en 1. Ya que $M$ tiene solo $n + 1$ entradas, se deduce que puede haber, como máximo, $O(n)$ llamadas a \texttt{M-Compute-Opt} y, por lo tanto, el tiempo de ejecución de \texttt{M-Compute-Opt(n)} es $O(n)$, tal como se deseaba.
+\end{proof} 
 
-La medida de progreso más útil aquí es el número de entradas en M que no están "vacías". Inicialmente, este número es 0; pero cada vez que el procedimiento invoca la repetición, emite dos llamadas recursivas a M-Compute-Opt, llena una nueva entrada y, por lo tanto, aumenta el número de entradas completadas en 1. Ya que M tiene solo n + 1 entradas, sigue que puede haber, como máximo, llamadas O (n) a M-ComputeOpt y, por lo tanto, el tiempo de ejecución de M-Compute-Opt (n) es O (n), según se desee.\\
+\subsection*{Calcular una solución además de su valor}
 
-\subsubsection*{Calcular una solución además de su valor}
+Hasta ahora, simplemente hemos calculado el valor de una solución óptima; probablemente también queremos conocer el conjunto óptimo de intervalos. Sería fácil extender \texttt{M-Compute-Opt} para seguir la pista de una solución óptima además de su valor: podríamos mantener un arreglo $S$ adicional de forma que $S[i]$ contenga un conjunto óptimo de intervalos entre $\{1,2,\dots,i\}$. Sin embargo, una mejora inocente del código para mantener las soluciones en arreglo $S$ aumentaría el tiempo de ejecución en un factor adicional de $O(n)$: mientras que una posición en el arreglo $M$ se puede actualizar en tiempo $O(1)$, almacenar un conjunto en la matriz $S$ llevaría un tiempo $O(n)$. Podemos evitar esta explosión de $O(n)$ no manteniendo $S$ explícitamente, sino recuperando la solución óptima a partir de los valores guardados en el arreglo $M$ después de que se haya calculado el valor óptimo.
 
-Hasta ahora, simplemente hemos calculado el valor de una solución óptima; Presumiblemente también queremos un conjunto óptimo de intervalos. Sería fácil extender M-Compute-Opt para seguir la pista de una solución óptima además de su valor: podríamos mantener una matriz S adicional para que S [i] contenga un conjunto óptimo de intervalos entre {1, 2 ,. . . , yo}. Sin embargo, la mejora ingenua del código para mantener las soluciones en la matriz S aumentaría el tiempo de ejecución por un factor adicional de O (n): mientras que una posición en la matriz M se puede actualizar en tiempo O (1), anotando un conjunto en la matriz S lleva tiempo O (n). Podemos evitar este estallido O (n) no manteniendo S explícitamente, sino recuperando la solución óptima de los valores guardados en la matriz M después de que se haya calculado el valor óptimo.\\
+Sabemos por \ref{thm:6.2} que $j$ pertenece a una solución óptima para el conjunto de intervalos $\{1,\dots,j\}$ si y solo si $v_j + OPT(p(j)) \geq OPT(j-1)$. Usando esta observación, obtenemos el siguiente procedimiento simple, que ``rastrea hacia atrás'' a través del arreglo $M$ para encontrar el conjunto de intervalos en una solución óptima.
 
-Sabemos por (6.2) que j pertenece a una solución óptima para el conjunto de intervalos {1,. . . , j} si y solo si vj + OPT (p (j)) ≥ OPT (j - 1). Usando esta observación, obtenemos el siguiente procedimiento simple, que "rastrea" a través de la matriz M para encontrar el conjunto de intervalos en una solución óptima.\\
+\includegraphics[width=0.9\textwidth]{Imagenes-Seccion6/cod6_3.PNG}
 
-COD6 3.PNG
+Como \texttt{Find-Solution} se llama a sí misma recursivamente solo en valores estrictamente más pequeños, hace un total de $O(n)$ llamadas recursivas; y como utiliza un tiempo constante por llamada, tenemos
 
-Como Find-Solution se llama a sí mismo recursivamente solo en valores estrictamente más pequeños, hace un total de O (n) llamadas recursivas; y como pasa un tiempo constante por llamada, tenemos\\
+\noindent\colorbox{mygray}{\parbox{\textwidth}{
+\begin{theorem}
+Dado el arreglo $M$ de los valores óptimos de los subproblemas, \texttt{Find-Solution} devuelve una solución óptima en tiempo $O(n)$.
+\end{theorem}
+}}
 
-\colorbox{mygray}{\parbox{15cm}{
-\textbf{(6.5)} Dada la matriz M de los valores óptimos de los subproblemas, FindSolution devuelve una solución óptima en tiempo O (n).}}\\
+\todo[inline]{Revisado hasta acá}
 
-\subsection{Principios de la Programación Dinámica: Memoización o Iteración sobre Subproblemas}
+\section{Principios de la Programación Dinámica: Memoización o Iteración sobre Subproblemas}
 
-Ahora usamos el algoritmo para el problema de programación de intervalos ponderados desarrollado en la sección anterior para resumir los principios básicos de la programación dinámica, y también para ofrecer una perspectiva diferente que será fundamental para el resto del capítulo: iterar sobre los subproblemas, en lugar de computar Soluciones recursivas.\\
+Ahora utilizamos el algoritmo para el problema de planificación de tareas por intervalos ponderados
+desarrollado en la sección anterior para resumir los principios básicos de la programación dinámica, y también para ofrecer una perspectiva diferente que será fundamental para el resto del capítulo: iterar sobre subproblemas, en lugar de calcular soluciones de forma recursiva.
 
-En la sección anterior, desarrollamos una solución de tiempo polinómico para el problema de programación de intervalos ponderados diseñando primero un algoritmo recursivo de tiempo exponencial y luego convirtiéndolo (por memoización) en un algoritmo recursivo eficiente que consultó una matriz global M de soluciones óptimas para subproblemas. Sin embargo, para comprender realmente lo que está sucediendo aquí, es útil formular una versión esencialmente equivalente del algoritmo. Es esta nueva formulación la que captura de manera más explícita la esencia de la técnica de programación dinámica, y servirá como una plantilla general para los algoritmos que desarrollamos en secciones posteriores.\\
+En la sección anterior, desarrollamos una solución en tiempo polinómico para el problema de planificación de tareas por intervalos ponderados, diseñando primero un algoritmo recursivo de tiempo exponencial y luego convirtiéndolo (por memoización) en un algoritmo recursivo que consultaba un arreglo global $M$ de soluciones óptimas a los subproblemas. 
+Sin embargo, para entender realmente lo que está pasando aquí, ayuda formular una versión esencialmente equivalente del algoritmo. 
+Esta nueva formulación es la que capta más explícitamente la esencia de la técnica de programación dinámica, y servirá como plantilla general para los algoritmos que desarrollamos en secciones posteriores.
 
-\subsubsection*{Diseñando el algoritmo}
+\subsection{Diseñando el algoritmo}
 
 La clave para el algoritmo eficiente es realmente la matriz M. Codifica la noción de que estamos usando el valor de soluciones óptimas para los subproblemas en intervalos {1, 2,. . . , j} para cada j, y usa (6.1) para definir el valor de M [j] en función de los valores que vienen antes en la matriz. Una vez que tenemos la matriz M, el problema se resuelve: M [n] contiene el valor de la solución óptima en la instancia completa, y Find-Solution se puede usar para rastrear a través de M de manera eficiente y devolver la solución óptima.\\
 
@@ -3094,7 +3181,7 @@ Naturalmente, estas son pautas informales. En particular, la noción de "más pe
 
 Veremos que a veces es más fácil iniciar el proceso de diseño de tal algoritmo mediante la formulación de un conjunto de subproblemas que parecen naturales y luego descubrir una recurrencia que los vincule entre sí; pero a menudo (como sucedió en el caso de la planificación de intervalos ponderados), puede ser útil definir primero una recurrencia razonando acerca de la estructura de una solución óptima, y ​​luego determinar qué subproblemas serán necesarios para desenrollar la recurrencia. Esta relación de gallina y huevo entre los subproblemas y las recurrencias es un problema sutil que subyace a la programación dinámica. Nunca está claro que una colección de subproblemas será útil hasta que uno encuentre una recurrencia que los vincule; pero puede ser difícil pensar en las recurrencias en ausencia de los subproblemas "más pequeños" sobre los que se basan. En las secciones posteriores, desarrollaremos una mayor práctica en la gestión de este compromiso de diseño.\\
 
-\subsection{Mínimos cuadrados segmentados: opciones de múltiples vías}
+\section{Mínimos cuadrados segmentados: opciones de múltiples vías}
 
 Ahora analizamos un tipo diferente de problema, que ilustra un estilo de programación dinámica ligeramente más complicado. En la sección anterior, desarrollamos una recurrencia basada en una elección fundamentalmente binaria: o el intervalo n pertenecía a una solución óptima o no. En el problema que consideramos aquí, la recurrencia implicará lo que podría llamarse "opciones de múltiples vías": en cada paso, tenemos un número polinomial de posibilidades a considerar para la estructura de la solución óptima. Como veremos, el enfoque de programación dinámica se adapta a esta situación más general de manera muy natural.\\
 
@@ -3198,7 +3285,7 @@ Finalmente, consideramos el tiempo de ejecución de los mínimos cuadrados segme
 
 Siguiendo esto, el algoritmo tiene n iteraciones, para valores j = 1,. . . , n. Para cada valor de j, tenemos que determinar el mínimo en la recurrencia (6.7) para completar la entrada de la matriz M [j]; esto toma tiempo O (n) para cada j, para un total de O (n2). Por lo tanto, el tiempo de ejecución es O (n2) una vez que se han determinado todos los valores ei, j.\\
 
-\subsection{El problema de la mochila: Agregar una variable}
+\section{El problema de la mochila: Agregar una variable}
 
 Estamos viendo cada vez más que los problemas en la programación proporcionan una fuente rica de problemas algorítmicos motivados en la práctica. Hasta ahora hemos considerado problemas en los que las solicitudes se especifican por un intervalo de tiempo dado en un recurso, así como problemas en los que las solicitudes tienen una duración y una fecha límite, pero no requieren un intervalo en particular durante el cual deben realizarse.\footnote{1 En este análisis, el tiempo de ejecución está dominado por la O (n3) necesaria para calcular todos los valores ei, j. Pero, de hecho, es posible calcular todos estos valores en tiempo O (n2), lo que reduce el tiempo de ejecución del algoritmo completo a O (n2). La idea, cuyos detalles dejaremos como ejercicio para el lector, es primero calcular ei, j para todos los pares (i, j) donde j - i = 1, luego para todos los pares donde j - i = 2, luego j - i = 3, y así sucesivamente. De esta manera, cuando llegamos a un valor ei, j particular, podemos usar los ingredientes del cálculo
 para ei, j − 1 para determinar ei, j en tiempo constante.}\\
@@ -3310,7 +3397,7 @@ Usando esta recurrencia, podemos escribir un algoritmo de programación dinámic
 \colorbox{mygray}{\parbox{15cm}{
 \textbf{(6.12)} El problema de la mochila se puede resolver en tiempo O (nW).}}\\
 
-\subsection{6.5 Estructura secundaria del RNA: Programación dinámica sobre intervalos}
+\section{Estructura secundaria del RNA: Programación dinámica sobre intervalos}
 
 En el Problema de la mochila, pudimos formular un algoritmo de programación dinámico agregando una nueva variable. Una forma diferente pero muy común por la cual uno termina agregando una variable a un programa dinámico es a través del siguiente escenario. Comenzamos pensando en el conjunto de subproblemas en {1, 2,. . . , j}, para todas las elecciones de j, y nos encontramos incapaces de llegar a una recurrencia natural. Luego observamos el conjunto más grande de subproblemas en {i, i + 1,. . . , j} para todas las opciones de i y j (donde i ≤ j), y encuentre una relación de recurrencia natural en estos subproblemas. De esta manera, hemos añadido la segunda variable i; el efecto es considerar un subproblema para cada intervalo contiguo en {1, 2,. . . , n}.\\
 
@@ -3405,7 +3492,7 @@ Es fácil limitar el tiempo de ejecución: hay O (n2) subproblemas a resolver, y
 
 Como siempre, podemos recuperar la estructura secundaria en sí (no solo su valor) registrando cómo se alcanzan los mínimos en (6.13) y rastreando a través del cálculo.\\
 
-\subsection{Alineación de secuencias}
+\section{Alineación de secuencias}
 
 Para el resto de este capítulo, consideramos otros dos algoritmos de programación dinámica que tienen cada uno una amplia gama de aplicaciones. En las siguientes dos secciones discutimos la alineación de secuencias, un problema fundamental que surge al comparar cadenas. Luego de esto, nos ocuparemos del problema de calcular las rutas más cortas en los gráficos cuando los bordes tienen costos que pueden ser negativos.\\
 
@@ -3555,7 +3642,7 @@ Por lo tanto, el valor de la alineación óptima es la longitud de la ruta más 
 
 Para un ejemplo, la Figura 6.18 muestra el valor de la ruta más corta desde (0, 0) a cada nodo (i, j) para el problema de alinear el significado y el nombre de las palabras. Para el propósito de este ejemplo, asumimos que $ \delta =2$; igualar una vocal con una vocal diferente, o una consonante con una consonante diferente, cuesta 1; mientras que unir una vocal y una consonante cuesta 3. Para cada celda de la tabla (que representa el nodo correspondiente), la flecha indica el último paso del camino más corto que conduce a ese nodo; en otras palabras, la forma en que el mínimo Se logra en (6.16). Por lo tanto, siguiendo las flechas hacia atrás desde el nodo (4, 4), podemos rastrear para construir la alineación\\
 
-\subsection{Alineación de secuencias en el espacio lineal a través de dividir y conquistar}
+\section{Alineación de secuencias en el espacio lineal a través de dividir y conquistar}
 
 En la sección anterior, mostramos cómo calcular la alineación óptima entre dos cadenas X e Y de longitudes m y n, respectivamente. La construcción de la matriz bidimensional de soluciones óptimas para subproblemas, OPT (·, ·), resultó ser equivalente a la construcción de un gráfico GXY con nodos mn dispuestos en una cuadrícula y buscando el camino más barato entre esquinas opuestas En cualquiera de estas formas de formular el algoritmo de programación dinámica, el tiempo de ejecución es O (mn), porque lleva un tiempo constante determinar el valor en cada una de las celdas mn de la matriz OPT; y el requisito de espacio también es O (mn), ya que estaba dominado por el costo de almacenar la matriz (o el gráfico GXY).\\
 
@@ -3661,11 +3748,11 @@ Entonces cuando m = n y obtenemos una división uniforme, el tiempo de ejecució
 
 Así, el paso inductivo funcionará si elegimos k = 2c, y esto completa la prueba $\blacksquare$\\
 
-\subsection{Caminos más cortos en un gráfico}
+\section{Caminos más cortos en un gráfico}
 
 Para las tres últimas secciones, nos centramos en el problema de encontrar rutas más cortas en una gráfica, junto con algunos problemas estrechamente relacionados.\\
 
-\subsubsection*{El problema}
+\subsection*{El problema}
 
 Sea G = (V, E) una gráfica dirigida. Suponga que cada borde $(i, j)  \in  E$ tiene un peso asociado cij. Los pesos se pueden usar para modelar una serie de cosas diferentes; Veremos aquí la interpretación en la que el peso cij representa un costo por ir directamente del nodo i al nodo j en el gráfico.\\
 
@@ -3829,9 +3916,9 @@ Tenga en cuenta que en la versión más eficiente en espacio de Bellman-Ford, la
 
 Dicha señal de detención es una consecuencia simple de la siguiente observación: si alguna vez ejecutamos una iteración completa i en la que no cambia el valor M [v], entonces no volverá a cambiar el valor M [v], ya que las futuras iteraciones comenzarán exactamente El mismo conjunto de entradas de matriz. Por lo tanto, es seguro detener el algoritmo. Tenga en cuenta que no es suficiente que un valor M [v] particular permanezca igual; para terminar de forma segura, necesitamos que todos estos valores permanezcan iguales para una sola iteración.\\
 
-\subsection{Ejercicios resueltos}
+\section*{Ejercicios resueltos}
 
-\subsubsection*{Ejercicio 1}
+\subsection*{Ejercicio 1}
 
 Supongamos que está gestionando la construcción de vallas publicitarias en la Carretera Conmemorativa Stephen Daedalus, una carretera muy transitada que corre de oeste a este por M millas. Los sitios posibles para las carteleras están dados por los números x1, x2, ..., xn, cada uno en el intervalo [0, M] (especificando su posición a lo largo de la carretera, medida en millas desde su extremo occidental). Si coloca una cartelera en la ubicación xi, recibirá un ingreso de ri> 0.\\
 
@@ -3872,7 +3959,7 @@ Luego fusionamos la lista ordenada x1, ..., xn con la lista ordenada x1, ..., xn
 
 Aquí hay una observación final sobre este problema. Claramente, la solución se parece mucho a la del problema de programación de intervalos ponderados, y hay una razón fundamental para ello. De hecho, nuestro problema de colocación de la cartelera puede codificarse directamente como una instancia de la Programación de intervalos ponderados, de la siguiente manera. Supongamos que para cada sitio xi, definimos un intervalo con puntos finales [xi - 5, xi] y peso ri. Luego, dado cualquier conjunto de intervalos no superpuestos, el conjunto correspondiente de sitios tiene la propiedad de que no hay dos dentro de las 5 millas uno del otro. A la inversa, dado cualquier conjunto de sitios (no dos dentro de 5 millas), los intervalos asociados con ellos no serán superpuestos. Por lo tanto, las recopilaciones de intervalos no superpuestos se corresponden precisamente con el conjunto de colocaciones válidas de la cartelera, y al eliminar el conjunto de intervalos que acabamos de definir (con sus ponderaciones) en un algoritmo para la Programación de intervalos ponderados se obtendrá la solución deseada\\
 
-\subsubsection*{Ejercicio 2}
+\subsection*{Ejercicio 2}
 
 A través de algunos amigos de amigos, terminas en una visita de consultoría a la firma biotecnológica Clones `R' Us (CRU). Al principio, no está seguro de cómo su fondo algorítmico será de alguna ayuda para ellos, pero pronto se encontrará con la necesidad de ayudar a dos ingenieros de software de aspecto idéntico a enfrentar un problema desconcertante.\\
 

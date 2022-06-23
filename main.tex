@@ -35,7 +35,18 @@
 \usepackage{capt-of}
 \usepackage[font=footnotesize]{caption}
 \usepackage{calc}% so we can do inline math within \setlength
-\usepackage{titlesec}
+\usepackage{crimson}
+
+\usepackage[compact]{titlesec}
+
+\titleformat{\chapter}[display]
+{\itshape\bfseries\color{gray}}
+{\fontsize{42}{40}\selectfont\chaptertitlename\hspace{5pt}\thechapter}
+{0pt}
+{\vspace{1pc}\fontsize{28}{32}\selectfont}[\vspace{3pc}]
+
+\titleformat{\subsection}
+  {\normalfont\large\bfseries}{\includegraphics[width=0.9cm]{subsection.PNG}}{0em}{}
 
 \titleformat{\subsubsection}[runin]{\normalfont\bfseries\itshape}{}{0.5em}{}
 \titlespacing{\subsubsection}{0pc}{1.5ex plus .1ex minus .2ex}{1pc}
@@ -66,9 +77,6 @@
 \renewcommand{\qedsymbol}{$\blacksquare$}
 \renewenvironment{proof}{{\noindent\bfseries Demostración.}}{\qed\vspace{12pt}}
 
-\usepackage{titlesec}
-\titleformat{\subsection}
-  {\normalfont\large\bfseries}{\includegraphics[width=1cm]{subsection.PNG}}{0em}{}
 
 %% para definir los forEach
 \algnewcommand\algorithmicforeach{\textbf{for each}}
@@ -339,12 +347,12 @@ Para empezar, recordemos que antes vimos un ejemplo en el que podía haber múlt
 
 Ahora en cualquier ejecución del algoritmo, $m$ estará emparejado con $w$, $m'$ estará emparejado con $w'$ (quizás en el otro orden), y todo terminaría ahí. Así, el otro emparejamiento estable, que consiste en los pares $(m',w)$ y $(m,w')$, no es alcanzable en una ejecución del algoritmo en el que el hombre propone. Por otro lado, si sería posible lograrlo si ejecutaremos una versión modificada del algoritmo, en la cual las mujeres propusieran. Y, en ejemplos más grandes con más de dos personas de cada lado, podríamos tener una gran colección de emparejamientos estables posibles, muchos de ellos no pudiendo ser obtenidos por un algoritmo natural.
 
-Este ejemplo muestra una cierta ``injusticia" en el algoritmo G-S, que favorece a los hombres. Si las preferencias de los hombres encajan perfectamente (todos ellos incluyen a diferentes mujeres como primera opción), entonces en todas las ejecuciones del algoritmo G-S todos los hombres acaban emparejados
+Este ejemplo muestra una cierta ``injusticia'' en el algoritmo G-S, que favorece a los hombres. Si las preferencias de los hombres encajan perfectamente (todos ellos incluyen a diferentes mujeres como primera opción), entonces en todas las ejecuciones del algoritmo G-S todos los hombres acaban emparejados
 con su primera opción, independientemente de las preferencias de las mujeres. Si las preferencias de las mujeres chocan completamente con las de los hombres (como ocurrió en este ejemplo), el emparejamiento estable resultante es el peor posible para las mujeres. Así, este sencillo conjunto de listas de preferencias resume de forma compacta un mundo en el que alguien está destinado a acabar siendo infeliz: las mujeres son infelices si los hombres se declaran, y los hombres son infelices si las mujeres se declaran.
 
 Analicemos en más detalle el algoritmo y veamos que tan general es esta ``injusticia''.
 
-Para empezar, nuestro ejemplo refuerza el punto de que el algoritmo G-S está realmente subespecificado: mientras haya un hombre libre, se nos permite elegir cualquier hombre libre para hacer la siguiente propuesta. Diferentes elecciones especifican diferentes ejecuciones del algoritmo; por eso, para ser cuidadosos, enunciamos (1.6) como ``Considere una ejecución del algoritmo G-S que devuelve un conjunto de pares S," en lugar de ``Considerar el conjunto S devuelto por el algoritmo G-S". Así, nos encontramos con otra pregunta muy natural: ¿Todas las ejecuciones del algoritmo G-S dan lugar al mismo emparejamiento? Este es un tipo de pregunta que que se plantea en muchos ámbitos de la ciencia de la computación: tenemos un algoritmo que se ejecuta de forma asíncrona, con diferentes componentes independientes que realizan acciones que pueden intercalarse de forma compleja, y queremos saber cuánta variabilidad causa esta asincronía en el resultado final. Para considerar un ejemplo muy diferente, los componentes independientes pueden no ser hombres y mujeres, sino componentes electrónicos que activan partes del ala de un avión; el efecto de la asincronía en su comportamiento puede ser muy importante.
+Para empezar, nuestro ejemplo refuerza el punto de que el algoritmo G-S está realmente subespecificado: mientras haya un hombre libre, se nos permite elegir cualquier hombre libre para hacer la siguiente propuesta. Diferentes elecciones especifican diferentes ejecuciones del algoritmo; por eso, para ser cuidadosos, enunciamos (1.6) como ``Considere una ejecución del algoritmo G-S que devuelve un conjunto de pares S," en lugar de ``Considerar el conjunto S devuelto por el algoritmo G-S''. Así, nos encontramos con otra pregunta muy natural: ¿Todas las ejecuciones del algoritmo G-S dan lugar al mismo emparejamiento? Este es un tipo de pregunta que que se plantea en muchos ámbitos de la ciencia de la computación: tenemos un algoritmo que se ejecuta de forma asíncrona, con diferentes componentes independientes que realizan acciones que pueden intercalarse de forma compleja, y queremos saber cuánta variabilidad causa esta asincronía en el resultado final. Para considerar un ejemplo muy diferente, los componentes independientes pueden no ser hombres y mujeres, sino componentes electrónicos que activan partes del ala de un avión; el efecto de la asincronía en su comportamiento puede ser muy importante.
 
 En el presente contexto, veremos que la respuesta a nuestra pregunta es sorprendentemente limpia: todas las ejecuciones del algoritmo G-S producen la misma coincidencia. Procedemos a demostrarlo ahora.
 
@@ -601,16 +609,15 @@ Propuesta de Definición de Eficiencia (1): \textit{un algoritmo es eficiente si
 
 Dediquemos un poco de tiempo a considerar esta definición. A cierto nivel, es difícil discutirla: uno de los objetivos en la base de nuestro estudio de los algoritmos es resolver problemas reales con rapidez. Y, de hecho, hay un área importante de investigación dedicada a la cuidadosa implementación y perfilado de diferentes algoritmos para problemas computacionales discretos.
 
-Pero en esta definición faltan algunas cosas cruciales, aunque nuestro
-objetivo principal es resolver rápidamente instancias de problemas reales en ordenadores reales. La primera es la omisión de dónde, y cómo de bien, implementamos un algoritmo. Incluso los malos algoritmos pueden ejecutarse rápidamente cuando se aplican a pequeños casos de prueba en procesadores extremadamente rápidos; incluso los buenos algoritmos pueden ejecutarse lentamente cuando se codifican de forma descuidada.
-Además, ¿qué es una instancia de entrada ``real"?
+Pero en esta definición faltan algunas cosas cruciales, aunque nuestro objetivo principal es resolver rápidamente instancias de problemas reales en ordenadores reales. La primera es la omisión de dónde, y cómo de bien, implementamos un algoritmo. Incluso los malos algoritmos pueden ejecutarse rápidamente cuando se aplican a pequeños casos de prueba en procesadores extremadamente rápidos; incluso los buenos algoritmos pueden ejecutarse lentamente cuando se codifican de forma descuidada.
+Además, ¿qué es una instancia de entrada ``real''?
 No conocemos toda la gama de casos de entrada que se encontrarán en la práctica, y algunos casos de entrada pueden ser mucho más difíciles que otros. 
 Por último, la definición propuesta no tiene en cuenta lo bien o mal que puede escalar un algoritmo a medida que el tamaño del problema crece
 a tamaños inesperados. Una situación común es que dos algoritmos muy diferentes se comporten de forma comparable con entradas de tamaño 100; multiplique el tamaño de la entrada por diez y uno de ellos se ejecutará rápidamente, mientras que el otro consumirá una enorme cantidad de tiempo.
 
 Así que lo que podríamos pedir es una definición concreta de eficiencia que sea independiente de la plataforma, independiente de la instancia y con valor predictivo con respecto a los tamaños de entrada crecientes. Antes de centrarnos en las consecuencias específicas de esta afirmación, podemos al menos explorar su sugerencia de alto nivel implícita: que necesitamos adoptar una visión más matemática de la situación.
 
-Podemos utilizar el problema del emparejamiento estable como ejemplo para guiarnos. La entrada tiene un parámetro natural de ``tamaño" $N$; podríamos tomarlo como el tamaño total de la representación de todas las listas de preferencias, ya que esto es lo que cualquier algoritmo para el problema recibirá como entrada. $N$ está estrechamente relacionado con el otro parámetro natural en este problema: $n$, el número de hombres y el número de mujeres. Dado que hay $2n$ listas de preferencias, cada una de ellas de longitud $n$, podemos ver que $N = 2n^2$, suprimiendo detalles más finos de cómo se representan los datos. Al considerar el problema, trataremos de describir un algoritmo a alto nivel, y luego analizaremos su tiempo de ejecución matemáticamente en función de este tamaño de entrada $N$.
+Podemos utilizar el problema del emparejamiento estable como ejemplo para guiarnos. La entrada tiene un parámetro natural de ``tamaño'' $N$; podríamos tomarlo como el tamaño total de la representación de todas las listas de preferencias, ya que esto es lo que cualquier algoritmo para el problema recibirá como entrada. $N$ está estrechamente relacionado con el otro parámetro natural en este problema: $n$, el número de hombres y el número de mujeres. Dado que hay $2n$ listas de preferencias, cada una de ellas de longitud $n$, podemos ver que $N = 2n^2$, suprimiendo detalles más finos de cómo se representan los datos. Al considerar el problema, trataremos de describir un algoritmo a alto nivel, y luego analizaremos su tiempo de ejecución matemáticamente en función de este tamaño de entrada $N$.
 
 
 \subsection*{Tiempos de Ejecución del Peor Caso y Búsqueda por Fuerza Bruta} 
@@ -619,13 +626,13 @@ Para empezar, nos enfocaremos en analizar el peor tiempo de ejecución: lo harem
 
 El enfoque en el peor de los casos parece inicialmente bastante draconiano: ¿y si un algoritmo funciona bien en la mayoría de los casos y solo tiene algunas entradas patológicas en las que es muy lento? Esto ciertamente es un problema en algunos casos, pero en general se ha encontrado que, en la práctica, el análisis del peor caso de un algoritmo captura razonablemente su eficiencia.
 
-Además, una vez que hemos decidido seguir el camino del análisis matemático, es difícil encontrar una alternativa eficaz al análisis del peor de los casos. El análisis del caso medio es una alternativa obvia y atractiva, en el que se estudia el rendimiento de un algoritmo en un promedio de casos "aleatorios". A veces puede proporcionar una visión significativa, pero a menudo también puede convertirse en un problema.
-pero también puede convertirse en un atolladero. Como hemos observado antes, es muy difícil de expresar toda la gama de instancias de entrada que surgen en la práctica, por lo que los intentos de estudiar el rendimiento de un algoritmo de un algoritmo en casos de entrada "aleatorios" pueden derivar rápidamente en en debates sobre cómo se debe generar una entrada aleatoria: el mismo algoritmo puede funcionar muy bien con una clase de entradas aleatorias y muy mal con otra. Al fin y al cabo, las entradas reales de un algoritmo no suelen producirse con una distribución aleatoria, por lo que el análisis del caso medio corre el riesgo de decirnos más sobre los medios por los que se generaron las entradas aleatorias que sobre el propio algoritmo.
+Además, una vez que hemos decidido seguir el camino del análisis matemático, es difícil encontrar una alternativa eficaz al análisis del peor de los casos. El análisis del caso medio es una alternativa obvia y atractiva, en el que se estudia el rendimiento de un algoritmo en un promedio de casos ``aleatorios''. A veces puede proporcionar una visión significativa, pero a menudo también puede convertirse en un problema.
+pero también puede convertirse en un atolladero. Como hemos observado antes, es muy difícil de expresar toda la gama de instancias de entrada que surgen en la práctica, por lo que los intentos de estudiar el rendimiento de un algoritmo de un algoritmo en casos de entrada ``aleatorios'' pueden derivar rápidamente en en debates sobre cómo se debe generar una entrada aleatoria: el mismo algoritmo puede funcionar muy bien con una clase de entradas aleatorias y muy mal con otra. Al fin y al cabo, las entradas reales de un algoritmo no suelen producirse con una distribución aleatoria, por lo que el análisis del caso medio corre el riesgo de decirnos más sobre los medios por los que se generaron las entradas aleatorias que sobre el propio algoritmo.
 
 Así que, en general, pensaremos en el análisis del peor caso del tiempo de ejecución de un algoritmo. Pero, ¿cuál es un punto de referencia analítico razonable que pueda decirnos si un límite de tiempo de ejecución es impresionante o muy flojo? Una primera guía sencilla
 es la comparación con la búsqueda por fuerza bruta en el espacio de búsqueda de posibles soluciones.
 
-Volvamos al ejemplo del Problema del Emparejamiento Estable. Incluso cuando el tamaño de una instancia de entrada de Emparejamiento Estable es relativamente pequeño, el espacio de búsqueda es enorme (hay $n!$ posibles emparejamientos perfectos entre $n$ hombres y $n$ mujeres), y tenemos que encontrar un emparejamiento que sea estable. El algoritmo natural de ``fuerza bruta" para este problema recorrería todos los emparejamientos por enumeración, comprobando cada uno de ellos para ver si es estable. La sorpresa, en cierto sentido, de nuestra solución al problema de las coincidencias estables es que necesitamos gastar un tiempo proporcional a $N$ para encontrar un emparejamiento estable
+Volvamos al ejemplo del Problema del Emparejamiento Estable. Incluso cuando el tamaño de una instancia de entrada de Emparejamiento Estable es relativamente pequeño, el espacio de búsqueda es enorme (hay $n!$ posibles emparejamientos perfectos entre $n$ hombres y $n$ mujeres), y tenemos que encontrar un emparejamiento que sea estable. El algoritmo natural de ``fuerza bruta'' para este problema recorrería todos los emparejamientos por enumeración, comprobando cada uno de ellos para ver si es estable. La sorpresa, en cierto sentido, de nuestra solución al problema de las coincidencias estables es que necesitamos gastar un tiempo proporcional a $N$ para encontrar un emparejamiento estable
 entre este espacio de posibilidades tremendamente grande. Esta fue una conclusión a la que llegamos a nivel analítico. No implementamos el algoritmo ni lo probamos en listas de preferencias de muestra, sino que lo razonamos matemáticamente. Sin embargo, nuestro análisis indicaba cómo podía aplicarse el algoritmo en la práctica y dio pruebas bastante concluyentes de que sería una gran mejora sobre una enumeración exhaustiva.
 
 Este será un tema común en la mayoría de los problemas que estudiamos: una representación compacta, especificando implícitamente un espacio de búsqueda gigante. Para la mayoría de estos problemas, habrá una solución obvia de fuerza bruta: probar todas las posibilidades y ver si alguna de ellas funciona. Este enfoque no sólo es casi siempre demasiado lento para ser útil, sino que es una evasión intelectual; no nos da ninguna idea de la estructura del problema que estamos estudiando. 
@@ -638,13 +645,13 @@ Definición propuesta de eficiencia (2): \textit{Un algoritmo es eficiente si co
 Esta será un borrador de definición muy útil para nosotros. Los algoritmos que mejoran sustancialmente la búsqueda por fuerza bruta casi siempre contienen una valiosa idea heurística que los hace funcionar; y nos dicen algo sobre la estructura intrínseca, y la tratabilidad computacional, del propio problema subyacente. 
 
 Pero si hay un problema con nuestra segunda definición de trabajo, es la vaguedad.
-¿Qué queremos decir con ``rendimiento cualitativamente mejor"? Esto sugiere que consideremos el tiempo de ejecución real de los algoritmos con más detenimiento, e intentemos cuantificar lo que sería un tiempo de ejecución razonable.
+¿Qué queremos decir con ``rendimiento cualitativamente mejor''? Esto sugiere que consideremos el tiempo de ejecución real de los algoritmos con más detenimiento, e intentemos cuantificar lo que sería un tiempo de ejecución razonable.
 
 \subsection*{Tiempo polinomial como definición de eficiencia} 
 
-Cuando se empezaron a analizar matemáticamente los algoritmos discretos --un hilo de investigación que comenzó a cobrar impulso a lo largo de la década de 1960-- un consenso sobre cómo cuantificar la noción de un tiempo de ejecución ``razonable" comenzó a emerger. Los espacios de búsqueda de los problemas combinatorios naturales tienden a crecer exponencialmente en el tamaño de la entrada $N$; si el tamaño de la entrada aumenta en uno, el número de posibilidades aumenta de forma multiplicativa. Nos gustaría que un buen algoritmo para un problema de este tipo escalara mejor: cuando el tamaño de la entrada aumenta en un factor constante --por ejemplo, un factor de 2-- el algoritmo sólo debería ralentizarse en un factor constante $C$.
+Cuando se empezaron a analizar matemáticamente los algoritmos discretos --un hilo de investigación que comenzó a cobrar impulso a lo largo de la década de 1960-- un consenso sobre cómo cuantificar la noción de un tiempo de ejecución ``razonable'' comenzó a emerger. Los espacios de búsqueda de los problemas combinatorios naturales tienden a crecer exponencialmente en el tamaño de la entrada $N$; si el tamaño de la entrada aumenta en uno, el número de posibilidades aumenta de forma multiplicativa. Nos gustaría que un buen algoritmo para un problema de este tipo escalara mejor: cuando el tamaño de la entrada aumenta en un factor constante --por ejemplo, un factor de 2-- el algoritmo sólo debería ralentizarse en un factor constante $C$.
 
-Aritméticamente, podemos formular esta forma de escalar como sigue. Supongamos que un algoritmo tiene la siguiente propiedad: hay constantes absolutas $c>0$ y $d>0$ tales que en cada instancia de entrada de tamaño $N$, su tiempo de ejecución esté limitado por $cN^d$ pasos computacionales primitivos. (En otras palabras, su tiempo de ejecución es como máximo proporcional a $N^d$). Por ahora, seguiremos siendo deliberadamente vagos en lo que queremos decir con la noción de ``paso computacional primitivo" pero se puede formalizar fácilmente en un modelo en el que cada paso corresponde a una sola instrucción en lenguaje ensamblador en un procesador estándar, o una línea de un lenguaje de programación estándar como C o Java. 
+Aritméticamente, podemos formular esta forma de escalar como sigue. Supongamos que un algoritmo tiene la siguiente propiedad: hay constantes absolutas $c>0$ y $d>0$ tales que en cada instancia de entrada de tamaño $N$, su tiempo de ejecución esté limitado por $cN^d$ pasos computacionales primitivos. (En otras palabras, su tiempo de ejecución es como máximo proporcional a $N^d$). Por ahora, seguiremos siendo deliberadamente vagos en lo que queremos decir con la noción de ``paso computacional primitivo'' pero se puede formalizar fácilmente en un modelo en el que cada paso corresponde a una sola instrucción en lenguaje ensamblador en un procesador estándar, o una línea de un lenguaje de programación estándar como C o Java. 
 En cualquier caso, si este tiempo de ejecución se mantiene, para algunos $c$ y $d$, entonces decimos que el algoritmo tiene un \textit{tiempo de ejecución polinómico}, o que es un algoritmo de \textit{tiempo polinómico}. Obsérvese que cualquier límite de tiempo polinómico tiene la propiedad de escalado que estamos buscando. Si el tamaño de la entrada aumenta de $N$ a $2N$, el límite del tiempo de ejecución aumenta de $cN^d$ a $c(2N)^d = c-2^dN^d$, lo que supone una ralentización por un factor de $2d$. Como $d$ es es una constante, también lo es $2d$; por supuesto, como cabría esperar, los polinomios de menor grado exhiben un mejor comportamiento de escala que los polinomios de mayor grado.
 De esta noción, y de la intuición expresada anteriormente, surge nuestro tercer intento de definición de eficiencia.
 
@@ -951,9 +958,9 @@ Las estructuras de datos descritas anteriormente nos permiten implementar el alg
 
 \section{Una compilación de tiempos de ejecución comunes.}
 
-Al tratar de analizar un nuevo algoritmo, ayuda a tener un sentido aproximado del "paisaje" de diferentes tiempos de ejecución. De hecho, hay estilos de análisis que se repiten con frecuencia, por lo que cuando uno ve límites de tiempo de ejecución como $O(n)$, $O(n*log n)$, y $O(n^2)$ que aparecen una y otra vez, a menudo es por un pequeño número de razones distintas. Aprender a reconocer estos estilos comunes de análisis es un objetivo a largo plazo. Para poner las cosas en marcha, ofrecemos la siguiente encuesta de los límites comunes de tiempo de ejecución y algunos de los enfoques típicos que conducen a ellos.\\
+Al tratar de analizar un nuevo algoritmo, ayuda a tener un sentido aproximado del ``paisaje'' de diferentes tiempos de ejecución. De hecho, hay estilos de análisis que se repiten con frecuencia, por lo que cuando uno ve límites de tiempo de ejecución como $O(n)$, $O(n*log n)$, y $O(n^2)$ que aparecen una y otra vez, a menudo es por un pequeño número de razones distintas. Aprender a reconocer estos estilos comunes de análisis es un objetivo a largo plazo. Para poner las cosas en marcha, ofrecemos la siguiente encuesta de los límites comunes de tiempo de ejecución y algunos de los enfoques típicos que conducen a ellos.\\
 
-Anteriormente discutimos la noción de que la mayoría de los problemas tienen un "espacio de búsqueda": el conjunto de todas las soluciones posibles, y notamos que un tema común en el diseño de algoritmos es la búsqueda de algoritmos cuyo rendimiento sea más eficiente que una búsqueda por fuerza bruta en el espacio de búsqueda. Al acercarse a un nuevo problema, entonces, a menudo ayuda pensar en dos tipos de límites: uno en el tiempo de ejecución que se espera alcanzar, y el otro sobre el tamaño del espacio de búsqueda del problema (y por lo tanto en el tiempo de ejecución de un algoritmo por fuerza bruta para el problema). La discusión de los tiempos de ejecución en esta sección comenzará en muchos casos con un análisis del algoritmo de fuerza bruta, ya que es útil como forma de orientarse con respecto a un problema; la tarea de mejorar tales algoritmos será nuestro objetivo en la mayor parte del libro.\\
+Anteriormente discutimos la noción de que la mayoría de los problemas tienen un ``espacio de búsqueda'': el conjunto de todas las soluciones posibles, y notamos que un tema común en el diseño de algoritmos es la búsqueda de algoritmos cuyo rendimiento sea más eficiente que una búsqueda por fuerza bruta en el espacio de búsqueda. Al acercarse a un nuevo problema, entonces, a menudo ayuda pensar en dos tipos de límites: uno en el tiempo de ejecución que se espera alcanzar, y el otro sobre el tamaño del espacio de búsqueda del problema (y por lo tanto en el tiempo de ejecución de un algoritmo por fuerza bruta para el problema). La discusión de los tiempos de ejecución en esta sección comenzará en muchos casos con un análisis del algoritmo de fuerza bruta, ya que es útil como forma de orientarse con respecto a un problema; la tarea de mejorar tales algoritmos será nuestro objetivo en la mayor parte del libro.\\
 
 \subsubsection*{Tiempo lineal} 
 
@@ -961,7 +968,7 @@ Un algoritmo que se ejecuta en $O(n)$, o tiempo lineal, tiene una propiedad muy 
 
 \subsubsection*{Calculando el máximo}
 
-Calculando el máximo de $n$ números, por ejemplo, se puede realizar en el estilo básico "one-pass". Supongamos que los números se proporcionan como entrada en una lista o en una matriz. Procesamos los números $a_1, a_2,. . ., a_n$ en orden, manteniendo un estimado del máximo a medida que avanzamos. Cada vez que encontramos un número $a_i$, comprobamos si $a_i$ es más grande que nuestra estimación actual, y si es así, actualizamos la estimación del máximo.\\
+Calculando el máximo de $n$ números, por ejemplo, se puede realizar en el estilo básico ``one-pass''. Supongamos que los números se proporcionan como entrada en una lista o en una matriz. Procesamos los números $a_1, a_2,. . ., a_n$ en orden, manteniendo un estimado del máximo a medida que avanzamos. Cada vez que encontramos un número $a_i$, comprobamos si $a_i$ es más grande que nuestra estimación actual, y si es así, actualizamos la estimación del máximo.\\
 
 \begin{lstlisting}
 	max = a[1];
@@ -997,11 +1004,11 @@ A menudo, un algoritmo tiene un tiempo de ejecución de $O(n)$, pero la razón e
 \end{figure}
 
 
-Ahora, para mostrar un límite de tiempo lineal, uno tiene la tentación de describir un argumento como lo que funcionó para el algoritmo de búsqueda del máximo: "Hacemos un trabajo constante por elemento, para un tiempo de ejecución total de $O(n)$." Pero en realidad no es cierto que hacemos solo un trabajo constante por elemento. Supongamos que $n$ es un número par, y considere las listas $A =\{ 1, 3, 5,. . . , 2n-1\}$ y $B =\{ n, n + 2, n + 4,. . . , 3n-2 \}$. El número $b_1$ en el frente de la lista B se ubicará al principio de la lista durante $n / 2$ iteraciones mientras que los elementos de A se seleccionan repetidamente, y por lo tanto estará involucrado en $\Omega(n)$ comparaciones. Ahora bien, es cierto que cada elemento puede participar en la mayoría de las comparaciones de $O(n)$ (en el peor de los casos, se compara con cada elemento en la otra lista), y si sumamos esto sobre todos los elementos obtenemos un límite de $O(n^2)$ en tiempo de ejecución. Este es un límite correcto, pero podemos mostrar algo mucho más fuerte.\\
+Ahora, para mostrar un límite de tiempo lineal, uno tiene la tentación de describir un argumento como lo que funcionó para el algoritmo de búsqueda del máximo: ``Hacemos un trabajo constante por elemento, para un tiempo de ejecución total de $O(n)$." Pero en realidad no es cierto que hacemos solo un trabajo constante por elemento. Supongamos que $n$ es un número par, y considere las listas $A =\{ 1, 3, 5,. . . , 2n-1\}$ y $B =\{ n, n + 2, n + 4,. . . , 3n-2 \}$. El número $b_1$ en el frente de la lista B se ubicará al principio de la lista durante $n / 2$ iteraciones mientras que los elementos de A se seleccionan repetidamente, y por lo tanto estará involucrado en $\Omega(n)$ comparaciones. Ahora bien, es cierto que cada elemento puede participar en la mayoría de las comparaciones de $O(n)$ (en el peor de los casos, se compara con cada elemento en la otra lista), y si sumamos esto sobre todos los elementos obtenemos un límite de $O(n^2)$ en tiempo de ejecución. Este es un límite correcto, pero podemos mostrar algo mucho más fuerte.\\
 
-La mejor manera de argumentar es limitar el número de iteraciones del While por un esquema de "contabilidad". Supongamos que cobramos el costo de cada iteración al elemento que se selecciona y agrega a la lista de salida. A cada elemento se le cobrará solo una vez, ya que en el momento en que se carga por primera vez, se agrega a la salida y no se vuelve a visitar por el algoritmo. Pero solo hay $2n$ total de elementos, y el costo de cada iteración se explica por un cargo a algún elemento, por lo que puede haber como máximo $2*n$ iteraciones. Cada iteración implica una cantidad constante de trabajo, por lo que el tiempo total de ejecución es $O(n)$, según lo deseado.\\
+La mejor manera de argumentar es limitar el número de iteraciones del While por un esquema de ``contabilidad''. Supongamos que cobramos el costo de cada iteración al elemento que se selecciona y agrega a la lista de salida. A cada elemento se le cobrará solo una vez, ya que en el momento en que se carga por primera vez, se agrega a la salida y no se vuelve a visitar por el algoritmo. Pero solo hay $2n$ total de elementos, y el costo de cada iteración se explica por un cargo a algún elemento, por lo que puede haber como máximo $2*n$ iteraciones. Cada iteración implica una cantidad constante de trabajo, por lo que el tiempo total de ejecución es $O(n)$, según lo deseado.\\
 
- Mientras este algoritmo de fusión iteraba a través de sus listas de entrada en orden,La forma "intercalada" en la que procesaba las listas requería un análisis  sutil del tiempo de ejecución. En el Capítulo 3 veremos algoritmos de tiempo lineal para grafos que tienen un flujo de control aún más complejo: gastan una cantidad constante de tiempo en cada nodo y arista subyacente en el grafo, pero el orden en el que procesan los nodos y las aristas depende de la estructura del grafo.\\
+ Mientras este algoritmo de fusión iteraba a través de sus listas de entrada en orden,La forma ``intercalada'' en la que procesaba las listas requería un análisis  sutil del tiempo de ejecución. En el Capítulo 3 veremos algoritmos de tiempo lineal para grafos que tienen un flujo de control aún más complejo: gastan una cantidad constante de tiempo en cada nodo y arista subyacente en el grafo, pero el orden en el que procesan los nodos y las aristas depende de la estructura del grafo.\\
 
 \subsubsection*{Tiempo $O(nlogn)$} 
 
@@ -1030,7 +1037,7 @@ El algoritmo de fuerza bruta para encontrar el par de puntos más cercano se pue
    Endfor
 \end{lstlisting}
 
-Observe cómo el bucle "interno", sobre $(xj,yj)$, tiene iteraciones $O(n)$, cada una de las cuales toma un tiempo constante; y el bucle "externo", sobre $(xi,yi)$, tiene $O(n)$ iteraciones, cada una invocando el bucle interno una vez.\\
+Observe cómo el bucle ``interno'', sobre $(xj,yj)$, tiene iteraciones $O(n)$, cada una de las cuales toma un tiempo constante; y el bucle ``externo'', sobre $(xi,yi)$, tiene $O(n)$ iteraciones, cada una invocando el bucle interno una vez.\\
 
 Es importante notar que el algoritmo que hemos estado discutiendo para el problema del par más cercano realmente es solo el enfoque de fuerza bruta: el espacio de búsqueda natural para este problema tiene el tamaño $O(n^2)$, y simplemente lo estamos enumerando. Al principio, uno siente que hay una cierta inevitabilidad sobre este algoritmo cuadrático, tenemos que medir todas las distancias, ¿no? Pero de hecho esto es una ilusión. En el Capítulo 5 describimos un algoritmo muy inteligente que encuentra el par de puntos más cercano en el plano en solo $O(nlogn)$ tiempo, y en el Capítulo 13 mostramos cómo se puede usar la aleatorización para reducir el tiempo de ejecución a $O(n)$.\\
 
@@ -1138,7 +1145,7 @@ eficiente.\\
 
 Finalmente, hay casos en los que uno encuentra tiempos de ejecución que son asintóticamente más
 pequeños que lineales. Dado que toma tiempo lineal solo leer la entrada, estas situaciones tienden a
-surgir en un modelo de computación donde la entrada se puede "consultar" indirectamente en lugar de
+surgir en un modelo de computación donde la entrada se puede ``consultar'' indirectamente en lugar de
 leer por completo, y el objetivo es minimizar la cantidad de consultas que se deben hacer.\\
 
 Quizás el ejemplo más conocido de esto es el algoritmo de búsqueda binaria. Dada una matriz
@@ -1153,7 +1160,7 @@ ahora y aplicar recursivamente esta búsqueda en la mitad inferior. Finalmente, 
 aplicamos el razonamiento análogo y la búsqueda recursiva en la mitad superior de A.\\
 
 El punto es que, en cada paso, hay una región de A donde posiblemente podría estar p; y
-estamos reduciendo el tamaño de esta región en un factor de dos con cada sonda. Entonces, ¿cuán grande es la región "activa" de las sondas A después de k? Comienza en tamaño n, por lo que después de k sondas tiene un tamaño máximo de $n(1/2)^k$.\\
+estamos reduciendo el tamaño de esta región en un factor de dos con cada sonda. Entonces, ¿cuán grande es la región ``activa'' de las sondas A después de k? Comienza en tamaño n, por lo que después de k sondas tiene un tamaño máximo de $n(1/2)^k$.\\
 
 Dado esto, ¿cuánto tiempo tomará para que el tamaño de la región activa se reduzca a una
 constante? Necesitamos que k sea lo suficientemente grande para que $(1/2)^k=O(1/n)$, y para hacer
@@ -1215,7 +1222,7 @@ con el problema de la conexión y el desarrollo de algunas técnicas fundamental
 
 Recuerde del Capítulo 1 que un grafo $G$ es simplemente una forma de codificar por pares las
 relaciones entre un conjunto de objetos: La misma consiste en un conjunto $V$ de nodos
-y un conjunto $E$ de aristas, las cuales "unen" dos nodos. Por lo tanto
+y un conjunto $E$ de aristas, las cuales ``unen'' dos nodos. Por lo tanto
 representaremos una arista $e \in E$ como un subconjunto de dos elementos de $V$: $e = \{u, v\}$ para algún $u, v \in V$.  Entonces dada una arista  $e = \{u, v\}$ a los nodos $u$ y $v$ los llamaremos vértices de $e$.\\
 
 Las aristas de un grafo indican una relación simétrica entre sus extremos.
@@ -1242,7 +1249,7 @@ y una arista que une $(u,v)$ si hay una vía férrea que va entre ellos sin dete
 \item \textbf{Redes de comunicación:} Un grupo de computadoras conectadas a través de
 una red de comunicación se puede modelar de forma natural con un grafo, existen diferentes formás de hacerlo. Primero, podríamos tener un nodo para cada computadora y
 una arista que une $u$ y $v$ si hay un enlace físico directo que las conecta. Alternativamente, para estudiar estructuras a gran escala como Internet,
-las personas a menudo definen un nodo como el conjunto de todas las máquinas controladas por un solo proveedor de servicios de Internet, y una arista que une $u$ y $v$ si hay una relación directa de conexión entre ellas, en otras palabras si existe un acuerdo para intercambiar datos bajo el protocolo estándar BGP que gobierna de forma global el Enrutamiento de Internet. Tenga en cuenta que esta última red es más "virtual" que la primera, ya que los enlaces indican un acuerdo formal además de
+las personas a menudo definen un nodo como el conjunto de todas las máquinas controladas por un solo proveedor de servicios de Internet, y una arista que une $u$ y $v$ si hay una relación directa de conexión entre ellas, en otras palabras si existe un acuerdo para intercambiar datos bajo el protocolo estándar BGP que gobierna de forma global el Enrutamiento de Internet. Tenga en cuenta que esta última red es más ``virtual'' que la primera, ya que los enlaces indican un acuerdo formal además de
 una conexión física.\\
 
 Al estudiar las redes inalámbricas, uno típicamente define un grafo donde
@@ -1271,7 +1278,7 @@ podríamos definir una entre $u \in X$ y $v \in Y$ si la persona $u$ pertenece
 a la organización $v$.
 Redes como esta son usadas ampliamente por los sociólogos para estudiar
 la dinámica de la interacción entre las personas. Se pueden usar para identificar
-las personas más "influyentes" en una empresa u organización, para modelar
+las personas más ``influyentes'' en una empresa u organización, para modelar
 la confianza en las relaciones en un contexto financiero o político, y seguir la propagación de modas, rumores, bromás, enfermedades y virus de correo electrónico.
 \item \textbf{Redes de dependencia:} 
 Es natural definir grafo dirigidos que capturen
@@ -1286,7 +1293,7 @@ que acabamos de enumerar, un cruce de este tipo podría corresponder a un usuari
 Con esta idea en mente, definimos un camino en un grafo no dirigido
 $G = (V, E)$ como una secuencia $P$ de nodos $v_1, v_2, ..., v_{k-1},v_k$ con la propiedad de que cada par consecutivo $v_i, v_{i+1}$ está unido por una arista en $G$. A menudo se dice que $P$ es un camino de $v_1$ a $v_k$, o un camino $v_1-v_k$. Por ejemplo, los nodos 4, 2, 1, 7, 8 forman un camino en la Figura 3.1. Se dice que un camino es un camino simple si todos sus vértices son distintos. Un ciclo es un camino $v_1, v_2, ..., v_{k-1}, v_k$ en el cual $k> 2$, y los primero $k-1$
  nodos son todos distintos, y $v_1 = v_k$; en otras palabras, la secuencia de nodos
-"regresa" al punto de partida. Todas estas definiciones se heredan naturalmente
+``regresa'' al punto de partida. Todas estas definiciones se heredan naturalmente
 a los grafos dirigidos, con el siguiente cambio: en un camino o ciclo dirigido,
 cada par de nodos consecutivos tiene la propiedad de que $(v_i, v_{i+1})$ es una arista. En otras palabras, la secuencia de nodos en el camino o ciclo debe respetar el direccionalidad de las aristas.\\
 
@@ -1302,18 +1309,18 @@ Decimos que un grafo no dirigido es conexo si, por cada par de nodos $u,v$, exis
 Además de simplemente saber sobre la existencia de un camino entre algún
 par de nodos $u$ y $v$, también podemos querer saber si hay un camino corto.
 Por lo tanto, definimos la distancia entre dos nodos $u$ y $v$ como el mínimo
-número de aristas con las cuales se pueda lograr un camino $u-v$. (Podemos designar algún símbolo como $\infty$ para denotar la distancia entre dos nodos que no están conectados).  El termino "distancia" proviene de imaginar que $G$ representa una comunicación o red de transporte; si queremos pasar de $u$ a $v$, es posible que deseemos una ruta con tan pocos "desvíos" como sea posible.\\
+número de aristas con las cuales se pueda lograr un camino $u-v$. (Podemos designar algún símbolo como $\infty$ para denotar la distancia entre dos nodos que no están conectados).  El termino ``distancia'' proviene de imaginar que $G$ representa una comunicación o red de transporte; si queremos pasar de $u$ a $v$, es posible que deseemos una ruta con tan pocos ``desvíos'' como sea posible.\\
 
 \textbf{Árboles:} Decimos que un grafo no dirigido es un árbol si es conexo y no contiene un ciclo. Por ejemplo, los dos grafos representados en la Figura 3.1 son árboles. En un sentido fuerte, los árboles son el tipo más simple de grafo conexo: eliminar cualquier arista de un árbol lo desconectará. \\
 
-Para pensar en la estructura de un árbol $T$, es útil enraizarlo (usar como raíz un nodo particular $r$). Físicamente, esta operación es agarrar el árbol $T$ en el nodo $r$ como raíz y dejar que el resto cuelgue hacia abajo bajo la fuerza de la gravedad. Más precisamente, "orientamos" cada arista de $T$ lejos de $r$;  dado un nodo $v$, definimos el padre de $v$ como el nodo $u$ que precede directamente a $v$ en su camino desde $r$; definimos que $w$ es un hijo de $v$ si $v$ es el padre de $w$. Más
+Para pensar en la estructura de un árbol $T$, es útil enraizarlo (usar como raíz un nodo particular $r$). Físicamente, esta operación es agarrar el árbol $T$ en el nodo $r$ como raíz y dejar que el resto cuelgue hacia abajo bajo la fuerza de la gravedad. Más precisamente, ``orientamos'' cada arista de $T$ lejos de $r$;  dado un nodo $v$, definimos el padre de $v$ como el nodo $u$ que precede directamente a $v$ en su camino desde $r$; definimos que $w$ es un hijo de $v$ si $v$ es el padre de $w$. Más
 en general, decimos que $w$ es un descendiente de $v$ (o $v$ es un antepasado de $w$) si $v$ esta más abajo de $w$; y decimos que un nodo $x$ es una hoja si no tiene
 descendientes. Por lo tanto, por ejemplo, las dos imágenes en la Figura 3.1 corresponden a el mismo árbol $T$: los mismos pares de nodos se unen por aristas, pero el dibujo a la derecha representa el resultado de enraizar $T$ en el nodo 1.\\
 
 Los árboles enraizados son objetos fundamentales en la informática, porque
-permiten codificar la noción de jerarquía. Por ejemplo, podemos imaginar que el árbol enraizado de la Figura 3.1 corresponde a la estructura organizativa de una compañía formada por 9 personas; los empleados 3 y 4 informan al empleado 2; empleados 2, 5 y 7 informan al empleado 1; y así.  Muchas paginas web utilizan estructuras de árboles, por ejemplo la pagina web de un instituto de ciencias de la computación tendrá forma de árbol, tendrá una página de inicio como raíz; la página Cursos es un hijo de la pagina de inicio; también la pagina "Personas" será hijo de inicio, y  las paginas estudiantes y profesores son hijos de la página Personas y así sucesivamente. \\
+permiten codificar la noción de jerarquía. Por ejemplo, podemos imaginar que el árbol enraizado de la Figura 3.1 corresponde a la estructura organizativa de una compañía formada por 9 personas; los empleados 3 y 4 informan al empleado 2; empleados 2, 5 y 7 informan al empleado 1; y así.  Muchas paginas web utilizan estructuras de árboles, por ejemplo la pagina web de un instituto de ciencias de la computación tendrá forma de árbol, tendrá una página de inicio como raíz; la página Cursos es un hijo de la pagina de inicio; también la pagina ``Personas'' será hijo de inicio, y  las paginas estudiantes y profesores son hijos de la página Personas y así sucesivamente. \\
 
-Para nuestros propósitos aquí, enraizar un árbol $T$  hace surgir ciertas preguntas sobre $T$ conceptualmente fácil de responder. Por ejemplo, dado un árbol $T$ con $n$ nodos , ¿cuántas aristas tiene? Cada nodo que no sea la raíz tiene una sola arista que conduce "hacia arriba" a su padre; y por el contrario, cada aristas conduce hacia arriba desde precisamente un nodo no raíz. Por lo tanto, hemos demostrado muy fácilmente el siguiente hecho. \\
+Para nuestros propósitos aquí, enraizar un árbol $T$  hace surgir ciertas preguntas sobre $T$ conceptualmente fácil de responder. Por ejemplo, dado un árbol $T$ con $n$ nodos , ¿cuántas aristas tiene? Cada nodo que no sea la raíz tiene una sola arista que conduce ``hacia arriba'' a su padre; y por el contrario, cada aristas conduce hacia arriba desde precisamente un nodo no raíz. Por lo tanto, hemos demostrado muy fácilmente el siguiente hecho. \\
 
 \textbf{(3.1):} Cada árbol de $n$ nodos tiene exactamente $n- 1$ aristas. \\
 
@@ -1330,7 +1337,7 @@ De este hecho, se sigue una conjetura que aún no probaremos:\\
   }}\\
 
 \section{Conexión de grafos y recorrido de grafos}
-Teniendo ahora algunas nociones fundamentales sobre grafos, nos centramos en una pregunta algorítmica muy importante: la conexión nodo a nodo. Supongamos que se nos da un grafo $G = (V,E)$ y dos nodos particulares $s$ y $t$. Queremos encontrar un algoritmo eficiente que responda la pregunta: ¿Existe un camino desde $s$ hasta $t$ en $G$? Llamaremos a este problema el "Problema de determinar la conexión $s-t$".\\
+Teniendo ahora algunas nociones fundamentales sobre grafos, nos centramos en una pregunta algorítmica muy importante: la conexión nodo a nodo. Supongamos que se nos da un grafo $G = (V,E)$ y dos nodos particulares $s$ y $t$. Queremos encontrar un algoritmo eficiente que responda la pregunta: ¿Existe un camino desde $s$ hasta $t$ en $G$? Llamaremos a este problema el ``Problema de determinar la conexión $s-t$".\\
 
 \begin{figure}[h]
 \centering
@@ -1339,16 +1346,16 @@ Teniendo ahora algunas nociones fundamentales sobre grafos, nos centramos en una
 \label{fig32}
 \end{figure}
 
-    Para grafos muy pequeños, esta pregunta puede ser respondida fácilmente, a partir de una inspección visual. Sin embargo, para grafos de mayores dimensiones, puede dar un poco de trabajo encontrar ese camino. En efecto el problema de la "conexión $s-t$" puede también ser llamado el "Problema de Resolución del Laberinto". Si imaginamos $G$ como un laberinto, con una habitación correspondiente a cada nodo, y un pasillo correspondiente a cada arista que une cada nodo (habitación), entonces el problema es empezar en una habitación $s$ y encontrar el camino para llegar a otra habitación $t$. ¿Qué tan eficiente puede ser un algoritmo diseñado para esta tarea? \\
+    Para grafos muy pequeños, esta pregunta puede ser respondida fácilmente, a partir de una inspección visual. Sin embargo, para grafos de mayores dimensiones, puede dar un poco de trabajo encontrar ese camino. En efecto el problema de la ``conexión $s-t$" puede también ser llamado el ``Problema de Resolución del Laberinto''. Si imaginamos $G$ como un laberinto, con una habitación correspondiente a cada nodo, y un pasillo correspondiente a cada arista que une cada nodo (habitación), entonces el problema es empezar en una habitación $s$ y encontrar el camino para llegar a otra habitación $t$. ¿Qué tan eficiente puede ser un algoritmo diseñado para esta tarea? \\
 
-    En esta sección describimos dos algoritmos naturales para este problema en un alto nivel: búsqueda de primer nivel (BFS por sus siglas en ingles "Breadth-First Search") y búsqueda en profundidad (DFS por sus siglas en ingles "Depth-First Search). En la siguiente sección discutiremos como implementar cada uno de estos eficientemente, construyendo una estructura de datos para representar grafos como la entrada a un algoritmo.
+    En esta sección describimos dos algoritmos naturales para este problema en un alto nivel: búsqueda de primer nivel (BFS por sus siglas en ingles ``Breadth-First Search'') y búsqueda en profundidad (DFS por sus siglas en ingles ``Depth-First Search). En la siguiente sección discutiremos como implementar cada uno de estos eficientemente, construyendo una estructura de datos para representar grafos como la entrada a un algoritmo.
     
 \subsubsection*{Búsqueda de primer nivel}  
-Quizás el algoritmo más simple para determinar la conexión $s-t$ es BFS, en el cual exploramos hacia afuera partiendo desde $s$ en todas las direcciones posibles, añadiendo nodos a una "capa" a la vez. De esta forma empezamos con $s$ e incluimos todos los nodos que son alcanzados por una arista a $s$ (esta es la primera capa de búsqueda). Entonces incluimos todos los nodos adicionales que son alcanzados por una arista a cualquier nodo de la primera capa (esta es la segunda capa). Continuamos de esta forma hasta no encontrar más nodos nuevos. \\\\
+Quizás el algoritmo más simple para determinar la conexión $s-t$ es BFS, en el cual exploramos hacia afuera partiendo desde $s$ en todas las direcciones posibles, añadiendo nodos a una ``capa'' a la vez. De esta forma empezamos con $s$ e incluimos todos los nodos que son alcanzados por una arista a $s$ (esta es la primera capa de búsqueda). Entonces incluimos todos los nodos adicionales que son alcanzados por una arista a cualquier nodo de la primera capa (esta es la segunda capa). Continuamos de esta forma hasta no encontrar más nodos nuevos. \\\\
 En el ejemplo de la figura 7, empezando con el nodo 1 como $s$, la primera capa de búsqueda consiste en los nodos 2 y 3, la segunda capa consiste en los nodos 4, 5, 7 y 8, y la tercera capa consiste únicamente del nodo 6. En este punto la búsqueda termina, puesto que no hay más nodos que puedan ser agregados (en particular notar que los nodos 9 a 13 nunca son alcanzados por la búsqueda).
 \\
 
-Como este ejemplo refuerza, hay una interpretación física natural para este algoritmo. Esencialmente, comenzamos en $s$ e "inundamos" el grafo con una ola que crece para visitar todos los nodos que puede alcanzar. La capa que contiene un nodo representa el punto en el tiempo en el cual dicho nodo es alcanzado.
+Como este ejemplo refuerza, hay una interpretación física natural para este algoritmo. Esencialmente, comenzamos en $s$ e ``inundamos'' el grafo con una ola que crece para visitar todos los nodos que puede alcanzar. La capa que contiene un nodo representa el punto en el tiempo en el cual dicho nodo es alcanzado.
 \\\\
 Podemos definir las capas $L_1,L_2,L_3...$ construidas por el algoritmo BFS más precisamente como sigue:
 	\begin{enumerate}
@@ -1401,7 +1408,7 @@ El conjunto de nodos descubiertos por el algoritmo BFS es precisamente los alcan
 
 Ahora, si uno lo piensa, está claro que BFS es solo una manera posible de
 producir esta componente. En un nivel más general, podemos construir la componente
-$R$ "explorando" $G$ en cualquier orden, comenzando desde $s$. Para comenzar, definimos $R = {s}$. Entonces, en cualquier punto en el tiempo, si encontramos una arista $(u, v)$ donde $u  \in  R$ y \(v \notin  R\), puede agregar $v$ a $R$. De hecho, si hay un camino $P$ de $s$ a $u$, entonces hay un camino de $s$ a $v$ obtenido al seguir primero a $P$ y luego seguir la arista $(u, v)$. \\
+$R$ ``explorando'' $G$ en cualquier orden, comenzando desde $s$. Para comenzar, definimos $R = {s}$. Entonces, en cualquier punto en el tiempo, si encontramos una arista $(u, v)$ donde $u  \in  R$ y \(v \notin  R\), puede agregar $v$ a $R$. De hecho, si hay un camino $P$ de $s$ a $u$, entonces hay un camino de $s$ a $v$ obtenido al seguir primero a $P$ y luego seguir la arista $(u, v)$. \\
 
 La Figura 3.4 ilustra este paso básico en el crecimiento de la componente $R$.
 Supongamos que seguimos creciendo el conjunto $R$ hasta que no hayan más aristas
@@ -1435,16 +1442,16 @@ crecer $R$ no está especificado, entonces, ¿cómo decidimos qué arista consid
 \subsubsection*{Búsqueda de primera profundidad (DFS Depth-First Search) }  
 
 Otro método natural para encontrar los nodos accesibles desde $s$ es el enfoque que
-podría tomar si el grafo $G$ fuera realmente un laberinto de habitaciones interconectadas y usted estaba caminando en eso. Empezaría desde $s$ y probaría la primera ventaja de ello, a un nodo $v$. Luego seguiría la primera arista que sale de $v$, y continuará de esta manera hasta llegar a un "callejón sin salida", un nodo para el que ya exploró a todos sus vecinos. Luego retrocederías hasta llegar a un nodo con un vecino inexplorado, y reanudar desde allí. Llamamos a este algoritmo depth-first search (DFS), ya que explora $G$ yendo tan profundamente como sea posible y solo retirarse cuando sea necesario. \\
+podría tomar si el grafo $G$ fuera realmente un laberinto de habitaciones interconectadas y usted estaba caminando en eso. Empezaría desde $s$ y probaría la primera ventaja de ello, a un nodo $v$. Luego seguiría la primera arista que sale de $v$, y continuará de esta manera hasta llegar a un ``callejón sin salida'', un nodo para el que ya exploró a todos sus vecinos. Luego retrocederías hasta llegar a un nodo con un vecino inexplorado, y reanudar desde allí. Llamamos a este algoritmo depth-first search (DFS), ya que explora $G$ yendo tan profundamente como sea posible y solo retirarse cuando sea necesario. \\
 
 DFS es una implementación particular de BFS que ya fue descrito anteriormente. Se describe más fácilmente recursivamente: podemos invocar DFS desde cualquier punto de partida, pero mantener el conocimiento global de los nodos que ya han sido explorados. \\
 
 
 \begin{lstlisting}
 DFS(u):
-  Marcar u como "Explorado" y agregar u a R
+  Marcar u como ``Explorado'' y agregar u a R
   Para cada arista  (u, v) incidente a u
-     SI v  no ha sido marcado como "Explorado" entonces
+     SI v  no ha sido marcado como ``Explorado'' entonces
         Invocamos recursivamente DFS(v)
      Fin del SI
 Fin de para cada
@@ -1456,7 +1463,7 @@ Hay algunas similitudes fundamentales y algunas diferencias fundamentales entre 
 
 Mientras que DFS finalmente visita exactamente el mismo conjunto de nodos que BFS, típicamente lo hace en un orden muy diferente; explora su camino por largos caminos, potencialmente muy alejados de $s$, en vez de retroceder para probar nodos inexplorados más cercanos. Nosotros podemos ver un reflejo de esta diferencia en el hecho de que, al igual que BFS, el algoritmo DFS produce un árbol $T$ con raíz natural $s$, pero el árbol generalmente tienen una estructura muy diferente. El algoritmo se decodifica así: hacemos a $s$ la raíz del árbol $T$, y luego hacemos el padre de $v$ cuando es responsable del descubrimiento de $v$. Es decir, cada vez que se invoca DFS ($v$) directamente durante la llamada a DFS ($u$), agregamos la arista $(u, v)$ a $T$. El árbol resultante se denomina árbol de búsqueda en profundidad de la componente $R$.\\
 
-La figura \ref{Fig35} muestra la construcción de un árbol DFS con raíz en el nodo 1 para el grafo de la Figura \ref{fig32}. Las aristas no punteadas son las aristas de $T$  que están en $G$ y las punteadas son las aristas de $G$ que no están en $T$. La ejecución de DFS comienza mediante la construcción de un camino en los nodos 1, 2, 3, 5, 4. La ejecución llega a un callejón sin salida en 4, ya que no hay nuevos nodos que encontrar, por lo que "retrocede" a 5, encuentra el nodo 6, realiza una copia de seguridad de nuevo a 3, y encuentra los nodos 7 y 8. En este punto no hay nuevos nodos para encontrar en la componente conexa, por lo que todas las llamadas DFS recursivas pendientes terminan, una por una, y la ejecución llega a su fin. Se representa el árbol DFS completo en la figura \ref{Fig35}(g).\\
+La figura \ref{Fig35} muestra la construcción de un árbol DFS con raíz en el nodo 1 para el grafo de la Figura \ref{fig32}. Las aristas no punteadas son las aristas de $T$  que están en $G$ y las punteadas son las aristas de $G$ que no están en $T$. La ejecución de DFS comienza mediante la construcción de un camino en los nodos 1, 2, 3, 5, 4. La ejecución llega a un callejón sin salida en 4, ya que no hay nuevos nodos que encontrar, por lo que ``retrocede'' a 5, encuentra el nodo 6, realiza una copia de seguridad de nuevo a 3, y encuentra los nodos 7 y 8. En este punto no hay nuevos nodos para encontrar en la componente conexa, por lo que todas las llamadas DFS recursivas pendientes terminan, una por una, y la ejecución llega a su fin. Se representa el árbol DFS completo en la figura \ref{Fig35}(g).\\
 
 Este ejemplo sugiere la forma característica en que los árboles DFS se ven
 diferente de los árboles BFS. En lugar de tener caminos de raíz a hoja que son tan cortos como sea posible, tienden a ser bastante estrechos y profundos. Sin embargo, como en el caso de BFS, podemos decir algo bastante fuerte sobre la forma en la que
@@ -1472,14 +1479,14 @@ las aristas de $G$ deben estar dispuestas en relación con las aristas de un ár
 
 Para establecer esto, primero observamos la siguiente propiedad del árbol generado por el algoritmo DFS:\\
 
- \textbf{(3.6)} Para una llamada recursiva dada DFS ($u$), todos los nodos que están marcados como "Explorado" entre la invocación y el final de esta llamada recursiva son descendientes de $u$ en $T$.\\
+ \textbf{(3.6)} Para una llamada recursiva dada DFS ($u$), todos los nodos que están marcados como ``Explorado'' entre la invocación y el final de esta llamada recursiva son descendientes de $u$ en $T$.\\
 
 Usando (3.6) probemos:\\
 
  \colorbox{mygray}{\parbox{15cm}{
 	\textbf{(3.7):} Si $T$ es un árbol de búsqueda en profundidad en el que $x$ e $y$ sean nodos en $T$ y si $(x, y)$ es una arista de $G$ que no es una arista de $T$. Entonces $x$ o $y$ es un antepasado del otro.}}\\\\
     
-\textbf{Demostración:} Supongamos que $(x, y)$ es una arista de $G$ que no es una arista de $T$, y supongamos sin pérdida de generalidad que $x$ es alcanzado primero por el algoritmo DFS. Cuando la arista $(x, y)$ se examina durante la ejecución de DFS ($x$), no se agrega a $T$ porque $y$ está marcado como "Explorado". Como $y$ no estaba marcado como "Explorado" cuando DFS ($x$) se invocó por primera vez, resulta que $y$ es un nodo que se descubrió entre invocación y finalización de la llamada recursiva DFS ($x$). De (3.6) se desprende que $y$ es un descendiente de $x$. $ \blacksquare $
+\textbf{Demostración:} Supongamos que $(x, y)$ es una arista de $G$ que no es una arista de $T$, y supongamos sin pérdida de generalidad que $x$ es alcanzado primero por el algoritmo DFS. Cuando la arista $(x, y)$ se examina durante la ejecución de DFS ($x$), no se agrega a $T$ porque $y$ está marcado como ``Explorado''. Como $y$ no estaba marcado como ``Explorado'' cuando DFS ($x$) se invocó por primera vez, resulta que $y$ es un nodo que se descubrió entre invocación y finalización de la llamada recursiva DFS ($x$). De (3.6) se desprende que $y$ es un descendiente de $x$. $ \blacksquare $
 
 \subsubsection*{El conjunto de todas las componentes conexas} 
 
@@ -1496,7 +1503,7 @@ idénticas o disjuntas.}}\\\\
 Esta es una afirmación que es muy clara intuitivamente, si uno mira un grafo como
 el ejemplo en la figura \ref{fig32}. El grafo está dividido en varias piezas sin
 aristas entre ellas; la pieza más grande es la componente conexa de los nodos
-1 a 8, la pieza mediana es la componente conexa de los nodos 11, 12 y 13, y la pieza más pequeña es la componente conexa de los nodos 9 y 10. Para demostrar la afirmación en general, solo tenemos que mostrar cómo definir estas "piezas" precisamente para un grafo arbitrario.\\
+1 a 8, la pieza mediana es la componente conexa de los nodos 11, 12 y 13, y la pieza más pequeña es la componente conexa de los nodos 9 y 10. Para demostrar la afirmación en general, solo tenemos que mostrar cómo definir estas ``piezas'' precisamente para un grafo arbitrario.\\
 
 \textbf{Demostración:} considere dos nodos $s$ y $t$ en un grafo $G$ con la propiedad que hay un camino entre $s$ y $t$. Afirmamos que las componentes conexas que contienen a $s$ y a $t$ son el mismo conjunto. De hecho, para cualquier nodo $v$ que esté en la componente de $s$ también debe ser accesible desde $t$ por un camino: podemos simplemente caminar de $t$ a $s$, y luego de $s$ a $v$. El mismo razonamiento funciona con los roles de $s$ y $t$ invertidos, por lo que un nodo está en la componente de uno si y solo si está en la componente del otro. Por otro lado, si no hay un camino entre $s$ y $t$, entonces no puede haber un nodo $v$ que está en la componente conexa de cada uno. Pues, si hubiera tal nodo $v$, entonces podríamos caminar de $s$ a $v$ y luego a $t$, construyendo un camino entre $s$ y $t$. Por lo tanto, si no hay un camino entre $s$ y $t$, entonces las componentes conexas son disjuntas. $ \blacksquare $ \\
 
@@ -1544,7 +1551,7 @@ Resumimos la comparación entre matrices de adyacencia y listas de adyacencia de
     
     Ahora consideramos la facilidad de acceso a la información almacenada en estas dos representaciones diferentes. Recuerde que en una matriz de adyacencia podemos verificar en tiempo \(O(1)\) si una arista particular ($u, v$) está presente en el grafo. En la representación de la lista de adyacencia, esto puede llevar un tiempo proporcional al grado \(O(n_{v})\): tenemos que seguir los punteros en la lista de adyacencia para ver si el nodo $v$ aparece en la lista. Por otro lado, si el algoritmo está actualmente mirando un nodo u, puede leer la lista de vecinos en tiempo constante por vecino.
    
-   En vista de esto, la lista de adyacencia es una representación natural para explorar grafos. Si el algoritmo está actualmente mirando un nodo $u$, puede leer esta lista de vecinos en tiempo constante por vecino; pasar a un vecino $v$ una vez que lo encuentra en esta lista en tiempo constante; y luego estar listo para leer la lista asociada con el nodo $v$. La representación de la lista corresponde a una noción física de "explorar" el grafo, en la que aprende los vecinos de un nodo $u$ una vez que llega a $u$, y puede leerlos en tiempo constante por vecino
+   En vista de esto, la lista de adyacencia es una representación natural para explorar grafos. Si el algoritmo está actualmente mirando un nodo $u$, puede leer esta lista de vecinos en tiempo constante por vecino; pasar a un vecino $v$ una vez que lo encuentra en esta lista en tiempo constante; y luego estar listo para leer la lista asociada con el nodo $v$. La representación de la lista corresponde a una noción física de ``explorar'' el grafo, en la que aprende los vecinos de un nodo $u$ una vez que llega a $u$, y puede leerlos en tiempo constante por vecino
 
 \subsubsection*{Colas y Pilas} 
 \paragraph{}
@@ -1591,16 +1598,16 @@ En esta implementación, no importa si manejamos cada lista L[$i$] como una cola
 \paragraph{}
 Para obtener la cota \(O(m + n)\), debemos observar que el ciclo For para procesar un nodo u puede tomar menos que \(O(n)\) tiempo si u tiene solo unos pocos vecinos. Como anteriormente, sea \(n_{u}\)  el grado de nodo u, el número de aristas incidentes a $u$. Ahora, el tiempo pasado en el bucle For considerando las aristas incidentes al nodo $u$ es \(O(n_{u})\), por lo que el total sobre todos los nodos es \(O(\sum_{u\epsilon V} {n_{u}})\). Recuerde \textit{(3.9)} que \(\sum_{u\epsilon V} {n_{u}} = 2m\) y por lo tanto el tiempo total dedicado considerando las aristas sobre el algoritmo completo es \(O(m)\). Necesitamos \(O(n)\) tiempo adicional para configurar listas y administrar la matriz\textit{ Discovered}. Entonces, el tiempo total es \(O(m+n)\) como se afirmó. $ \blacksquare $ \\
 
-Describimos el algoritmo usando hasta $n$ listas separadas L[$i$] para cada capa \(L_{i}\). En lugar de todas estas listas distintas, podemos implementar el algoritmo usando una sola lista L que mantenemos como una cola. De esta forma, el algoritmo procesa los nodos en el orden en que se "descubren" por primera vez: cada vez que se "descubre" un nodo,
+Describimos el algoritmo usando hasta $n$ listas separadas L[$i$] para cada capa \(L_{i}\). En lugar de todas estas listas distintas, podemos implementar el algoritmo usando una sola lista L que mantenemos como una cola. De esta forma, el algoritmo procesa los nodos en el orden en que se ``descubren'' por primera vez: cada vez que se ``descubre'' un nodo,
 se agrega al final de la cola y el algoritmo siempre procesa las aristas del nodo que actualmente está primero en la cola.
-Si mantenemos los nodos "descubiertos" en este orden, todos los nodos en la capa \(L_{i}\) aparecerán en la cola delante de todos los nodos en la capa \(L_{i+1}\), for \(i = 0, 1, 2. . .\). Por lo tanto, todos los nodos en la capa \(L_{i}\) se considerarán en una secuencia contigua, seguidos por todos los nodos en la capa \(L_{i+1}\), y así sucesivamente. Por lo tanto, esta implementación en términos de una cola única producirá el mismo resultado que la implementación de BFS anterior.
+Si mantenemos los nodos ``descubiertos'' en este orden, todos los nodos en la capa \(L_{i}\) aparecerán en la cola delante de todos los nodos en la capa \(L_{i+1}\), for \(i = 0, 1, 2. . .\). Por lo tanto, todos los nodos en la capa \(L_{i}\) se considerarán en una secuencia contigua, seguidos por todos los nodos en la capa \(L_{i+1}\), y así sucesivamente. Por lo tanto, esta implementación en términos de una cola única producirá el mismo resultado que la implementación de BFS anterior.
 
 \subsubsection*{Implementar DFS} 
 \paragraph{}
 Ahora consideramos el algoritmo de DFS. En la sección anterior
-presentamos DFS como un procedimiento recursivo, que es una forma natural de especificarlo. Sin embargo, también se puede ver como casi idéntico a BFS, con la diferencia que mantiene los nodos procesados en una pila, en lugar de en una cola. Esencialmente, la estructura recursiva de DFS se puede ver como nodos de empuje en una pila para su posterior procesamiento, mientras avanza a nodos más recientemente "descubiertos". Ahora mostraremos cómo implementar DFS al mantener esta pila de nodos para ser procesados explícitamente.\\
+presentamos DFS como un procedimiento recursivo, que es una forma natural de especificarlo. Sin embargo, también se puede ver como casi idéntico a BFS, con la diferencia que mantiene los nodos procesados en una pila, en lugar de en una cola. Esencialmente, la estructura recursiva de DFS se puede ver como nodos de empuje en una pila para su posterior procesamiento, mientras avanza a nodos más recientemente ``descubiertos''. Ahora mostraremos cómo implementar DFS al mantener esta pila de nodos para ser procesados explícitamente.\\
 
-Tanto en BFS como en DFS, hay una distinción entre el acto de "descubrir"
+Tanto en BFS como en DFS, hay una distinción entre el acto de ``descubrir''
 un nodo $v$ (la primera vez que se ve, cuando el algoritmo encuentra una arista a $v$) y al acto de explorar un nodo $v$, cuando todos las aristas incidentes a $v$ son escaneadas, lo que resulta en el descubrimiento potencial de otros nodos. La diferencia entre BFS y DFS radica en la forma en que el descubrimiento y la exploración son intercalados.\\
 
 En BFS, una vez que comenzamos a explorar un nodo $u$ en la capa \(L_{i}\), agregamos todos sus vecinos recién descubiertos a la siguiente capa \(L_{i+1}\), y diferimos en realidad explorando estos vecinos hasta que llegamos al procesamiento de la capa \(L_{i+1}\). Por el contrario, DFS es más impulsivo: cuando explora un nodo $u$, escanea el vecinos de $u$ hasta que encuentre el primer nodo $v$ aún no explorado (si hay alguno), y luego inmediatamente cambia la atención a explorar $v$.\\
@@ -1627,7 +1634,7 @@ Aun queda un ultimo detalle para mencionar. DFS no está especificado, ya que la
 \paragraph{}
 \colorbox{mygray}{\parbox{15cm}{
 	\textbf{(3.12):} El algoritmo anterior implementa DFS, en el sentido de que visita los nodos exactamente en el mismo orden que el procedimiento DFS recursivo en la sección anterior (excepto que cada lista de adyacencia se procesa en orden inverso).}}\\   
-Si queremos que el algoritmo también encuentre el árbol DFS, necesitamos que cada nodo $u$ de la pila $S$ mantenga el nodo que "hizo" que $u$ se agregue a la pila. Esto se puede hacer fácilmente mediante el uso de un arrays \textit{parent} y la configuración \(parent[v] = u\) cuando agregamos el nodo $v$ a la pila debido a la arista ($u, v$). Cuando marcamos un nodo \(u \neq s\) como "Explorado", también podemos agregar la arista \((u, parent[u])\) al árbol $T$. Tenga en cuenta que un nodo $v$ puede estar en la pila $S$ varias veces, ya que puede ser adyacente a múltiples nodos $u$ que exploramos, y cada nodo agrega una copia de $v$ para la pila $S$. Sin embargo, solo usaremos una de estas copias para explorar el nodo $v$, la última copia que añadimos. Como resultado, basta con mantener un valor \(parent[v]\) para cada nodo $v$ simplemente sobrescribiendo el valor \(parent[v]\) cada vez que agregamos una nueva copia de $v$ a la pila $S$.\\
+Si queremos que el algoritmo también encuentre el árbol DFS, necesitamos que cada nodo $u$ de la pila $S$ mantenga el nodo que ``hizo'' que $u$ se agregue a la pila. Esto se puede hacer fácilmente mediante el uso de un arrays \textit{parent} y la configuración \(parent[v] = u\) cuando agregamos el nodo $v$ a la pila debido a la arista ($u, v$). Cuando marcamos un nodo \(u \neq s\) como ``Explorado'', también podemos agregar la arista \((u, parent[u])\) al árbol $T$. Tenga en cuenta que un nodo $v$ puede estar en la pila $S$ varias veces, ya que puede ser adyacente a múltiples nodos $u$ que exploramos, y cada nodo agrega una copia de $v$ para la pila $S$. Sin embargo, solo usaremos una de estas copias para explorar el nodo $v$, la última copia que añadimos. Como resultado, basta con mantener un valor \(parent[v]\) para cada nodo $v$ simplemente sobrescribiendo el valor \(parent[v]\) cada vez que agregamos una nueva copia de $v$ a la pila $S$.\\
  
 El paso principal en el algoritmo es agregar y eliminar nodos hacia y desde la pila $S$, que toma \(O(1)\) cada vez. Por lo tanto, para acotar el tiempo de ejecución, debemos acotar el número de estas operaciones. Para contar la cantidad de operaciones de la pila, es suficiente contar la cantidad de nodos añadidos a $S$, ya que cada nodo debe agregarse una vez por cada vez que se puede eliminar desde $S$.\\
 
@@ -1658,7 +1665,7 @@ Claramente, un triángulo no es bipartito, ya que podemos colorear un nodo rojo,
 \colorbox{mygray}{\parbox{15cm}{
 	\textbf{(3.14):} Si un grafo G es bipartito, entonces no puede contener un ciclo impar.}}\\\\
 \paragraph{}
-Es fácil reconocer que un grafo es bipartito cuando los conjuntos $X$ e $Y$ (es decir, nodos rojos y azules) se han identificado realmente para nosotros; y en muchos entornos donde surgen grafos bipartitos, esto es natural. Pero supongamos que nos encontramos con un grafo $G$ sin ninguna anotación, y nos gustaría determinar si es bipartito- es decir, si existe una partición de nodos rojos y azules. ¿Qué tan difícil es esto? Vemos en \textit{(3.14)} que un ciclo impar es un simple "obstáculo" para que un grafo sea bipartito. ¿Hay otros obstáculos más complejos para la bipartidad?
+Es fácil reconocer que un grafo es bipartito cuando los conjuntos $X$ e $Y$ (es decir, nodos rojos y azules) se han identificado realmente para nosotros; y en muchos entornos donde surgen grafos bipartitos, esto es natural. Pero supongamos que nos encontramos con un grafo $G$ sin ninguna anotación, y nos gustaría determinar si es bipartito- es decir, si existe una partición de nodos rojos y azules. ¿Qué tan difícil es esto? Vemos en \textit{(3.14)} que un ciclo impar es un simple ``obstáculo'' para que un grafo sea bipartito. ¿Hay otros obstáculos más complejos para la bipartidad?
 
 \subparagraph*{Diseñando el Algoritmo}
 \paragraph{}
@@ -1680,7 +1687,7 @@ Ahora demostraremos un lema que muestra que este algoritmo determina correctamen
 }}\\\\
 \paragraph{}
 \textbf{Demostración:} Consideremos primero el caso $(1)$, donde suponemos que no hay arista que une dos nodos de la misma capa. Por $(3.4)$, sabemos que cada arista de $G$ une nodos en la misma capa o en capas adyacentes. Nuestra suposición para el caso $(1)$ es precisamente que la primera de estas dos alternativas nunca ocurre, por lo que esto significa que cada arista se une a dos nodos en capas adyacentes. Pero nuestro procedimiento de coloreado da nodos en las capas adyacentes a los colores opuestos, por lo que cada arista tiene extremos con colores opuestos. Por lo tanto, esta coloración establece que $G$ es bipartito.
-Ahora supongamos que estamos en caso (2); ¿por qué $G$ debe contener un ciclo impar? Se nos dice que $G$ contiene una arista que une dos nodos de la misma capa. Supongamos que esta es la arista \(e = (x, y)\), con \(x, y  \in  L_{j}\). Además, por razones de notoriedad, recuerde que \(L_{0}\) ("capa 0") es el conjunto que consiste en solo $s$. Ahora considere el árbol BFS $T$ producido por nuestro algoritmo, y sea $z$ el nodo cuyo número de capa sea lo más grande posible, sujeto a la condición de que $z$ sea un antecesor de $x$ e $y$ en $T$; por razones obvias, podemos llamar $z$ el \textit{ancestro común más bajo} de $x$ e $y$. Supongamos que \(z  \in  L_{i}\), donde \(i <j\). Ahora tenemos la situación ilustrada en la Figura 10. Consideramos que el ciclo $C$ se define siguiendo el camino $z-x$ en $T$, luego la arista $e$, y luego el camino $y-z$ en $T$. El largo de este ciclo es \((j - i) + 1+ (j - i)\), agregando la longitud de sus tres partes por separado; esto es igual a \(2(j - i) + 1\), que es un número impar. $ \blacksquare $ 
+Ahora supongamos que estamos en caso (2); ¿por qué $G$ debe contener un ciclo impar? Se nos dice que $G$ contiene una arista que une dos nodos de la misma capa. Supongamos que esta es la arista \(e = (x, y)\), con \(x, y  \in  L_{j}\). Además, por razones de notoriedad, recuerde que \(L_{0}\) (``capa 0'') es el conjunto que consiste en solo $s$. Ahora considere el árbol BFS $T$ producido por nuestro algoritmo, y sea $z$ el nodo cuyo número de capa sea lo más grande posible, sujeto a la condición de que $z$ sea un antecesor de $x$ e $y$ en $T$; por razones obvias, podemos llamar $z$ el \textit{ancestro común más bajo} de $x$ e $y$. Supongamos que \(z  \in  L_{i}\), donde \(i <j\). Ahora tenemos la situación ilustrada en la Figura 10. Consideramos que el ciclo $C$ se define siguiendo el camino $z-x$ en $T$, luego la arista $e$, y luego el camino $y-z$ en $T$. El largo de este ciclo es \((j - i) + 1+ (j - i)\), agregando la longitud de sus tres partes por separado; esto es igual a \(2(j - i) + 1\), que es un número impar. $ \blacksquare $ 
 
 
 \begin{figure}[h]
@@ -1697,7 +1704,7 @@ Ahora supongamos que estamos en caso (2); ¿por qué $G$ debe contener un ciclo 
 
 Hasta ahora, hemos estado viendo problemas en grafos no dirigidos; ahora consideramos hasta qué punto estas ideas se trasladan al caso de los grafos dirigidos.\\
 
-Recuerde que en un grafo dirigido, la arista $(u, v)$ tiene una dirección: va de $u$ a $v$. De esta manera, la relación entre $u$ y $v$ es asimétrica, y esto tiene efectos cualitativos sobre la estructura del grafo resultante . En la Sección 3.1, por ejemplo, hablamos de la World Wide Web como una instancia de un grafo dirigido grande y complejo cuyos nodos son páginas y cuyos aristas son hipervínculos. El acto de explorar la Web se basa en seguir una secuencia de aristas en este grafo dirigido; y la direccionalidad es crucial, ya que generalmente no es posible navegar "hacia atrás" siguiendo los hipervínculos en la dirección inversa.\\
+Recuerde que en un grafo dirigido, la arista $(u, v)$ tiene una dirección: va de $u$ a $v$. De esta manera, la relación entre $u$ y $v$ es asimétrica, y esto tiene efectos cualitativos sobre la estructura del grafo resultante . En la Sección 3.1, por ejemplo, hablamos de la World Wide Web como una instancia de un grafo dirigido grande y complejo cuyos nodos son páginas y cuyos aristas son hipervínculos. El acto de explorar la Web se basa en seguir una secuencia de aristas en este grafo dirigido; y la direccionalidad es crucial, ya que generalmente no es posible navegar ``hacia atrás'' siguiendo los hipervínculos en la dirección inversa.\\
 
 Al mismo tiempo, una serie de definiciones y algoritmos básicos tienen análogos naturales en el caso dirigido. Esto incluye la presentación de la lista de adyacencia y algoritmos de búsqueda de grafos como BFS y DFS. Ahora discutimos estos a su vez.\\
 
@@ -1711,7 +1718,7 @@ BFS y DFS son casi los mismos algoritmos en los grafos dirigidos que en los graf
 
 Es importante entender qué está procesando esta versión dirigida de BFS. En los grafos dirigidos, es posible que un nodo tenga una ruta a un nodo t aunque t no tenga una ruta hacia s; y lo que hace BFS en los grafos dirigidos es calcular es el conjunto de todos los nodos t con la propiedad s que tiene una ruta hacia t. Dichos nodos pueden tener o no caminos hacia s.\\
 
-También existe un análogo a DFS, que también se ejecuta en tiempo lineal y calcula el mismo conjunto de nodos. Es de nuevo un procedimiento recursivo que trata de explorar lo más profundo ("deep") 
+También existe un análogo a DFS, que también se ejecuta en tiempo lineal y calcula el mismo conjunto de nodos. Es de nuevo un procedimiento recursivo que trata de explorar lo más profundo (``deep'') 
 posible, en este caso solo siguiendo las aristas de acuerdo con su dirección inherente. Por lo tanto, cuando DFS se encuentra en un nodo $u$, inicia de forma recursiva una búsqueda en profundidad, en orden, para cada nodo al que $u$ tiene una arista.\\
 
 Supongamos que, para un nodo dado s, queríamos el conjunto de nodos que tienen un camino a s, en lugar del conjunto de nodos a los que s tiene un camino a ellos. Una manera fácil de hacerlo sería definir un nuevo grafo dirigido, $G^{rev}$, que obtenemos de G simplemente invirtiendo la dirección de cada arista. Entonces podríamos ejecutar BFS o DFS en $G^{rev}$; un nodo tiene un camino desde s en $G^{rev}$ si y solo si tiene un camino a s en G.\\
@@ -1768,7 +1775,7 @@ Podemos representar un conjunto de tareas interdependientes introduciendo un nod
 
 Continuemos un poco más con esta imagen de DAG como relaciones de precedencia. Dado un conjunto de tareas con dependencias, sería natural buscar un orden válido en el que se puedan realizar las tareas, para que se respeten todas las dependencias. Específicamente, para un grafo dirigido $G$, decimos que un ordenamiento topológico de G es un ordenamiento de sus nodos como $v_1, v_2, ..., v_n$ de modo que para cada arista $(v_i, v_j)$, tenemos $i <j$. En otras palabras, todas las aristas apuntan hacia adelante en el orden. Un orden topológico en las tareas proporciona un orden en el que se pueden realizar de forma segura; cuando llegamos a la tarea $v_j$, ya se han hecho todas las tareas que se requieren para precederla. En la figura 3.7 (b) hemos etiquetado los nodos del DAG de la parte (a) con un orden topológico; tenga en cuenta que cada arista realmente pasa de un nodo indexado más bajo a un nodo indexado más alto.\\
 
-De hecho, podemos ver un ordenamiento topológico de $G$ como una "prueba" inmediata de que $G$ no tiene ciclos, a través de lo siguiente.\\
+De hecho, podemos ver un ordenamiento topológico de $G$ como una ``prueba'' inmediata de que $G$ no tiene ciclos, a través de lo siguiente.\\
 
  \colorbox{mygray}{\parbox{15cm}{
 	\textbf{(3.18):} Si $G$ tiene un orden topológico, entonces $G$ es un DAG}}\\\\
@@ -1823,7 +1830,7 @@ Este no es un mal tiempo de ejecución; y si $G$ es muy denso, contiene $n^2$ ar
 
 De hecho, podemos lograr un tiempo de ejecución de $O(m+n)$ usando el mismo algoritmo de alto nivel eliminando iterativamente nodos sin aristas entrantes. Simplemente tenemos que ser más eficientes para encontrar estos nodos, y lo hacemos de la siguiente manera\\
 
-Declaramos que un nodo está "activo" si el algoritmo aún no lo ha eliminado, y explícitamente mantenemos dos cosas:\\
+Declaramos que un nodo está ``activo'' si el algoritmo aún no lo ha eliminado, y explícitamente mantenemos dos cosas:\\
 
    \begin{enumerate}
    		\item para cada nodo $w$, la cantidad de aristas entrantes que $w$ tiene de los nodos activos; 
@@ -1862,7 +1869,7 @@ Un programa es libre de interferencias si no hay ningún punto en el que los dos
 
 Proporcione un algoritmo de tiempo polinomial que decida si existe un cronograma sin interferencias mediante el cual cada robot pueda llegar a su destino\\
 
-\textbf{Solución:} Este es un problema del siguiente sabor general. Tenemos un conjunto de configuraciones posibles para los robots, donde definimos una configuración para que sea una elección de ubicación para cada uno. Estamos tratando de llegar desde una configuración inicial dada $(a,b)$ a una configuración final dada $(c,d)$, sujeta a restricciones sobre cómo podemos movernos entre configuraciones (solo podemos cambiar la ubicación de un robot a un nodo vecino), y también sujeto a restricciones sobre qué configuraciones son "legales".\\
+\textbf{Solución:} Este es un problema del siguiente sabor general. Tenemos un conjunto de configuraciones posibles para los robots, donde definimos una configuración para que sea una elección de ubicación para cada uno. Estamos tratando de llegar desde una configuración inicial dada $(a,b)$ a una configuración final dada $(c,d)$, sujeta a restricciones sobre cómo podemos movernos entre configuraciones (solo podemos cambiar la ubicación de un robot a un nodo vecino), y también sujeto a restricciones sobre qué configuraciones son ``legales''.\\
 
 Este problema puede ser difícil de considerar si vemos las cosas en el nivel del grafo subyacente $G$: para una configuración dada de los robots, es decir, la ubicación actual de cada uno, no está claro qué regla deberíamos usar para decidir cómo mover uno de los robots a continuación. Entonces, en su lugar, aplicamos una idea que puede ser muy útil para las situaciones en las que intentamos realizar este tipo de búsqueda. Observamos que nuestro problema se parece mucho a un problema de búsqueda de camino, no en el grafo original $G$ sino en el espacio de todas las configuraciones posibles.\\
 
@@ -1897,7 +1904,7 @@ Finalmente, debemos considerar el tiempo de ejecución. Denotemos a $n$ como el 
 
 \chapter{Algoritmos Codiciosos}
 
-En \textit{Wall Street}, esa icónica película de la década de 1980, Michael Douglas se incorpora frente a una habitación llena de accionistas y proclama: " Codicia. . . es buena. La codicia está bien. La codicia funciona". En este capítulo, tomaremos un enfoque mucho más discreto y perspectiva a medida que investigamos los pros y los contras de la codicia a corta alcance en el diseño de algoritmos. De hecho, nuestro objetivo es acercarnos a una serie de diferentes problemas computacionales con un conjunto de preguntas recurrentes: ¿es buena la codicia? ¿funciona?\\
+En \textit{Wall Street}, esa icónica película de la década de 1980, Michael Douglas se incorpora frente a una habitación llena de accionistas y proclama: ``Codicia. . . es buena. La codicia está bien. La codicia funciona''. En este capítulo, tomaremos un enfoque mucho más discreto y perspectiva a medida que investigamos los pros y los contras de la codicia a corta alcance en el diseño de algoritmos. De hecho, nuestro objetivo es acercarnos a una serie de diferentes problemas computacionales con un conjunto de preguntas recurrentes: ¿es buena la codicia? ¿funciona?\\
 
 Es difícil, si no imposible, definir con precisión lo que significa un algoritmo ávido. Un algoritmo es ávido si construye una solución en pequeños pasos, eligiendo una decisión en cada paso de corto alcance para optimizar algunos criterios subyacentes . A menudo se pueden diseñar muchos algoritmos ávidos diferentes para el mismo problema, cada uno localmente, optimizando incrementalmente en alguna medida diferente, mientras se llega a una solución.\\
 
@@ -1934,7 +1941,7 @@ En un caso realmente malo, por ejemplo, cuando el tiempo de finalización $f(i)$
 \end{figure}
 
 \begin{itemize}
-\item	 En la regla ávida anterior, nuestro problema era que la segunda solicitud compite con la primera y la tercera solicitud, es decir, aceptar esta solicitud nos hizo rechazar otras dos solicitudes. Podríamos diseñar un algoritmo ávido que se basa en esta idea: para cada solicitud, contamos el número de otras solicitudes que no son compatibles, y acepta la solicitud que tiene el menor número de solicitudes no compatibles. (En otras palabras, seleccionamos el intervalo con el menor número de " conflictos"). Esta regla ávida de elección conduciría a la solución óptima en el ejemplo anterior. De hecho, es un poco más difícil diseñar un mal ejemplo para esta regla; pero se puede hacer, y hemos dibujado un ejemplo en la Figura 4.1 (c). La solución óptima única en este ejemplo es aceptar las cuatro solicitudes en la fila superior. Los métodos ávidos sugeridos aquí aceptan la solicitud del medio en la segunda fila y por lo tanto, garantizan una solución de tamaño no superior a tres.\\
+\item	 En la regla ávida anterior, nuestro problema era que la segunda solicitud compite con la primera y la tercera solicitud, es decir, aceptar esta solicitud nos hizo rechazar otras dos solicitudes. Podríamos diseñar un algoritmo ávido que se basa en esta idea: para cada solicitud, contamos el número de otras solicitudes que no son compatibles, y acepta la solicitud que tiene el menor número de solicitudes no compatibles. (En otras palabras, seleccionamos el intervalo con el menor número de `` conflictos''). Esta regla ávida de elección conduciría a la solución óptima en el ejemplo anterior. De hecho, es un poco más difícil diseñar un mal ejemplo para esta regla; pero se puede hacer, y hemos dibujado un ejemplo en la Figura 4.1 (c). La solución óptima única en este ejemplo es aceptar las cuatro solicitudes en la fila superior. Los métodos ávidos sugeridos aquí aceptan la solicitud del medio en la segunda fila y por lo tanto, garantizan una solución de tamaño no superior a tres.\\
 
 Una regla ávida que conduce a la solución óptima se basa en una cuarta idea: primero debemos aceptar la solicitud que termina primero, es decir, la solicitud $i$ para lo cual $f (i)$ es lo más pequeño posible. Esta es también una idea bastante natural: nos aseguramos que nuestro recurso se libera lo antes posible sin dejar de satisfacer una solicitud. De esta forma, podemos maximizar el tiempo restante para satisfacer otras solicitudes.\\
 
@@ -1972,7 +1979,7 @@ Para empezar, podemos declarar inmediatamente que los intervalos en el conjunto 
 
 Lo que necesitamos mostrar es que esta solución es óptima. Entonces, para propósitos de comparación, sea $O$ un conjunto óptimo de intervalos. Lo ideal es que uno quiera mostrar que $A = O$, pero esto es demásiado pedir: puede haber muchas soluciones óptimás, y en el mejor de los casos $A$ es igual a solo una de las soluciones. Entonces, en su lugar, implemente mostraremos que $|A| = |O|$, es decir, que $A$ contiene el mismo número de intervalos que $O$ y por lo tanto, también es una solución óptima.\\
 
-La idea que subyace a la prueba, como sugerimos inicialmente, será encontrar un sentido en el que nuestro algoritmo ávido "se mantenga" por delante de esta solución $O$. Compararemos las soluciones parciales que el algoritmo ávido construye con los segmentos iniciales de la solución $O$, y demostrar que el algoritmo ávido está mejorando paso a paso.\\
+La idea que subyace a la prueba, como sugerimos inicialmente, será encontrar un sentido en el que nuestro algoritmo ávido ``se mantenga'' por delante de esta solución $O$. Compararemos las soluciones parciales que el algoritmo ávido construye con los segmentos iniciales de la solución $O$, y demostrar que el algoritmo ávido está mejorando paso a paso.\\
 
 Introducimos algunas notaciones para ayudar con esta prueba. Sea  $i_1, ...,i_k$ el conjunto de solicitudes en $A$ en el orden en que se agregaron a $A$. Tenga en cuenta que $|A| = k$. De manera similar, el conjunto de solicitudes en $O$ es denotado por $j_1, ...,j_m$. Nuestro objetivo es demostrar que $k = m$. Supongamos que las solicitudes de los intervalos correspondientes en $O$ también se ordenan en el orden natural de izquierda a derecha , es decir, en el orden de los puntos de inicio y fin. Tenga en cuenta que las solicitudes en $O$ son compatibles, lo que implica que los puntos de inicio tienen el mismo orden que los puntos finales.\\
 
@@ -1984,14 +1991,14 @@ Introducimos algunas notaciones para ayudar con esta prueba. Sea  $i_1, ...,i_k$
 
 
 
-Nuestra intuición para el método ávido vino de desear que nuestro recurso volviera a ser libre tan pronto como fuera posible después de satisfacer la primera solicitud. Y, de hecho, nuestra regla ávida garantiza que $f(i_1)≤ f(j_1)$. Este es el sentido en el cual queremos mostrar que nuestra regla ávida "se mantiene por delante", que cada uno de sus intervalos finaliza al menos tan pronto como el intervalo correspondiente en el conjunto $O$. Por lo tanto, ahora demostramos que para cada $r≥1$, la $r-esima$ solicitud aceptada en la planificación del algoritmo finaliza a más tardar igual tiempo que la solicitud $r-esima$ de la planificación óptima.\\
+Nuestra intuición para el método ávido vino de desear que nuestro recurso volviera a ser libre tan pronto como fuera posible después de satisfacer la primera solicitud. Y, de hecho, nuestra regla ávida garantiza que $f(i_1)≤ f(j_1)$. Este es el sentido en el cual queremos mostrar que nuestra regla ávida ``se mantiene por delante'', que cada uno de sus intervalos finaliza al menos tan pronto como el intervalo correspondiente en el conjunto $O$. Por lo tanto, ahora demostramos que para cada $r≥1$, la $r-esima$ solicitud aceptada en la planificación del algoritmo finaliza a más tardar igual tiempo que la solicitud $r-esima$ de la planificación óptima.\\
 
 \textbf{(4.2)} Para todos los índices $r ≤ k$ tenemos que $f (i_r) ≤ f (j_r)$.\\
 
 
 \textbf{Demostración}. Vamos a probar esta afirmación por inducción. Para $r=1$, la afirmación es claramente cierta: el algoritmo comienza seleccionando la solicitud $i_1$ con un tiempo mínimo de finalización.\\
 
-Ahora, $r>1$. Asumiremos como nuestra hipótesis de inducción que la afirmación es verdadera para $r-1$, y trataremos de probarlo para $r$. Como se muestra en la Figura 4.3, la hipótesis de inducción nos permite suponer que $f(i_{r-1}) ≤ f(j_{r-1})$. Para que el intervalo $r-esimo$ del algoritmo no termine antes también, tendría que "quedarse atrás " como se muestra. Pero hay una razón simple por la que esto no podría suceder: en lugar de elegir un intervalo de finalización posterior, el algoritmo ávido siempre tiene la opción (en el peor caso) de elegir $j_r$ y así cumplir el paso de inducción.\\
+Ahora, $r>1$. Asumiremos como nuestra hipótesis de inducción que la afirmación es verdadera para $r-1$, y trataremos de probarlo para $r$. Como se muestra en la Figura 4.3, la hipótesis de inducción nos permite suponer que $f(i_{r-1}) ≤ f(j_{r-1})$. Para que el intervalo $r-esimo$ del algoritmo no termine antes también, tendría que ``quedarse atrás " como se muestra. Pero hay una razón simple por la que esto no podría suceder: en lugar de elegir un intervalo de finalización posterior, el algoritmo ávido siempre tiene la opción (en el peor caso) de elegir $j_r$ y así cumplir el paso de inducción.\\
 
 Podemos hacer preciso este argumento de la siguiente manera. Sabemos (dado que $O$ consiste en intervalos compatibles) que $f(j_{r-1}) ≤ s(j_r)$. Combinando esto con la hipótesis de inducción $f(i_{r-1}) ≤ f(j_{r-1})$, obtenemos $f(i_{r-1}) ≤ s(j_r)$. Por lo tanto, el intervalo $j_r$ está en el conjunto $R$ de los intervalos disponibles en el momento en que el algoritmo ávido selecciona $i_r$. El algoritmo ávido selecciona el intervalo disponible con el menor tiempo de finalización; dado que el intervalo $j_r$ es uno de estos intervalos disponibles, tenemos $f(i_r) ≤ f(j_r)$. Con esto se completa el paso inductivo.  $\blacksquare$\\
 
@@ -2040,9 +2047,9 @@ Ahora, ¿ hay alguna esperanza de usar solo dos recursos en esta instancia de mu
 
 \textbf{Demostración}. Supongamos que un conjunto de intervalos tiene profundidad $d$, y que $I_1, ..., I_d$ pasan todos sobre un punto común en la línea de tiempo. Entonces cada uno de estos intervalos debe planificarse en un recurso diferente, por lo que toda la instancia juntas necesitan al menos $d$ recursos simultáneamente.  $\blacksquare$\\
 
-Ahora consideramos dos preguntas, que están estrechamente relacionadas. En primer lugar, ¿ podemos diseñar un algoritmo eficiente que planifique todos los intervalos utilizando la mínima cantidad posible de recursos? En segundo lugar, ¿siempre hay un horario que utiliza una cantidad de recursos igual a la profundidad? En efecto, una respuesta positiva a esta segunda pregunta diría que los únicos obstáculos para los intervalos de partición son puramente locales: un conjunto de intervalos todos apilados sobre el mismo punto. No está claro de inmediato que no podrían existir otros obstáculos de "largo alcance" que eleven aún más la cantidad de recursos requeridos.\\
+Ahora consideramos dos preguntas, que están estrechamente relacionadas. En primer lugar, ¿ podemos diseñar un algoritmo eficiente que planifique todos los intervalos utilizando la mínima cantidad posible de recursos? En segundo lugar, ¿siempre hay un horario que utiliza una cantidad de recursos igual a la profundidad? En efecto, una respuesta positiva a esta segunda pregunta diría que los únicos obstáculos para los intervalos de partición son puramente locales: un conjunto de intervalos todos apilados sobre el mismo punto. No está claro de inmediato que no podrían existir otros obstáculos de ``largo alcance'' que eleven aún más la cantidad de recursos requeridos.\\
 
-Ahora diseñaremos un algoritmo ávido simple que planifica todos los intervalos usando una cantidad de recursos igual a la profundidad. Esto implica inmediatamente la optimalidad del algoritmo: a la vista de (4.4), ninguna solución podría usar una cantidad de recursos menor que la profundidad. El análisis de nuestro algoritmo por lo tanto ilustrará otro enfoque general para probar la optimalidad: uno encuentra un límite " estructural" simple afirmando que cada solución posible debe tener al menos un cierto valor, y luego muestra que el algoritmo bajo consideración siempre logra este límite .\\
+Ahora diseñaremos un algoritmo ávido simple que planifica todos los intervalos usando una cantidad de recursos igual a la profundidad. Esto implica inmediatamente la optimalidad del algoritmo: a la vista de (4.4), ninguna solución podría usar una cantidad de recursos menor que la profundidad. El análisis de nuestro algoritmo por lo tanto ilustrará otro enfoque general para probar la optimalidad: uno encuentra un límite `` estructural'' simple afirmando que cada solución posible debe tener al menos un cierto valor, y luego muestra que el algoritmo bajo consideración siempre logra este límite .\\
 
 \subsubsection*{Diseñando el Algoritmo} Sea $d$ la profundidad del conjunto de intervalos; mostramos cómo asignar una etiqueta a cada intervalo, donde las etiquetas provienen del conjunto de números ${1,2,...,d}$, y la asignación tiene la propiedad de que los intervalos superpuestos están etiquetados con números diferentes. Esto proporciona la solución deseada, ya que podemos interpretar cada número como el nombre de un recurso, y la etiqueta de cada intervalo como el nombre del recurso al que está asignado.\\
 
@@ -2074,15 +2081,15 @@ Tenemos el siguiente enunciado:\\
 
 Ahora, probaremos que no hay dos intervalos superpuestos con la misma etiqueta. De hecho, considere dos intervalos $I$ e $I'$ que se superponen, y supongamos que $I$ precede a $I'$ en el orden. Entonces, cuando $I'$ es considerado por el algoritmo, $I$ está en el conjunto de intervalos cuyas etiquetas están excluidas de la consideración; en consecuencia, el algoritmo no asignará a $I'$ la etiqueta que utilizó para $I$. $\blacksquare$\\
 
-El algoritmo y su análisis son muy simples. Básicamente, si tiene $d$ etiquetas a su disposición, a medida que barre los intervalos de izquierda a derecha, asignando una etiqueta disponible para cada intervalo que encuentre, nunca podrá alcanzar un punto donde todas las etiquetas estén actualmente en uso.\\
+El algoritmo y su análisis son muy simples. Básicamente, si tiene $d$ etiquetas a su disposición, a medida que barre los intervalos de izquierda a derecha, asignando una etiqueta disponible para cada intervalo que encuentre, nunca podrá alcanzar un punto donde todas las etiquetas estén actualmente en uso.
 
-Dado que nuestro algoritmo utiliza $d$ etiquetas, podemos usar (4.4) para concluir que, de hecho, siempre está utilizando la menor cantidad posible de etiquetas. Lo resumimos de la siguiente manera.\\
+Dado que nuestro algoritmo utiliza $d$ etiquetas, podemos usar (4.4) para concluir que, de hecho, siempre está utilizando la menor cantidad posible de etiquetas. Lo resumimos de la siguiente manera.
 
-\textbf{(4.6)} El algoritmo ávido anterior planifica cada intervalo en un recurso, usando una cantidad de recursos igual a la profundidad del conjunto de intervalos. Y esta es la cantidad óptima de recursos necesarios.\\
+\textbf{(4.6)} El algoritmo ávido anterior planifica cada intervalo en un recurso, usando una cantidad de recursos igual a la profundidad del conjunto de intervalos. Y esta es la cantidad óptima de recursos necesarios.
 
 \subsection{Planificacion para minimizar la tardanza: Un argumento de intercambio}
 
-Ahora hablaremos de un problema de planificación relacionado con aquel con el que comenzamos el capítulo. A pesar de las similitudes en la formulación del problema y en el algoritmo ávido para resolverlo, la prueba de que este algoritmo es óptimo requerirá un tipo de análisis más sofisticado.\\
+Ahora hablaremos de un problema de planificación relacionado con aquel con el que comenzamos el capítulo. A pesar de las similitudes en la formulación del problema y en el algoritmo ávido para resolverlo, la prueba de que este algoritmo es óptimo requerirá un tipo de análisis más sofisticado.
 
 \subsection*{El problema}
 Considere de nuevo una situación en la que tenemos un único recurso y un conjunto de $n$ solicitudes para usar el recurso durante un intervalo de tiempo. Supongamos que el recurso está disponible comenzando en el tiempo $s$. Sin embargo, a diferencia del problema anterior, cada solicitud ahora es más flexible. En lugar de una hora de inicio y una hora de finalización, la solicitud $i$ tiene una fecha límite, y requiere un intervalo de tiempo contiguo de duración $t_i$, pero está dispuesto a planificarse en cualquier momento antes de la fecha límite. A cada solicitud aceptada se le debe asignar un intervalo de tiempo de duración $t_i$, y se deben asignar diferentes intervalos a las diferentes solicitudes.\\
@@ -2127,7 +2134,7 @@ Primero especificamos alguna notación que será útil para hablar sobre el algo
 \end{lstlisting}
 
 \subsubsection*{Analizando el algoritmo}
-Para razonar acerca de la optimalidad del algoritmo, primero observamos que el cronograma que produce no tiene " espacios vacíos " -tiempos cuando la máquina no está funcionando pero todavía hay trabajos pendientes. El tiempo que transcurre durante un intervalo se denomina tiempo de inactividad: hay trabajo por hacer, pero por alguna razón la máquina está inactiva. La planificación producida por nuestro algoritmo no solo no tiene tiempo de inactividad; también es muy fácil ver que hay un horario óptimo con esta propiedad. No escribiremos una prueba para esto.\\
+Para razonar acerca de la optimalidad del algoritmo, primero observamos que el cronograma que produce no tiene `` espacios vacíos " -tiempos cuando la máquina no está funcionando pero todavía hay trabajos pendientes. El tiempo que transcurre durante un intervalo se denomina tiempo de inactividad: hay trabajo por hacer, pero por alguna razón la máquina está inactiva. La planificación producida por nuestro algoritmo no solo no tiene tiempo de inactividad; también es muy fácil ver que hay un horario óptimo con esta propiedad. No escribiremos una prueba para esto.\\
 
 \textbf{(4.7)} Existe un horario óptimo sin tiempo de inactividad.\\
 
@@ -2180,82 +2187,84 @@ La optimalidad de nuestro algoritmo ávido ahora sigue inmediatamente.\\
 \textbf{Demostración}. El enunciado (4.9) demuestra que existe un cronograma óptimo sin inversiones. Ahora, por (4.8) todos los programás sin inversiones tienen la misma latencia máxima, por lo que el cronograma obtenido por el algoritmo ávido es óptimo.\\
 
 \subsubsection*{Extensiones:}
+
 Hay muchas generalizaciones posibles de este problema de programación. Por ejemplo, asumimos que todos los trabajos estaban disponibles para comenzar en la hora de inicio común $s$. Una versión natural, pero más dura, de este problema contendría solicitudes que, además de la fecha límite $d_i$ y la hora solicitada $t_i$, también tendrían un tiempo de inicio $r_i$ más temprano posible. Este tiempo de inicio posible más temprano se conoce generalmente como el tiempo de liberación. Los problemas con los tiempos de liberación surgen naturalmente en los problemas de programación donde las solicitudes pueden tomar la forma: ¿ Puedo reservar la sala para una conferencia de dos horas, en algún momento entre la 1 P.M. y 5 P.M.? Nuestra prueba de que el algoritmo ávido encuentra una solución óptima se basó fundamentalmente en el hecho de que todos los trabajos estaban disponibles en la hora de inicio común. (¿ Ves dónde ?) Desafortunadamente, como veremos más adelante en el libro, en el Capítulo 8, esta versión más general del problema es mucho más difícil de resolver de manera óptima.\\
 
 
+\section{Caminos más cortos en un grafo}
+
+\todo[inline]{revisado desde acá (salteado)}
+
+Algunos de los algoritmos básicos para grafos se basan en principios de diseño codicioso. Aquí aplicamos un algoritmo codicioso al problema de encontrar los caminos más cortos, y en la siguiente sección veremos la construcción de árboles de cobertura de coste mínimo.
+
+\subsection{El problema}
+
+Como hemos visto, los grafos se utilizan a menudo para modelar redes en las que se viaja de un punto a otro, atravesando una secuencia de carreteras a través de intercambios, o atravesando una secuencia de enlaces de comunicación a través de routers intermedios. En consecuencia, un problema algorítmico básico es determinar el camino más corto entre los nodos de un grafo. Podemos plantearlo como una pregunta de punto a punto: Dados los nodos $u$ y $v$, ¿cuál es el camino más corto $u-v$? O podemos pedir más información: Dado un nodo inicial $s$, ¿cuál es el camino más corto desde $s$ hasta cualquier otro nodo?
+
+La formulación concreta del problema de los caminos más cortos es la siguiente. Se nos da un grafo dirigido $G = (V , E)$, con un nodo inicial designado $s$. Suponemos que $s$ tiene un camino hacia cada uno de los otros nodos de $G$. Cada arista e tiene una longitud $\ell_e ≥ 0$, que indica el tiempo (o la distancia, o el coste) que se tarda en atravesar $e$. Para un camino $P$, la longitud de $P$ --denominada $\ell(P)$-- es la suma de las longitudes de todas las aristas de $P$. Nuestro objetivo es determinar el camino más corto desde $s$ hasta cualquier otro nodo del grafo. Debemos mencionar que aunque el problema está especificado para un grafo dirigido, podemos manejar el caso de un grafo no dirigido simplemente sustituyendo cada arista no dirigida $e = (u, v)$ de longitud $\ell_e$ por dos aristas dirigidas $(u, v)$ y $(v, u)$, cada una de longitud $\ell_e$ .
+
+\todo[inline]{revisado hasta acá (salteado)}
+
+\subsection{Diseñando el algoritmo}
+
+En 1959, Edsger Dijkstra propuso un simple algoritmo ávido para resolver el problema de los caminos más cortos. Comenzamos describiendo un algoritmo que solo determina el \textit{largo} del camino más corto de $s$ a cualquier otro nodo en el grafo; luego es fácil obtener los caminos también. El algoritmo mantiene un conjunto $S$ de vértices $u$ para los cuales hemos determinado la distancia $d(u)$, a través del camino más corto desde $s$; esta es la parte ``explorada'' del grafo. Inicialmente $S=\{s\}$, y $d(s)=0$. Ahora, para cada nodo $v \in V-S$, determinamos el camino más corto que puede ser construido pasando a través de un camino dentro de la parte explorada $S$ hasta $u \in S$, seguido por una única arista $(u,v)$. Esto es, consideramos la cantidad $d'(v) = min_{e=(u,w):u \in S} d (u) + \ell_e$. Elegimos el nodo $v \in V-S$ para el cual esta distancia es la mínima, añadimos $v$ a $S$, y definimos $d(v)$ como el valor de $d'(v)$.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{Imagenes-Seccion4/algoritmodijkstra.png}
+\end{figure}
 
 
-\subsection{Caminos más cortos en un grafo}
+Es simple producir los caminos $s-u$ correspondientes a las distancias encontradas por el algoritmo de Dijkstra. 
+Como cada nodo $v$ se agrega al conjunto $S$, simplemente registramos la arista $(u, v)$ en la que se obtuvo el valor $min_{e=(u,w):u \in S} d (u) + \ell_e$ . El camino $P_v$ es implícitamente representado por estas aristas: si $(u,v)$ es la arista que guardamos para $v$, entonces $P_v$ es (recursivamente) el camino $P_u$ seguido por una sola arista $(u,v)$. En otras palabras, para construir $P_v$, simplemente empezamos en $v$, seguimos las aristas que guardamos en $u$ en orden inverso a su predecesor, y seguimos de esta forma hasta que alcanzamos $s$. Note que $s$ debe ser alcanzado, ya que nuestro camino hacia atrás desde $v$ visita nodos que fueron agregados a $S$ cada vez más temprano.
 
-Algunos de los algoritmos básicos para grafos están basados en principios del diseño de algoritmos ávidos. Aquí aplicamos un algoritmo ávido en el problema de encontrar los caminos más cortos, y en la siguiente sección veremos la construcción de árboles recubridores de mínimo costo.\\\\
-
-\textbf{El problema}
-Como hemos visto, los grafos son típicamente usados para modelar redes en las cuales uno va de un punto al otro -  atravesando una secuencia de caminos, o atravesando una secuencia de nodos de comunicación por rutas intermedias. Como resultado, un básico problema algorítmico consiste en determinar el menor camino entre nodos en un grafo. Podríamos plantear esto como una pregunta ``punto a punto'' : Dados los nodos $u$ y $v$, ¿Cuál es el mínimo camino entre $u$ y $v$? O podríamos pedir más información: Dado un nodo inicial $s$, ¿ Cuál es el camino más corto de $s$ a cada otro nodo?\\
-
-En concreto el problema de los caminos más cortos es el siguiente. Tenemos un grafo dirigido $G=(V,E)$, con un determinado nodo de inicio $s$. Asumimos que s tiene un camino a cada otro nodo en $G$. Cada arista $e$ tiene longitud $l_e$ >=  0 indicando el tiempo (o distancia, costo, etc.) que toma atravesar $e$. Para un camino $P$, la longitud de $P$ – denotada $l(P)$ – es la suma de las longitudes de todas las aristas de $P$. Nuestro objetivo es determinar el camino más corto de $s$ a cualquier otro nodo en el grafo. Nótese que aunque el problema fue especificado para un grafo dirigido, podemos manejar el caso de un grafo no dirigido simplemente reemplazando cada arista no dirigida $e=(u,v)$ de longitud $l_e$ por dos aristas dirigidas $(u,v)$ y $(v,u)$, cada una de largo $l_e$.\\\\
-
-\subsubsection*{Diseñando el algoritmo}
-En 1959, Edsger Dijkstra propuso un simple algoritmo ávido para resolver el problema de los caminos más cortos. Comenzamos describiendo un algoritmo que solo determina el largo del camino más corto de $s$ a cualquier otro nodo en el grafo; es entonces fácil obtener los caminos también. El algoritmo mantiene un conjunto $S$ de vértices $u$ para los cuales hemos determinado una distancia, $d(u)$, del camino más corto desde $s$; esta es la parte ``explorada'' del grafo. Inicialmente $S={s}$, y $d(s)=0$. Ahora, para cada nodo $v$ \(\in\) $V-S$, determinamos el camino más corto que puede ser construido pasando a través de un camino de la parte explorada $S$ hasta $u$ \(\in\) $S$, seguido por una única arista $(u,v)$. Esto es, consideramos la cantidad $d'(v)$ = min\{$d (u)$ + $l_e$ : $e=(u,w)$, $u$ \(\in\) $S$ \} . Elegimos el nodo $v$ \(\in\) $V-S$ para el cual esta distancia es la mínima, añadimos $v$ a $S$, y definimos $d(v)$ como el valor de $d'(v)$.\\
-
-\begin{lstlisting}
- Algoritmo Dijkstra (G,l)
-Sea S el conjunto de nodos explorados
-	Para cada u perteneciente a S, guardo la distancia d(u)
-Inicialmente, S = {s} y d(s) = 0
-While S != V
-	Seleccionar un v no perteneciente a S con al menos un nodo de S
-	para el cual d'(v) = min(d(u)+le ) es lo mas chico posible
-	Agregar v a S y definir d(v)=d'(v)
-EndWhile
-\end{lstlisting}
-
-
-Es simple producir los caminos $s-u$ correspondientes a las distancias encontradas
-por el algoritmo de Dijkstra. Como cada nodo $v$ se agrega al conjunto $S$, simplemente registramos
-la arista $(u, v)$ en la que se obtuvo el valor min\{$d (u)$ + $l_e$ : $e = (u, w)$, $u$ \(\in\) $S$ \} . El camino $P_v$ es implícitamente representado por estas aristas: si $(u,v)$ es la arista que guardamos para $v$, entonces $P_v$ es (recursivamente) el camino $P_u$ seguido por una sola arista $(u,v)$. En otras palabras, para construir $P_v$, simplemente empezamos en $v$, seguimos las aristas que guardamos en $u$ en orden inverso a su predecesor, y seguimos de esta forma hasta que alcanzamos $s$. Note que $s$ debe ser alcanzado, ya que nuestro camino hacia atrás desde $v$ visita nodos que fueron agregados a $S$ más y más temprano.\\
-
-Para entender mejor lo que el algoritmo está haciendo, considere la representación de su ejecución en 4.7. En el instante que representa la imagen, se han realizado 2 iteraciones: La primera agrego el nodo $u$, y la segunda el nodo $v$. En la iteración que le sigue, el nodo $x$ será añadido porque logra el menor valor de $d'(x)$; Gracias a la arista $(u,x)$, tenemos $d'(x)= d(u)$ + $l_{ux}$ = 2. Note que intentar añadir el nodo y o $z$ al conjunto $S$ en este punto causaría un valor incorrecto para las distancias de los caminos más cortos; eventualmente, estos nodos serán añadidos desde las aristas de $x$.\\
+Para entender mejor lo que el algoritmo está haciendo, considere la representación de su ejecución en la Figura \ref{fig:fig4.7}. En el instante que representa la imagen, se han realizado dos iteraciones: la primera agregó el nodo $u$, y la segunda el nodo $v$. En la iteración que le sigue, el nodo $x$ será añadido porque ofrece el menor valor de $d'(x)$; gracias a la arista $(u,x)$, tenemos $d'(x) = d(u) + \ell_{ux} = 2$. Note que intentar añadir el nodo $y$ o $z$ al conjunto $S$ en este punto causaría un valor incorrecto para las distancias de los caminos más cortos; en algún momento, estos nodos serán añadidos desde las aristas de $x$.
 
 \begin{figure}[h]
 \centering
 \includegraphics[scale=0.5]{Imagenes-Seccion4/fig_4_7.PNG}
+\caption{Una muestra de la ejecución del algoritmo de Dijkstra. El siguiente nodo en ser añadido al conjunto $S$ será $x$, dado el camino por $u$.}
+\label{fig:fig4.7}
 \end{figure}
-\textbf{Figura 4.7} Una muestra de la ejecución del algoritmo de Dijkstra. El siguiente nodo en ser añadido al conjunto $S$ será $x$, dado el camino por $u$.\\
 
-\subsubsection*{Analizando el algoritmo}
+\subsection*{Analizando el algoritmo}
 
-Vemos en este ejemplo que el Algoritmo de Dijkstra está haciendo lo correcto y
-evitando trampas recurrentes: hacer crecer el conjunto $S$ por el nodo incorrecto puede conducir a una
-sobreestimacion de la distancia del camino más corto a ese nodo. La pregunta es:
-¿Es siempre cierto que cuando el algoritmo de Dijkstra agrega un nodo $v$, obtenemos la verdadera
-distancia más corta a $v$?\\
-	Ahora respondemos esto probando la corrección del algoritmo, mostrando que los caminos $P_u$ realmente son los caminos más cortos. El algoritmo de Dijkstra es ávido en el sentido de que siempre forma el nuevo camino más corto $s-v$ que podemos formar de un camino en $S$ seguido de otra arista más. Probamos su corrección usando una variante de
-nuestro primer estilo de análisis: mostramos que "se mantiene por delante" de todas las demás soluciones
-estableciendo, inductivamente, que cada vez que selecciona un camino a un nodo $v$, ese
-camino es más corto que cualquier otra ruta posible a $v$.\\\\
+Vemos en este ejemplo que el algoritmo de Dijkstra está haciendo lo correcto y evitando trampas recurrentes: hacer crecer el conjunto $S$ por el nodo incorrecto puede conducir a una sobre-estimación de la distancia del camino más corto a ese nodo. La pregunta es:
+¿es siempre cierto que cuando el algoritmo de Dijkstra agrega un nodo $v$, obtenemos la distancia más corta a $v$?
 
- \colorbox{mygray}{\parbox{15cm}{
-	\textbf{(4.14)}  Considere el conjunto $S$ en un punto cualquiera durante la ejecución del algoritmo. Para cada $u$ \(\in\) $S$, el camino $P_u$ es el más corto de $s$ a $u$.}}\\\\
+Ahora respondemos esto probando la corrección del algoritmo, mostrando que los caminos $P_u$ realmente son los caminos más cortos. El algoritmo de Dijkstra es codicioso en el sentido de que siempre forma el nuevo camino más corto $s-v$ que podemos formar a partir de un camino en $S$ seguido de una sola arista. Probamos su corrección usando una variante de nuestro primer estilo de análisis: mostramos que ``se mantiene por delante'' de todas las demás soluciones estableciendo, inductivamente, que cada vez que selecciona un camino a un nodo $v$, ese
+camino es más corto que cualquier otra ruta posible a $v$.
 
-Tenga en cuenta que este hecho establece inmediatamente la corrección del Algoritmo, ya que podemos aplicarlo cuando el algoritmo finaliza, en el cual el punto $S$ incluye todos los nodos.\\
+\noindent\colorbox{mygray}{\parbox{\textwidth}{
+\begin{theorem}
+Considere el conjunto $S$ en un punto cualquiera de la ejecución del algoritmo. Para cada $u \in S$, el camino $P_u$ es el más corto de $s$ a $u$.
+\end{theorem}
+}}
 
-\textbf{Demostración}. Probamos esto por inducción en el tamaño de $S$. El caso $|S|=1$ es fácil, ya que tenemos $S$=\{s\} y $d(s)=0$. Supongamos que esto se mantiene cuando $|S|=k$ para algún valor de $k > 1$; Ahora aumentamos $S$ a $k+1$ añadiendo el nodo $v$.
-Sea $(u,v)$ la ultima arista el el camino $s-v$, $P_v$.\\
-Por hipótesis de inducción, $P_u$ es el camino más corto $s-u$ para cada $u$ \(\in\) S. Ahora considere cualquier otro camino $s-v$, denominado $P$; queremos mostrar que es al menos tan largo como $P_v$. Para alcanzar $v$, este camino debe salir de $S$ en alguna parte; sea y el primer nodo en $P$ que no está en $S$, y sea x \(\in\) $S$ el nodo justo antes de $y$.\\
-	La situación es ahora como la descrita en la figura 4.8, y la clave de la prueba es simple: $P$ no puede ser más corto que $P_v$ porque ya es al menos tan largo como $P_v$ para cuando salió de $S$. 
-De hecho, en la iteración $k + 1$, del
-Algoritmo debe haber considerado agregar el nodo y al conjunto $S$ a través de la arista $(x, y)$
-y rechazó esta opción a favor de agregar v. Esto significa que no hay camino
-de $s$ a $y$ a través de $x$ que es más corto que $P_v$. Pero el subtrayecto de $P$ hasta y es
-tal camino, y entonces este subtrayecto es al menos tan largo como $P_v$. Como las longitudes de arista
-son no negativas, el camino completo $P$ es al menos tan largo como $P_v$ también.\\
+Tenga en cuenta que este hecho establece inmediatamente la corrección del algoritmo, ya que podemos aplicarlo cuando el algoritmo finaliza, momento en el que $S$ incluye todos los nodos.
+
+\begin{proof}
+Probamos esto por inducción en el tamaño de $S$. El caso en el que $|S| = 1$ es fácil, ya que tenemos $S=\{s\}$ y $d(s)=0$. Supongamos que esto se mantiene cuando $|S|=k$ para algún valor de $k > 1$; Ahora aumentamos el tamaño de $S$ a $k+1$ añadiendo el nodo $v$.
+Sea $(u,v)$ la ultima arista el el camino $s-v$, $P_v$.
+
+Por hipótesis inductiva, $P_u$ es el camino más corto $s-u$ para cada $u\in S$. Ahora considere cualquier otro camino $s-v$, denominado $P$; queremos mostrar que es al menos tan largo como $P_v$. Para alcanzar $v$, este camino debe salir de $S$ en alguna parte; sea $y$ el primer nodo en $P$ que no está en $S$, y sea $x \in S$ el nodo justo antes de $y$.
+La situación es ahora como la descrita en la Figura \ref{fig:fig4.8}, y el meollo de la prueba es muy simple: $P$ no puede ser más corto que $P_v$ porque ya es al menos tan largo como $P_v$ para cuando salió de $S$. 
+
+De hecho, en la iteración $k + 1$, del algoritmo debe haber considerado agregar el nodo $y$ al conjunto $S$ a través de la arista $(x, y)$ y rechazó esta opción a favor de agregar $v$. Esto significa que no hay camino de $s$ a $y$ a través de $x$ que sea más corto que $P_v$. 
+Pero la parte del camino $P$ que llega hasta $y$ es tal camino, y entonces este subtrayecto es al menos tan largo como $P_v$. Como las longitudes de arista
+son no negativas, el camino completo $P$ es al menos tan largo como $P_v$ también.
+
 Esta es una prueba completa; uno también puede expresar el argumento del párrafo anterior utilizando las siguientes desigualdades. Sea $P'$ el subcamino de $P$ desde $s$ hasta $x$. Ya que $x$ \(\in\) $S$, sabemos por hipótesis de inducción que $P_x$ es un camino más corto de $s-x$ (de largo $d(x)$), y entonces $l(P')$ \(\geq\) $l(P_x)=d(x)$. Entonces el subcamino de $P$ hasta el nodo $y$ tiene longitud $l(P')+l(x,y)$ \(\geq\) $d(x)+l(x,y)$ \(\geq\) $d'(y)$, y el camino completo $P$ es al menos tan largo como este subcamino. Finalmente, ya que el algoritmo selecciono $v$ en esta iteración, sabemos que $d'(y)$ \(\geq\) $d'(v)=l(P_v)$. Combinando estas desigualdades tenemos que $l(P)$ \(\geq\) $l(P') + l(x,y)$ \(\geq\) $l(P_v)$. \(\blacksquare\)\\
+
+\end{proof}
 
 \begin{figure}[h]
 \centering
-\includegraphics[scale=0.5]{Imagenes-Seccion4/fig_4_8.PNG}
+\includegraphics[width=\textwidth]{Imagenes-Seccion4/fig_4_8.PNG}
+\caption{ El camino más corto $P_v$ y un camino alternativo $P$ de $s$ a $v$ a través del nodo $y$.}
+\label{fig:fig4.8}
 \end{figure}
-\textbf{Figura 4.8} El camino más corto $P_v$ y un camino alternativo $P$ de $s$ a $v$ a través del nodo $y$.\\
+
 
 
 Aquí hay dos observaciones sobre el algoritmo de Dijkstra y su análisis. Primero, el algoritmo no siempre encuentra las rutas más cortas si alguna de las aristas puede tener longitudes negativas ( ¿ Ves dónde se rompe la prueba?) Muchas de las aplicaciones de camino más corto implican longitudes de arista negativas, y un algoritmo más complejo, de Bellman y Ford, se requiere para este caso. Veremos este algoritmo cuando consideremos el tema de la programación dinámica.\\
@@ -2263,7 +2272,7 @@ Aquí hay dos observaciones sobre el algoritmo de Dijkstra y su análisis. Prime
 
 La segunda observación es que el algoritmo de Dijkstra es, en cierto sentido, incluso
 más simple de lo que hemos descrito aquí. El algoritmo de Dijkstra es realmente una
-versión "continua" del algoritmo BFS para atravesar un
+versión ``continua'' del algoritmo BFS para atravesar un
 grafo, y puede estar motivado por la siguiente intuición física. Suponga que
 las aristas de $G$ forman un sistema de tuberías llenas de agua, unidas en
 los nodos; cada arista $e$ tiene una longitud $l_e$ y un ancho fijo. Ahora
@@ -2329,7 +2338,7 @@ Haremos la siguiente observación:\\
 \textbf{(4.16)} Sea $T$ una solucion de mínimo costo al problema de diseño de conexión definido arriba. Entonces $(V,T)$ es un árbol.\\
 
 \textbf{Demostración} Por definición, $(V,T)$ debe ser conexo; demostraremos que tampoco contendrá ciclos. Entonces, supongamos que contiene un ciclo $C$, y sea $e$ cualquier
-arista en $C$. Afirmamos que ($V$, $T$ - \{$e$\}) todavía es conexo, ya que cualquier camino que haya pasado anteriormente por la arista $e$ ahora puede ir "para el otro lado" alrededor del resto
+arista en $C$. Afirmamos que ($V$, $T$ - \{$e$\}) todavía es conexo, ya que cualquier camino que haya pasado anteriormente por la arista $e$ ahora puede ir ``para el otro lado'' alrededor del resto
 del ciclo $C$ en su lugar. Se deduce que ($V$, $T$ - \{$e$\}) también es una solución válida para el
 problema, y es más barata, lo cual es una contradicción.\\
 
@@ -2346,9 +2355,9 @@ Aquí hay 3 algoritmos ávidos, cada uno de los cuales encuentra de forma correc
 
 \item Un algoritmo simple comienza sin ninguna arista en absoluto y construye un árbol de cubrimiento al insertar sucesivamente las aristas de $E$ en orden de costo creciente. A medida que avanzamos por las aristas en este orden, insertamos cada arista $e$ siempre que no cree un ciclo cuando se agrega a las aristas que tenemos ya insertadas. Si, por otro lado, insertar $e$ daría como resultado un ciclo, entonces simplemente descartamos $e$ y continuamos. Este enfoque se llama Algoritmo de Kruskal.
 
-\item Otro simple algoritmo greedy puede ser diseñado en analogía con el algoritmo de Dijkstra para caminos, aunque, de hecho es aun más fácil de especificar. Empezamos con un nodo raíz $s$ e intentamos de formar un árbol desde $s$ hacia afuera. en cada paso, simplemente agregamos el nodo que puede ser unido en la forma más barata al árbol parcial que ya tenemos. más concretamente mantenemos un conjunto $S$ ⊆ $V$ en el cual se ha construido un árbol de cubrimiento hasta ahora. Inicialmente, $S$=\{$s$\}. En cada iteración aumentamos $S$ por un nodo, agregando en nodo $v$ que minimiza el "costo de unión" min\{$c_e$ : $e=(u,w)$, $u$ \(\in\) $S$ \}, e incluimos la arista $e=(u,v)$ que logra este mínimo en el árbol de cubrimiento. Este método se llama algoritmo de Prim.
+\item Otro simple algoritmo greedy puede ser diseñado en analogía con el algoritmo de Dijkstra para caminos, aunque, de hecho es aun más fácil de especificar. Empezamos con un nodo raíz $s$ e intentamos de formar un árbol desde $s$ hacia afuera. en cada paso, simplemente agregamos el nodo que puede ser unido en la forma más barata al árbol parcial que ya tenemos. más concretamente mantenemos un conjunto $S$ ⊆ $V$ en el cual se ha construido un árbol de cubrimiento hasta ahora. Inicialmente, $S$=\{$s$\}. En cada iteración aumentamos $S$ por un nodo, agregando en nodo $v$ que minimiza el ``costo de unión'' min\{$c_e$ : $e=(u,w)$, $u$ \(\in\) $S$ \}, e incluimos la arista $e=(u,v)$ que logra este mínimo en el árbol de cubrimiento. Este método se llama algoritmo de Prim.
 
-\item Finalmente, podemos diseñar un algoritmo greedy haciendo una versión "al revés" del algoritmo de Kruskal. Específicamente, empezamos con un grafo entero $(V,E)$ y empezamos a eliminar aristas en orden de costo decreciente. A medida que llegamos a cada arista $e$ (empezando de la más costosa), la borramos siempre que al hacerlo no desconectemos el grafo que tenemos actualmente. A falta de un mejor nombre, a este se le llama el algoritmo de eliminación inversa.
+\item Finalmente, podemos diseñar un algoritmo greedy haciendo una versión ``al revés'' del algoritmo de Kruskal. Específicamente, empezamos con un grafo entero $(V,E)$ y empezamos a eliminar aristas en orden de costo decreciente. A medida que llegamos a cada arista $e$ (empezando de la más costosa), la borramos siempre que al hacerlo no desconectemos el grafo que tenemos actualmente. A falta de un mejor nombre, a este se le llama el algoritmo de eliminación inversa.
 \end{itemize}
 
 \begin{figure}[h]
@@ -2360,12 +2369,12 @@ Aquí hay 3 algoritmos ávidos, cada uno de los cuales encuentra de forma correc
 
 Por ejemplo, la Figura 4.9 muestra las primeros cuatro aristas añadidas por los algoritmos de Prim y Kruskal respectivamente, en una instancia geométrica del problema del árbol recubridor mínimo en el cual el costo de cada arista es proporcional a la distancia geométrica en el plano.\\
 
-El hecho de que cada uno de estos algoritmos garantiza una solución optima sugiere que hay una cierta "robustez" el el problema del árbol recubridor mínimo - hay muchas maneras de llegar a la respuesta. A continuación exploramos algunas de las razones por las cuales tantos algoritmos diferentes producen árboles de mínimo costo.\\
+El hecho de que cada uno de estos algoritmos garantiza una solución optima sugiere que hay una cierta ``robustez'' el el problema del árbol recubridor mínimo - hay muchas maneras de llegar a la respuesta. A continuación exploramos algunas de las razones por las cuales tantos algoritmos diferentes producen árboles de mínimo costo.\\
 
 \subsubsection*{Analizando los Algoritmos}
 Todos estos algoritmos funcionan insertando o borrando repetidamente las aristas de una
 solución parcial. Entonces, para analizarlos, sería útil tener en cuenta algunos
-datos básicos que dicen cuándo es "seguro" incluir una arista en el árbol recubridor mínimo, y cuando es seguro eliminar una arista considerando que no hay manera posible de que ella esté en el árbol recubridor mínimo. Para los propósitos de
+datos básicos que dicen cuándo es ``seguro'' incluir una arista en el árbol recubridor mínimo, y cuando es seguro eliminar una arista considerando que no hay manera posible de que ella esté en el árbol recubridor mínimo. Para los propósitos de
 el análisis, haremos la suposición simplificadora de que todos los costos de arista son
 distintos entre sí (es decir, no hay dos iguales). Esta suposición hace más fácil expresar los argumentos que siguen, y vamos a mostrar más adelante en esta sección como estas suposiciones pueden ser eliminadas.\\
 
@@ -2440,7 +2449,7 @@ Aunque no exploraremos esto más en detalle, la combinación de la propiedad de 
     
 Eliminar la suposición de que todos los costos perimetrales son distintos Hasta ahora, hemos supuesto que todos los costos de arista son distintos, y esta suposición ha hecho que el análisis sea más limpio en varios lugares. Ahora, supongamos que se nos da una instancia del Problema del árbol de expansión mínimo en el que ciertas arista tienen el mismo costo: ¿cómo podemos concluir que los algoritmos que hemos estado discutiendo aún ofrecen soluciones óptimas?\\
 
-Resulta ser una manera fácil de hacer esto: simplemente tomamos la instancia y perturbamos todos los costos de arista por diferentes números extremadamente pequeños, para que todos se vuelvan distintos. Ahora, los dos costos que difirieron originalmente seguirán teniendo el mismo orden relativo, ya que las perturbaciones son muy pequeñas; y dado que todos nuestros algoritmos se basan solo en la comparación de los costos de las arista, las perturbaciones sirven simplemente como "desempate" para resolver comparaciones entre costos que solían ser iguales.\\
+Resulta ser una manera fácil de hacer esto: simplemente tomamos la instancia y perturbamos todos los costos de arista por diferentes números extremadamente pequeños, para que todos se vuelvan distintos. Ahora, los dos costos que difirieron originalmente seguirán teniendo el mismo orden relativo, ya que las perturbaciones son muy pequeñas; y dado que todos nuestros algoritmos se basan solo en la comparación de los costos de las arista, las perturbaciones sirven simplemente como ``desempate'' para resolver comparaciones entre costos que solían ser iguales.\\
 
 Además, afirmamos que cualquier árbol de expansión mínimo $T$ para la nueva instancia perturbada también debe haber sido un árbol de expansión mínimo para la instancia original. Para ver esto, observamos que si $T$ cuesta más que algún árbol $T*$ en la instancia original, entonces para perturbaciones lo suficientemente pequeñas, el cambio en el costo de $T$ no puede ser suficiente para hacerlo mejor que $T*$ bajo los nuevos costos. Por lo tanto, si ejecutamos cualquiera de nuestros algoritmos de árbol de expansión mínimo, utilizando los costos perturbados para comparar las aristas, produciremos un árbol de expansión mínimo $T$ que también es óptimo para la instancia original.\\  
 % * <mathias2b@gmail.com> 2018-09-18T14:55:47.750Z:
@@ -2497,7 +2506,7 @@ La estructura de datos para esta implementación alternativa usa punteros. Cada 
 
 Considere una operación de Unión para dos conjuntos $A$ y $B$, y suponga que el nombre que usamos para el conjunto $A$ es un nodo $v \in A$, mientras que el conjunto $B$ se nombra después del nodo $u \in B$. La idea es que $u$ o $v$ sea el nombre del conjunto combinado; supongamos que seleccionamos $v$ como el nombre. Para indicar que tomamos la unión de los dos conjuntos y que el nombre del conjunto de unión es $v$, simplemente actualizamos su puntero para apuntar a $v$. No actualizamos los punteros en los otros nodos del conjunto $B$.\\
 
-Como resultado, para elementos $w \in B$ que no sean $u$, el nombre del conjunto al que pertenecen debe calcularse siguiendo una secuencia de punteros, primero guiándolos hacia el "nombre antiguo" y luego a través del puntero desde $u$ al "Nuevo nombre" $v$. Consulte la Figura 4.12 para ver cómo es esa representación. Por ejemplo, los dos conjuntos de la figura 4.12 podrían ser el resultado de la siguiente secuencia de operaciones de la Unión: Unión $(w, u)$, Unión $(s, u)$, Unión $(t, v)$, Unión $(z, v)$, Unión $(i, x)$, Unión $(y, j)$, Unión $(x, j)$ y Unión $(u, v)$.\\
+Como resultado, para elementos $w \in B$ que no sean $u$, el nombre del conjunto al que pertenecen debe calcularse siguiendo una secuencia de punteros, primero guiándolos hacia el ``nombre antiguo'' y luego a través del puntero desde $u$ al ``Nuevo nombre'' $v$. Consulte la Figura 4.12 para ver cómo es esa representación. Por ejemplo, los dos conjuntos de la figura 4.12 podrían ser el resultado de la siguiente secuencia de operaciones de la Unión: Unión $(w, u)$, Unión $(s, u)$, Unión $(t, v)$, Unión $(z, v)$, Unión $(i, x)$, Unión $(y, j)$, Unión $(x, j)$ y Unión $(u, v)$.\\
 
 Esta estructura de datos basada en punteros implementa Unión en el tiempo $O(1)$: todo lo que tenemos que hacer es actualizar un puntero. Pero una operación Buscar ya no es un tiempo constante, ya que tenemos que seguir una secuencia de punteros a través de un historial de nombres antiguos que tenía el conjunto, para llegar al nombre actual. ¿Cuánto tiempo puede durar una operación Find ($u$)? El número de pasos necesarios es exactamente el número de veces que el conjunto que contiene el nodo $u$ tuvo que cambiar su nombre, es decir, el número de veces que la posición del conjunto de componentes [$u$] se habría actualizado en nuestra representación de matriz anterior. Esto puede ser tan grande como $O(n)$ si no tenemos cuidado al elegir los nombres de los conjuntos. Para reducir el tiempo requerido para una operación Buscar, utilizaremos la misma optimización que usamos antes: mantenga el nombre de las setas más grandes en el nombre de la unión. La secuencia de Uniones que produjo la estructura de datos en la Figura 4.12 siguió esta convención. Para implementar esta elección de manera eficiente, mantendremos un campo adicional con los nodos: el tamaño del conjunto correspondiente.\\
 
@@ -2520,7 +2529,7 @@ Esta estructura de datos basada en punteros implementa Unión en el tiempo $O(1)
 
 A continuación, analizaremos brevemente una optimización natural en la estructura de datos UnionFind basada en punteros que tiene el efecto de acelerar las operaciones de búsqueda. Estrictamente hablando, esta mejora no será necesaria para nuestros propósitos en este libro: para todas las aplicaciones de las estructuras de datos Union-Find que consideramos, el tiempo $O(log n)$ por operación es lo suficientemente bueno en el sentido de que la mejora en el el tiempo para las operaciones no se traduciría en mejoras en el tiempo total de ejecución de los algoritmos donde los usamos. (Las operaciones de UnionFind no serán el único cuello de botella computacional en el tiempo de ejecución de estos algoritmos).\\
 
-Para motivar la versión mejorada de la estructura de datos, primero analicemos un caso malo para el tiempo de ejecución de la estructura de datos Union-Find basada en punteros. Primero construimos una estructura donde una de las operaciones Find tarda aproximadamente tiempo $log(n)$. Para hacer esto, podemos tomar repetidamente Uniones de conjuntos de igual tamaño. Supongamos que v es un nodo para el cual la operación Find ($v$) tarda aproximadamente tiempo $log n$. Ahora podemos emitir Find ($v$) repetidamente y toma log n para cada llamada. Tener que seguir la misma secuencia de punteros de log n cada vez para encontrar el nombre del conjunto que contiene v es bastante redundante: después de la primera solicitud de Buscar ($v$), ya "conocemos" el nombre $x$ del conjunto que contiene $v$, y también sabemos que todos los otros nodos que hemos tocado durante nuestro camino desde $v$ hasta el nombre actual también están contenidos en el conjunto $x$. Por lo tanto, en la implementación mejorada, comprimiremos la ruta que seguimos después de cada operación Buscar al restablecer todos los punteros a lo largo de la ruta para señalar el nombre actual del conjunto. No se pierde información al hacer esto y hace que las siguientes operaciones de búsqueda se ejecuten más rápidamente. Vea la Figura 4.13 para una estructura de datos Union-Find y el resultado de Find ($v$) usando la compresión de ruta.\\
+Para motivar la versión mejorada de la estructura de datos, primero analicemos un caso malo para el tiempo de ejecución de la estructura de datos Union-Find basada en punteros. Primero construimos una estructura donde una de las operaciones Find tarda aproximadamente tiempo $log(n)$. Para hacer esto, podemos tomar repetidamente Uniones de conjuntos de igual tamaño. Supongamos que v es un nodo para el cual la operación Find ($v$) tarda aproximadamente tiempo $log n$. Ahora podemos emitir Find ($v$) repetidamente y toma log n para cada llamada. Tener que seguir la misma secuencia de punteros de log n cada vez para encontrar el nombre del conjunto que contiene v es bastante redundante: después de la primera solicitud de Buscar ($v$), ya ``conocemos'' el nombre $x$ del conjunto que contiene $v$, y también sabemos que todos los otros nodos que hemos tocado durante nuestro camino desde $v$ hasta el nombre actual también están contenidos en el conjunto $x$. Por lo tanto, en la implementación mejorada, comprimiremos la ruta que seguimos después de cada operación Buscar al restablecer todos los punteros a lo largo de la ruta para señalar el nombre actual del conjunto. No se pierde información al hacer esto y hace que las siguientes operaciones de búsqueda se ejecuten más rápidamente. Vea la Figura 4.13 para una estructura de datos Union-Find y el resultado de Find ($v$) usando la compresión de ruta.\\
 
 
 \begin{figure}[h]
@@ -2545,7 +2554,7 @@ En resumen, tenemos\\
 Supongamos que tres de sus amigos, inspirados por la película de terror The Blair Witch Project, han decidido caminar por el sendero de los Apalaches este verano. Quieren caminar tanto como sea posible por día pero, por razones obvias, no antes de que oscurezca. En un mapa, han identificado un gran conjunto de buenos puntos de parada para acampar, y están considerando el siguiente sistema para decidir cuándo detenerse por el día. Cada vez que llegan a un punto de detención potencial, determinan si pueden llegar al siguiente antes del anochecer. Si pueden hacerlo, entonces siguen caminando; de lo contrario, se detienen.\\
 
 
-A pesar de muchos inconvenientes importantes, afirman que este sistema tiene una buena característica. "Dado que solo caminamos a la luz del día", afirman, "minimiza el número de paradas de campamento que tenemos que hacer".\\
+A pesar de muchos inconvenientes importantes, afirman que este sistema tiene una buena característica. ``Dado que solo caminamos a la luz del día'', afirman, ``minimiza el número de paradas de campamento que tenemos que hacer''.\\
 
 ¿Es esto cierto? El sistema propuesto es un algoritmo ávido, y deseamos determinar si se minimiza el número de paradas necesarias.\\
 
@@ -2560,9 +2569,9 @@ Ahora podemos formular la pregunta de la siguiente manera. ¿Es el algoritmo áv
 
 Hay una preocupación natural con este algoritmo: ¿no ayudaría detenerse temprano algún día, para estar mejor sincronizado con las oportunidades de acampar en días futuros? Pero si lo piensas bien, comienzas a preguntarte si esto realmente podría suceder. ¿Podría haber realmente una solución alternativa que quede rezagada intencionalmente detrás de la solución codiciosa, y luego aumente de velocidad y pase la codiciosa solución? ¿Cómo podría pasar, dado que la solución codiciosa viaja lo más posible cada día?\\
 
-Esta última consideración comienza a verse como el esquema de un argumento basado en el principio de "mantenerse adelante" de la Sección 4.1. Tal vez podamos demostrar que, siempre que la estrategia ambiciosa de acampar venza en un día determinado, ninguna otra solución puede alcanzarla y adelantarla al día siguiente.\\
+Esta última consideración comienza a verse como el esquema de un argumento basado en el principio de ``mantenerse adelante'' de la Sección 4.1. Tal vez podamos demostrar que, siempre que la estrategia ambiciosa de acampar venza en un día determinado, ninguna otra solución puede alcanzarla y adelantarla al día siguiente.\\
 
-Ahora convertimos esto en una prueba que muestra que el algoritmo es realmente óptimo, identificando un sentido natural en el que los puntos de detención eligen "mantenerse por delante" de cualquier otro conjunto legal de puntos de detención. Aunque estamos siguiendo el estilo de prueba de la Sección 4.1, vale la pena notar un interesante contraste con el Problema de Programación de Intervalos: allí necesitábamos probar que un algoritmo ávido maximizaba una cantidad de interés, mientras que aquí buscamos minimizar una cierta cantidad.\\
+Ahora convertimos esto en una prueba que muestra que el algoritmo es realmente óptimo, identificando un sentido natural en el que los puntos de detención eligen ``mantenerse por delante'' de cualquier otro conjunto legal de puntos de detención. Aunque estamos siguiendo el estilo de prueba de la Sección 4.1, vale la pena notar un interesante contraste con el Problema de Programación de Intervalos: allí necesitábamos probar que un algoritmo ávido maximizaba una cantidad de interés, mientras que aquí buscamos minimizar una cierta cantidad.\\
 
 Sea $R = {x_{p1},..., x_{pk}}$ el conjunto de puntos de detención elegidos por el algoritmo ávido, y suponga, por contradicción, que existe un conjunto de puntos de detención válido más chicos; llamemos a este conjunto más pequeño $S = {x_{q1}, ..., x_{qm}}$, con $m<k$.\\
 
@@ -2610,7 +2619,7 @@ Supongamos que se le asigna un grafo $G$ conexo, con costos de arista que puede 
 
 \textbf{Solución}. Del texto, sabemos dos reglas por las cuales podemos concluir si una arista $e$ pertenece a un árbol de expansión mínimo: la Propiedad de corte (4.17) dice que $e$ está en cada árbol de expansión mínimo cuando es el cruce de arista más barata de algún conjunto $S$ al complemento $V - S$; y la Propiedad del ciclo (4.20) dice que $e$ no está en ningún árbol de expansión mínimo si es la arista más cara en algún ciclo $C$. Veamos si podemos hacer uso de estas dos reglas como parte de un algoritmo que resuelve este problema en tiempo lineal.\\
 
-Las Propiedades de Corte y Ciclo están esencialmente hablando de cómo $e$ se relaciona con el conjunto de aristas que son más baratas que $e$. La Propiedad de Corte puede verse como preguntando: ¿Hay algún conjunto de $S⊆V$ para que para pasar de $S$ a $V-S$ sin usar $e$, tengamos que usar una arista que sea más cara que $e$? Y si pensamos en el ciclo $C$ en la declaración de la Propiedad del ciclo, recorrer el "camino largo" alrededor de $C$ (evitando $e$) se puede ver como una ruta alternativa entre los extremos de e que solo usa aristas más baratas.\\
+Las Propiedades de Corte y Ciclo están esencialmente hablando de cómo $e$ se relaciona con el conjunto de aristas que son más baratas que $e$. La Propiedad de Corte puede verse como preguntando: ¿Hay algún conjunto de $S⊆V$ para que para pasar de $S$ a $V-S$ sin usar $e$, tengamos que usar una arista que sea más cara que $e$? Y si pensamos en el ciclo $C$ en la declaración de la Propiedad del ciclo, recorrer el ``camino largo'' alrededor de $C$ (evitando $e$) se puede ver como una ruta alternativa entre los extremos de e que solo usa aristas más baratas.\\
 
 Al juntar estas dos observaciones, sugerimos que intentemos probar la siguiente declaración.\\
 
@@ -2644,7 +2653,7 @@ Para analizar el tiempo de ejecución de Mergesort, resumiremos su comportamient
 (†) Divida la entrada en dos partes de igual tamaño; resuelve los dos subproblemas en estas piezas por separado por recursión; y luego combine los dos resultados en una solución global, gastando solo tiempo lineal para la división inicial y la recombinación final.\\
 
 
-En Mergesort, como en cualquier algoritmo que se adapte a este estilo, también necesitamos un caso base para la recursión, por lo general tenerlo "de fondo" en las entradas de algún tamaño constante. En el caso de Mergesort, supondremos que una vez que la entrada se ha reducido al tamaño 2, detenemos la recursión y clasificamos los dos elementos simplemente comparándolos entre sí.\\
+En Mergesort, como en cualquier algoritmo que se adapte a este estilo, también necesitamos un caso base para la recursión, por lo general tenerlo ``de fondo'' en las entradas de algún tamaño constante. En el caso de Mergesort, supondremos que una vez que la entrada se ha reducido al tamaño 2, detenemos la recursión y clasificamos los dos elementos simplemente comparándolos entre sí.\\
 
 Considere cualquier algoritmo que se ajuste al patrón en (†), y deje que $T(n)$ denote su peor tiempo de ejecución en instancias de entrada de tamaño $n$. Suponiendo que $n$ es par, el algoritmo pasa el tiempo $O (n)$ para dividir la entrada en dos piezas de tamaño $n/2$ cada una; luego pasa el tiempo $T(n/2)$ para resolver cada uno (ya que $T(n/2)$ es el peor tiempo de ejecución para una entrada de tamaño $n/2$); y finalmente gasta $O(n)$ tiempo para combinar las soluciones de las dos llamadas recursivas. Por lo tanto, el tiempo de ejecución $T(n)$ satisface la siguiente relación de recurrencia\\
 
@@ -2666,7 +2675,7 @@ La resolución de recurrencia es una tarea que se ha incorporado a varios sistem
 Hay dos formas básicas para resolver una recurrencia, cada una de las cuales describiremos con más detalle a continuación.\\
 
 \begin{enumerate}
-\item La forma más natural e intuitiva de buscar una solución para una recurrencia es "desenrollar" la recursión, teniendo en cuenta el tiempo de ejecución en los primeros niveles e identificar un patrón que pueda continuar a medida que se expande la recursión. Luego se suman los tiempos de ejecución en todos los niveles de la recursión (es decir, hasta que "toca fondo" en los subproblemas de tamaño constante) y, por lo tanto, llega a un tiempo de ejecución total.
+\item La forma más natural e intuitiva de buscar una solución para una recurrencia es ``desenrollar'' la recursión, teniendo en cuenta el tiempo de ejecución en los primeros niveles e identificar un patrón que pueda continuar a medida que se expande la recursión. Luego se suman los tiempos de ejecución en todos los niveles de la recursión (es decir, hasta que ``toca fondo'' en los subproblemas de tamaño constante) y, por lo tanto, llega a un tiempo de ejecución total.
 
 \item  Una segunda forma es comenzar con una estimación de la solución, sustituirla por la relación de recurrencia y verificar que funcione. Formalmente, uno justifica este plug-in usando un argumento por inducción en n. Existe una variante útil de este método en la que uno tiene una forma general para la solución, pero no tiene valores exactos para todos los parámetros. Al dejar estos parámetros no especificados en la sustitución, a menudo se pueden resolver según sea necesario
 \end{enumerate}
@@ -2829,7 +2838,7 @@ También es útil ver cómo la sustitución parcial en la recurrencia funciona m
 $T(n)\leq T(n/2)+cn\leq k\left ( \frac{n}{2} \right )^d+cn=\frac{k}{2^d}n^d+cn$.\\\\
 Si ahora simplemente elegimos $d = 1$  y $k = 2c$, tenemos $T(n)\leq \frac{k}{2}n+cn=(\frac{k}{2}+c)n=kn$, que completa la inducción.\\
 
-\textbf{El efecto del parámetro q}. Vale la pena reflexionar brevemente sobre el papel del parámetro $q$ en la clase de recurrencias $T (n) ≤ qT (n / 2) + O (n)$ definido por (5.3). Cuando $q = 1$, el tiempo de ejecución resultante es lineal; cuando $q = 2$, es $O (n log n)$; y cuando $q> 2$, es un polinomio vinculado con un exponente mayor que 1 que crece con $q$. La razón de este rango de tiempos de ejecución diferentes radica en que la mayor parte del trabajo se gasta en la recursión: cuando $q = 1$, el tiempo total de ejecución está dominado por el nivel superior, mientras que cuando $q> 2$ está dominado por el trabajo realizado subproblemas de tamaño constante en la parte inferior de la recursión. Visto de esta manera, podemos apreciar que la recurrencia para $q = 2$ representa realmente un "cuchillo": la cantidad de trabajo realizado en cada nivel es exactamente la misma, que es lo que produce el tiempo de ejecución $O (n log n)$.\\
+\textbf{El efecto del parámetro q}. Vale la pena reflexionar brevemente sobre el papel del parámetro $q$ en la clase de recurrencias $T (n) ≤ qT (n / 2) + O (n)$ definido por (5.3). Cuando $q = 1$, el tiempo de ejecución resultante es lineal; cuando $q = 2$, es $O (n log n)$; y cuando $q> 2$, es un polinomio vinculado con un exponente mayor que 1 que crece con $q$. La razón de este rango de tiempos de ejecución diferentes radica en que la mayor parte del trabajo se gasta en la recursión: cuando $q = 1$, el tiempo total de ejecución está dominado por el nivel superior, mientras que cuando $q> 2$ está dominado por el trabajo realizado subproblemas de tamaño constante en la parte inferior de la recursión. Visto de esta manera, podemos apreciar que la recurrencia para $q = 2$ representa realmente un ``cuchillo'': la cantidad de trabajo realizado en cada nivel es exactamente la misma, que es lo que produce el tiempo de ejecución $O (n log n)$.\\
 
 \textbf{Una recurrencia relacionada:} $T (n) ≤ 2T (n / 2) + O (n2)$\\
 Concluimos nuestra discusión con una relación de recurrencia final; es ilustrativa tanto como otra aplicación de una suma geométrica en descomposición y como un contraste interesante con la recurrencia (5.1) que caracteriza a Mergesort. Además, veremos una variante cercana en el Capítulo 6, cuando analicemos un algoritmo de divide y conquistaras para resolver el problema de alineación de secuencia usando una pequeña cantidad de memoria de trabajo.\\
@@ -2854,11 +2863,11 @@ En retrospectiva, nuestra conjetura inicial de $T (n) = O (n^2 log n)$, basada e
 Pasamos un tiempo discutiendo enfoques para resolver una serie de recurrencias comunes. El resto del capítulo ilustrará la aplicación de divide y vencerás a los problemas de una cantidad de dominios diferentes; usaremos lo que hemos visto en las secciones anteriores para vincular los tiempos de ejecución de estos algoritmos. Comenzamos mostrando cómo se puede utilizar una variante de la técnica Mergesort para resolver un problema que no está directamente relacionado con la clasificación de números.\\
 
 \textbf{El problema}\\
-Consideraremos un problema que surge en el análisis de las clasificaciones, que se están volviendo importantes para varias aplicaciones actuales. Por ejemplo, varios sitios en la Web hacen uso de una técnica conocida como filtrado colaborativo, en la que intentan hacer coincidir sus preferencias (para libros, películas, restaurantes) con las de otras personas en Internet. Una vez que el sitio web ha identificado a personas con gustos "similares" a los suyos -basada en una comparación de cómo usted y ellos califican varias cosas-, puede recomendar cosas nuevas que a estas personas les han gustado. Otra aplicación surge en las herramientas de metabúsqueda en la Web, que ejecutan la misma consulta en muchos motores de búsqueda diferentes y luego intentan sintetizar los resultados buscando similitudes y diferencias entre las diversas clasificaciones que devuelven los motores de búsqueda.\\
+Consideraremos un problema que surge en el análisis de las clasificaciones, que se están volviendo importantes para varias aplicaciones actuales. Por ejemplo, varios sitios en la Web hacen uso de una técnica conocida como filtrado colaborativo, en la que intentan hacer coincidir sus preferencias (para libros, películas, restaurantes) con las de otras personas en Internet. Una vez que el sitio web ha identificado a personas con gustos ``similares'' a los suyos -basada en una comparación de cómo usted y ellos califican varias cosas-, puede recomendar cosas nuevas que a estas personas les han gustado. Otra aplicación surge en las herramientas de metabúsqueda en la Web, que ejecutan la misma consulta en muchos motores de búsqueda diferentes y luego intentan sintetizar los resultados buscando similitudes y diferencias entre las diversas clasificaciones que devuelven los motores de búsqueda.\\
 
-Un problema central en aplicaciones como esta es el problema de comparar dos clasificaciones. Clasifica un conjunto de $n$ películas, y luego un sistema de filtrado colaborativo consulta su base de datos para buscar otras personas que tengan clasificaciones "similares". Pero, ¿cuál es una buena forma de medir, numéricamente, qué tan similares son las clasificaciones de dos personas? Claramente, una clasificación idéntica es muy similar, y una clasificación completamente invertida es muy diferente; queremos algo que se interponga a través de la región media.\\
+Un problema central en aplicaciones como esta es el problema de comparar dos clasificaciones. Clasifica un conjunto de $n$ películas, y luego un sistema de filtrado colaborativo consulta su base de datos para buscar otras personas que tengan clasificaciones ``similares''. Pero, ¿cuál es una buena forma de medir, numéricamente, qué tan similares son las clasificaciones de dos personas? Claramente, una clasificación idéntica es muy similar, y una clasificación completamente invertida es muy diferente; queremos algo que se interponga a través de la región media.\\
 
-Consideremos comparar su clasificación y la clasificación de un extraño del mismo conjunto de $n$ películas. Un método natural sería etiquetar las películas de $1$ a $n$ según su clasificación, luego ordenar estas etiquetas de acuerdo con la clasificación del extraño, y ver cuántos pares están "fuera de servicio". Más concretamente, consideraremos el siguiente problema. Se nos da una secuencia de $n$ números $a_1, ..., a_n$; asumiremos que todos los números son distintos. Queremos definir una medida que nos indique qué tan lejos está esta lista de estar en orden ascendente; el valor de la medida debe ser $0$ si $a_1 <a_2 <... <a_n$, y debe aumentar a medida que los números se vuelven más codificados.\\
+Consideremos comparar su clasificación y la clasificación de un extraño del mismo conjunto de $n$ películas. Un método natural sería etiquetar las películas de $1$ a $n$ según su clasificación, luego ordenar estas etiquetas de acuerdo con la clasificación del extraño, y ver cuántos pares están ``fuera de servicio''. Más concretamente, consideraremos el siguiente problema. Se nos da una secuencia de $n$ números $a_1, ..., a_n$; asumiremos que todos los números son distintos. Queremos definir una medida que nos indique qué tan lejos está esta lista de estar en orden ascendente; el valor de la medida debe ser $0$ si $a_1 <a_2 <... <a_n$, y debe aumentar a medida que los números se vuelven más codificados.\\
 
 \begin{wrapfigure}{t}{0.2\textwidth}
 \includegraphics[width=0.25\textwidth]{Imagenes-Seccion5/fig5_4.PNG}
@@ -2866,7 +2875,7 @@ Consideremos comparar su clasificación y la clasificación de un extraño del m
  \label{fig:Imagenes-Seccion5/fig5_4.PNG}
 \end{wrapfigure}
 
-Una forma natural de cuantificar esta noción es contar el número de inversiones. Decimos que dos índices $i<j$ forman una inversión si $a_i> a_j$, es decir, si los dos elementos $a_i$ y $a_j$ están "fuera de orden". Intentaremos determinar el número de inversiones en la secuencia $a_1, ... , u_n$.\\
+Una forma natural de cuantificar esta noción es contar el número de inversiones. Decimos que dos índices $i<j$ forman una inversión si $a_i> a_j$, es decir, si los dos elementos $a_i$ y $a_j$ están ``fuera de orden''. Intentaremos determinar el número de inversiones en la secuencia $a_1, ... , u_n$.\\
 
 Solo para precisar esta definición, considere un ejemplo en el que la secuencia es $2$, $4$, $1$, $3$, $5$. Hay tres inversiones en esta secuencia: $(2, 1), (4, 1) y (4, 3)$ ) También existe una forma geométrica atractiva de visualizar las inversiones, ilustrada en la figura 5.4: dibujamos la secuencia de los números ingresados en el orden en que se proporcionan, y debajo de eso en orden ascendente. Luego dibujamos un segmento de línea entre cada número en la lista superior y su copia en la lista inferior. Cada par de segmentos de línea cruzados corresponde a un par que está en el orden opuesto en las dos listas; en otras palabras, una inversión.\\
 
@@ -2876,11 +2885,11 @@ Observe que el número de inversiones es una medida que interpola suavemente ent
 
 Ahora mostramos cómo contar el número de inversiones mucho más rápidamente, en el tiempo $O(nlogn)$. Tenga en cuenta que dado que puede haber un número cuadrático de inversiones, dicho algoritmo debe poder calcular el número total sin tener que mirar cada inversión individualmente. La idea básica es seguir la estrategia (†) definida en la Sección 5.1. Establecemos $m =\lceil n / 2 \rceil$  y divida la lista en las dos piezas $a_1, ..., a_m$ y $a_{m+1}, ..., a_n$. Primero contamos el número de inversiones en cada una de estas dos mitades por separado. Luego contamos el número de inversiones $(a_i, a_j)$, donde los dos números pertenecen a diferentes mitades; el truco es que debemos hacer esta parte en $O(n)$ tiempo, si queremos aplicar (5.2). Tenga en cuenta que estas inversiones de la primera mitad / segunda mitad tienen una forma particularmente agradable: son precisamente los pares $(a_i, a_j)$, donde ai está en la primera mitad, $a_j$ está en la segunda mitad y $a_i> a_j$.\\
 
-Para ayudar a contar el número de inversiones entre las dos mitades, haremos que el algoritmo ordene recursivamente los números en las dos mitades también. Hacer que el paso recursivo haga un poco más de trabajo (ordenando así como contando las inversiones) hará que la porción de "combinación" del algoritmo sea más fácil\\
+Para ayudar a contar el número de inversiones entre las dos mitades, haremos que el algoritmo ordene recursivamente los números en las dos mitades también. Hacer que el paso recursivo haga un poco más de trabajo (ordenando así como contando las inversiones) hará que la porción de ``combinación'' del algoritmo sea más fácil\\
 
-Entonces la rutina crucial en este proceso es Merge-and-Count. Supongamos que hemos ordenado recursivamente la primera y segunda mitad de la lista y contamos las inversiones en cada una. Ahora tenemos dos listas clasificadas A y B, que contienen la primera y la segunda mitades, respectivamente. Queremos producir una sola lista clasificada C de su unión, mientras también contamos el número de pares (a, b) con un $a \in A$, $b \in B$, y $a>b$. En nuestra discusión previa, esto es precisamente lo que necesitaremos para el paso de "combinación" que calcula el número de inversiones de la primera mitad / segunda mitad\\
+Entonces la rutina crucial en este proceso es Merge-and-Count. Supongamos que hemos ordenado recursivamente la primera y segunda mitad de la lista y contamos las inversiones en cada una. Ahora tenemos dos listas clasificadas A y B, que contienen la primera y la segunda mitades, respectivamente. Queremos producir una sola lista clasificada C de su unión, mientras también contamos el número de pares (a, b) con un $a \in A$, $b \in B$, y $a>b$. En nuestra discusión previa, esto es precisamente lo que necesitaremos para el paso de ``combinación'' que calcula el número de inversiones de la primera mitad / segunda mitad\\
 
-Esto está estrechamente relacionado con el problema más simple que discutimos en el Capítulo 2, que formó el paso de "combinación" correspondiente para Mergesort: allí teníamos dos listas ordenadas A y B, y queríamos fusionarlas en una sola lista ordenada en $O(n)$ hora. La diferencia aquí es que queremos hacer algo extra: no solo deberíamos producir una sola lista ordenada de $A$ y $B$, sino que también deberíamos contar el número de "pares invertidos" $(a, b)$ donde $a \in A$, $b \in B$ y $a> b$.\\
+Esto está estrechamente relacionado con el problema más simple que discutimos en el Capítulo 2, que formó el paso de ``combinación'' correspondiente para Mergesort: allí teníamos dos listas ordenadas A y B, y queríamos fusionarlas en una sola lista ordenada en $O(n)$ hora. La diferencia aquí es que queremos hacer algo extra: no solo deberíamos producir una sola lista ordenada de $A$ y $B$, sino que también deberíamos contar el número de ``pares invertidos'' $(a, b)$ donde $a \in A$, $b \in B$ y $a> b$.\\
 
 Resulta que podremos hacer esto en el mismo estilo que utilizamos para la fusión. Nuestra rutina Merge-and-Count recorrerá las listas clasificadas $A$ y $B$, eliminando los elementos del frente y agregándolos a la lista ordenada $C$. En un paso dado, tenemos un puntero actual en cada lista, que muestra nuestra posición actual. Supongamos que estos indicadores están actualmente en los elementos $a_i$ y $b_j$. En un paso, comparamos los elementos $a_i$ y $b_j$ señalados en cada lista, eliminamos el más pequeño de su lista y lo agregamos al final de la lista $C$.\\
 
@@ -3173,31 +3182,31 @@ Lo más importante es que la mayor parte de nuestra discusión sobre el problema
 
     \item La solución al problema original se puede calcular fácilmente de las soluciones a los subproblemas. (Por ejemplo, el problema original puede ser uno de los subproblemas).
     
-    \item Hay un orden natural en los subproblemas desde "más pequeño" a "más grande", junto con una recurrencia fácil de calcular (como en (6.1) y (6.2)) que permite determinar la solución a un subproblema desde Las soluciones a algunos subproblemas más pequeños.
+    \item Hay un orden natural en los subproblemas desde ``más pequeño'' a ``más grande'', junto con una recurrencia fácil de calcular (como en (6.1) y (6.2)) que permite determinar la solución a un subproblema desde Las soluciones a algunos subproblemas más pequeños.
 
 \end{itemize}
 
-Naturalmente, estas son pautas informales. En particular, la noción de "más pequeño" en la parte (iii) dependerá del tipo de recurrencia que se tenga.\\
+Naturalmente, estas son pautas informales. En particular, la noción de ``más pequeño'' en la parte (iii) dependerá del tipo de recurrencia que se tenga.\\
 
-Veremos que a veces es más fácil iniciar el proceso de diseño de tal algoritmo mediante la formulación de un conjunto de subproblemas que parecen naturales y luego descubrir una recurrencia que los vincule entre sí; pero a menudo (como sucedió en el caso de la planificación de intervalos ponderados), puede ser útil definir primero una recurrencia razonando acerca de la estructura de una solución óptima, y ​​luego determinar qué subproblemas serán necesarios para desenrollar la recurrencia. Esta relación de gallina y huevo entre los subproblemas y las recurrencias es un problema sutil que subyace a la programación dinámica. Nunca está claro que una colección de subproblemas será útil hasta que uno encuentre una recurrencia que los vincule; pero puede ser difícil pensar en las recurrencias en ausencia de los subproblemas "más pequeños" sobre los que se basan. En las secciones posteriores, desarrollaremos una mayor práctica en la gestión de este compromiso de diseño.\\
+Veremos que a veces es más fácil iniciar el proceso de diseño de tal algoritmo mediante la formulación de un conjunto de subproblemas que parecen naturales y luego descubrir una recurrencia que los vincule entre sí; pero a menudo (como sucedió en el caso de la planificación de intervalos ponderados), puede ser útil definir primero una recurrencia razonando acerca de la estructura de una solución óptima, y ​​luego determinar qué subproblemas serán necesarios para desenrollar la recurrencia. Esta relación de gallina y huevo entre los subproblemas y las recurrencias es un problema sutil que subyace a la programación dinámica. Nunca está claro que una colección de subproblemas será útil hasta que uno encuentre una recurrencia que los vincule; pero puede ser difícil pensar en las recurrencias en ausencia de los subproblemas ``más pequeños'' sobre los que se basan. En las secciones posteriores, desarrollaremos una mayor práctica en la gestión de este compromiso de diseño.\\
 
 \section{Mínimos cuadrados segmentados: opciones de múltiples vías}
 
-Ahora analizamos un tipo diferente de problema, que ilustra un estilo de programación dinámica ligeramente más complicado. En la sección anterior, desarrollamos una recurrencia basada en una elección fundamentalmente binaria: o el intervalo n pertenecía a una solución óptima o no. En el problema que consideramos aquí, la recurrencia implicará lo que podría llamarse "opciones de múltiples vías": en cada paso, tenemos un número polinomial de posibilidades a considerar para la estructura de la solución óptima. Como veremos, el enfoque de programación dinámica se adapta a esta situación más general de manera muy natural.\\
+Ahora analizamos un tipo diferente de problema, que ilustra un estilo de programación dinámica ligeramente más complicado. En la sección anterior, desarrollamos una recurrencia basada en una elección fundamentalmente binaria: o el intervalo n pertenecía a una solución óptima o no. En el problema que consideramos aquí, la recurrencia implicará lo que podría llamarse ``opciones de múltiples vías'': en cada paso, tenemos un número polinomial de posibilidades a considerar para la estructura de la solución óptima. Como veremos, el enfoque de programación dinámica se adapta a esta situación más general de manera muy natural.\\
 
 Como un tema aparte, el problema desarrollado en esta sección también es una buena ilustración de cómo una definición algorítmica limpia puede formalizar una noción que inicialmente parece demasiado difusa y no intuitiva para trabajar matemáticamente.\\
 
 
 \subsubsection*{El problema}
 
-A menudo, al observar datos científicos o estadísticos, representados en un conjunto de ejes bidimensional, se intenta pasar una "línea de mejor ajuste" a través de los datos, como se muestra en la Figura 6.6.\\
+A menudo, al observar datos científicos o estadísticos, representados en un conjunto de ejes bidimensional, se intenta pasar una ``línea de mejor ajuste'' a través de los datos, como se muestra en la Figura 6.6.\\
 
 Este es un problema fundamental en estadística y análisis numérico, formulado de la siguiente manera. Supongamos que nuestros datos consisten en un conjunto P de n puntos en el plano, denotado (x1, y1), (x2, y2), ..., (xn, yn); y supongamos x1 <x2 <... <xn. Dada una línea L definida por la ecuación y = ax + b, decimos que el error de L con respecto a P es la suma de sus ``distancias'' cuadradas a los puntos en P:\\
 
 \begin{figure}[h]
 \centering
 \includegraphics[scale=1]{Imagenes-Seccion6/fig6_6.PNG}
-\caption{Figura 6.6 Una "línea de mejor ajuste".}
+\caption{Figura 6.6 Una ``línea de mejor ajuste''.}
 \end{figure}
 
 \begin{figure}[h]
@@ -3214,11 +3223,11 @@ Un objetivo natural es entonces encontrar la línea con el mínimo error; esto r
 \includegraphics[scale=1]{Imagenes-Seccion6/cod6_1.PNG}
 \end{figure}
 
-Ahora, aquí hay un tipo de problema que estas fórmulas no fueron diseñadas para cubrir. A menudo tenemos datos que se parecen en algo a la imagen de la Figura 6.7. En este caso, nos gustaría hacer una afirmación como: "Los puntos se encuentran aproximadamente en una secuencia de dos líneas". ¿Cómo podríamos formalizar este concepto?\\
+Ahora, aquí hay un tipo de problema que estas fórmulas no fueron diseñadas para cubrir. A menudo tenemos datos que se parecen en algo a la imagen de la Figura 6.7. En este caso, nos gustaría hacer una afirmación como: ``Los puntos se encuentran aproximadamente en una secuencia de dos líneas''. ¿Cómo podríamos formalizar este concepto?\\
 
 Esencialmente, cualquier línea simple a través de los puntos en la figura tendría un error terrible; pero si usamos dos líneas, podríamos lograr un error bastante pequeño. Por lo tanto, podemos intentar formular un nuevo problema de la siguiente manera: en lugar de buscar una línea de mejor ajuste, se nos permite pasar un conjunto arbitrario de líneas a través de los puntos, y buscamos un conjunto de líneas que minimice el error. Pero esto falla como una buena formulación de problemas, porque tiene una solución trivial: si se nos permite ajustar los puntos con un conjunto de líneas arbitrariamente grande, podríamos ajustar los puntos perfectamente haciendo que una línea diferente pase a través de cada par de líneas consecutivas. puntos en P.\\
 
-En el otro extremo, podríamos intentar "codificar" el número dos en el problema; Podríamos buscar el mejor ajuste usando a lo sumo dos líneas. Pero esto también pierde una característica crucial de nuestra intuición: no comenzamos con una idea preconcebida de que los puntos se encuentran aproximadamente en dos líneas; Llegamos a la conclusión de que al mirar la foto. Por ejemplo, la mayoría de las personas diría que los puntos en la Figura 6.8 se encuentran aproximadamente en tres líneas.\\
+En el otro extremo, podríamos intentar ``codificar'' el número dos en el problema; Podríamos buscar el mejor ajuste usando a lo sumo dos líneas. Pero esto también pierde una característica crucial de nuestra intuición: no comenzamos con una idea preconcebida de que los puntos se encuentran aproximadamente en dos líneas; Llegamos a la conclusión de que al mirar la foto. Por ejemplo, la mayoría de las personas diría que los puntos en la Figura 6.8 se encuentran aproximadamente en tres líneas.\\
 
 \begin{figure}[h]
 \centering
@@ -3290,11 +3299,11 @@ Siguiendo esto, el algoritmo tiene n iteraciones, para valores j = 1,. . . , n. 
 Estamos viendo cada vez más que los problemas en la programación proporcionan una fuente rica de problemas algorítmicos motivados en la práctica. Hasta ahora hemos considerado problemas en los que las solicitudes se especifican por un intervalo de tiempo dado en un recurso, así como problemas en los que las solicitudes tienen una duración y una fecha límite, pero no requieren un intervalo en particular durante el cual deben realizarse.\footnote{1 En este análisis, el tiempo de ejecución está dominado por la O (n3) necesaria para calcular todos los valores ei, j. Pero, de hecho, es posible calcular todos estos valores en tiempo O (n2), lo que reduce el tiempo de ejecución del algoritmo completo a O (n2). La idea, cuyos detalles dejaremos como ejercicio para el lector, es primero calcular ei, j para todos los pares (i, j) donde j - i = 1, luego para todos los pares donde j - i = 2, luego j - i = 3, y así sucesivamente. De esta manera, cuando llegamos a un valor ei, j particular, podemos usar los ingredientes del cálculo
 para ei, j − 1 para determinar ei, j en tiempo constante.}\\
 
-En esta sección, consideramos una versión del segundo tipo de problema, con duraciones y plazos, que es difícil de resolver directamente utilizando las técnicas que hemos visto hasta ahora. Usaremos la programación dinámica para resolver el problema, pero con un giro: el conjunto "obvio" de subproblemas resultará no ser suficiente, por lo que terminamos creando una colección más rica de subproblemas. Como veremos, esto se hace agregando una nueva variable a la recurrencia subyacente al programa dinámico.\\
+En esta sección, consideramos una versión del segundo tipo de problema, con duraciones y plazos, que es difícil de resolver directamente utilizando las técnicas que hemos visto hasta ahora. Usaremos la programación dinámica para resolver el problema, pero con un giro: el conjunto ``obvio'' de subproblemas resultará no ser suficiente, por lo que terminamos creando una colección más rica de subproblemas. Como veremos, esto se hace agregando una nueva variable a la recurrencia subyacente al programa dinámico.\\
 
 \subsubsection*{El problema}
 
-En el problema de programación que consideramos aquí, tenemos una sola máquina que puede procesar trabajos, y tenemos un conjunto de solicitudes {1, 2,. . . , n}. Solo podemos usar este recurso durante el período comprendido entre el tiempo 0 y el tiempo W, para un número W. Cada solicitud corresponde a un trabajo que requiere tiempo para procesar. Si nuestro objetivo es procesar trabajos para mantener la máquina lo más ocupada posible hasta el "corte" W, ¿qué trabajos debemos elegir?\\
+En el problema de programación que consideramos aquí, tenemos una sola máquina que puede procesar trabajos, y tenemos un conjunto de solicitudes {1, 2,. . . , n}. Solo podemos usar este recurso durante el período comprendido entre el tiempo 0 y el tiempo W, para un número W. Cada solicitud corresponde a un trabajo que requiere tiempo para procesar. Si nuestro objetivo es procesar trabajos para mantener la máquina lo más ocupada posible hasta el ``corte'' W, ¿qué trabajos debemos elegir?\\
 
 Más formalmente, nos dan n artículos {1,. . . , n}, y cada uno tiene un peso no negativo dado wi (para i = 1, ..., n). También se nos da un límite W. Nos gustaría seleccionar un subconjunto S de los elementos para que? i wS wi ≤ W y, sujeto a esta restricción,? i wS wi es lo más grande posible. Llamaremos a esto el problema de suma de subconjuntos.\\
 
@@ -3302,7 +3311,7 @@ Este problema es un caso especial natural de un problema más general llamado el
 
 Como esto se asemeja a otros problemas de programación que hemos visto antes, es natural preguntar si un algoritmo codicioso puede encontrar la solución óptima. Parece que la respuesta es no, al menos no se conoce una regla codiciosa eficiente que siempre construya una solución óptima. Un enfoque codicioso natural sería intentar clasificar los artículos disminuyendo el peso, o al menos hacer esto para todos los elementos de peso a lo sumo de W, y luego comenzar a seleccionar los artículos en este orden siempre que el peso total permanezca por debajo de W. Pero si W es un múltiplo de 2, y tenemos tres elementos con ponderaciones {W / 2 + 1, W / 2, W / 2}, vemos que este algoritmo codicioso no producirá la solución óptima. Alternativamente, podríamos clasificar aumentando el peso y luego hacer lo mismo; pero esto falla en entradas como {1, W / 2, W / 2}.\\
 
-El objetivo de esta sección es mostrar cómo usar la programación dinámica para resolver este problema. Recuerde los principios principales de la programación dinámica: tenemos que crear un pequeño número de subproblemas para que cada subproblema pueda resolverse fácilmente a partir de subproblemas "más pequeños", y la solución al problema original se puede obtener fácilmente una vez que sepamos las soluciones para Todos los subproblemas. El problema difícil aquí radica en descubrir un buen conjunto de subproblemas.\\
+El objetivo de esta sección es mostrar cómo usar la programación dinámica para resolver este problema. Recuerde los principios principales de la programación dinámica: tenemos que crear un pequeño número de subproblemas para que cada subproblema pueda resolverse fácilmente a partir de subproblemas ``más pequeños'', y la solución al problema original se puede obtener fácilmente una vez que sepamos las soluciones para Todos los subproblemas. El problema difícil aquí radica en descubrir un buen conjunto de subproblemas.\\
 
 \subsubsection*{Diseñando el algoritmo}
 
@@ -3411,11 +3420,11 @@ Hay algunos problemas canónicos que se ajustan a este perfil; Aquellos de usted
 
 \subsubsection*{El problema}
 
-A medida que uno aprende en las clases de biología introductoria, Watson y Crick propusieron que el ADN de doble cadena está "comprimido" juntos mediante un par de bases complementarias. Cada hebra de ADN se puede ver como una hilera de bases, donde cada base se extrae del conjunto {A, C, G, T}\footnote{Adenina, citosina, guanina y timina, las cuatro unidades básicas del ADN.}.  Las bases A y T se emparejan entre sí, y las bases C y G se emparejan entre sí; son estos emparejamientos A-T y C-G los que mantienen unidos los dos hilos.\\
+A medida que uno aprende en las clases de biología introductoria, Watson y Crick propusieron que el ADN de doble cadena está ``comprimido'' juntos mediante un par de bases complementarias. Cada hebra de ADN se puede ver como una hilera de bases, donde cada base se extrae del conjunto {A, C, G, T}\footnote{Adenina, citosina, guanina y timina, las cuatro unidades básicas del ADN.}.  Las bases A y T se emparejan entre sí, y las bases C y G se emparejan entre sí; son estos emparejamientos A-T y C-G los que mantienen unidos los dos hilos.\\
 
-Ahora, las moléculas de ARN monocatenario son componentes clave en muchos de los procesos que se desarrollan dentro de una célula y siguen más o menos los mismos principios estructurales. Sin embargo, a diferencia del ADN de doble cadena, no hay una "segunda cadena" para que el ARN se adhiera; por lo tanto, tiende a retroceder y formar pares de bases consigo mismo, dando como resultado formas interesantes como la que se muestra en la Figura 6.13. El conjunto de pares (y la forma resultante) formado por la molécula de ARN a través de este proceso se denomina estructura secundaria, y comprender la estructura secundaria es esencial para comprender el comportamiento de la molécula.\\
+Ahora, las moléculas de ARN monocatenario son componentes clave en muchos de los procesos que se desarrollan dentro de una célula y siguen más o menos los mismos principios estructurales. Sin embargo, a diferencia del ADN de doble cadena, no hay una ``segunda cadena'' para que el ARN se adhiera; por lo tanto, tiende a retroceder y formar pares de bases consigo mismo, dando como resultado formas interesantes como la que se muestra en la Figura 6.13. El conjunto de pares (y la forma resultante) formado por la molécula de ARN a través de este proceso se denomina estructura secundaria, y comprender la estructura secundaria es esencial para comprender el comportamiento de la molécula.\\
 
-Para nuestros propósitos, una molécula de ARN de una sola hebra puede verse como una secuencia de n símbolos (bases) extraídos del alfabeto {A, C, G, U}\footnote{Tenga en cuenta que el símbolo del alfabeto de ADN ha sido reemplazado por una U, pero este no es importante para nosotros aquí}. Sea B = b1b2 ... bn una molécula de ARN monocatenaria, donde cada $bi  \in  {A, C, G, U}$. A una primera aproximación, uno puede modelar su estructura secundaria de la siguiente manera. Como de costumbre, requerimos que A se empareje con U, y C se empareje con G; también requerimos que cada base pueda emparejarse como máximo con otra base; en otras palabras, el conjunto de pares de bases forma una coincidencia. También resulta que las estructuras secundarias son (de nuevo, en una primera aproximación) "sin nudos", que formalizaremos como una especie de condición de no cruzamiento a continuación.\\
+Para nuestros propósitos, una molécula de ARN de una sola hebra puede verse como una secuencia de n símbolos (bases) extraídos del alfabeto {A, C, G, U}\footnote{Tenga en cuenta que el símbolo del alfabeto de ADN ha sido reemplazado por una U, pero este no es importante para nosotros aquí}. Sea B = b1b2 ... bn una molécula de ARN monocatenaria, donde cada $bi  \in  {A, C, G, U}$. A una primera aproximación, uno puede modelar su estructura secundaria de la siguiente manera. Como de costumbre, requerimos que A se empareje con U, y C se empareje con G; también requerimos que cada base pueda emparejarse como máximo con otra base; en otras palabras, el conjunto de pares de bases forma una coincidencia. También resulta que las estructuras secundarias son (de nuevo, en una primera aproximación) ``sin nudos'', que formalizaremos como una especie de condición de no cruzamiento a continuación.\\
 
 Así, en concreto, decimos que una estructura secundaria en B es un conjunto de pares S = {(i, j)}, donde $i, j  \in  {1, 2,. . . , n}$, que satisface las siguientes condiciones.\\
 
@@ -3435,7 +3444,7 @@ Por lo tanto, una vez dicho todo esto, podemos establecer el problema básico de
 \begin{figure}[h]
 \centering
 \includegraphics[scale=1]{Imagenes-Seccion6/fig6_14.PNG}
-\caption{Figura 6.14 Dos vistas de una estructura secundaria de ARN. En la segunda vista, (b), la cadena se ha "estirado" a lo largo, y los bordes que conectan los pares coincidentes aparecen como "burbujas" sincrónicas sobre la cadena.}
+\caption{Figura 6.14 Dos vistas de una estructura secundaria de ARN. En la segunda vista, (b), la cadena se ha ``estirado'' a lo largo, y los bordes que conectan los pares coincidentes aparecen como ``burbujas'' sincrónicas sobre la cadena.}
 \end{figure}
 
 \subsubsection*{Diseñando y analizando el algoritmo}
@@ -3500,7 +3509,7 @@ Para el resto de este capítulo, consideramos otros dos algoritmos de programaci
 
 Los diccionarios en la Web parecen ser cada vez más útiles: a menudo parece más fácil sacar un diccionario en línea marcado que obtener un diccionario físico de la estantería. Y muchos diccionarios en línea ofrecen funciones que no puede obtener de una impresa: si está buscando una definición y escriba una palabra que no contenga, digamos, ocurrencia, volverá y preguntará: significa ocurrencia? "¿Cómo hace esto? ¿Realmente sabía lo que tenía en mente?\\
 
-Transmitamos la segunda pregunta a un libro diferente y pensemos un poco en la primera. Para decidir lo que probablemente quiso decir, sería natural buscar en el diccionario la palabra más "similar" a la que escribió. Para hacer esto, debemos responder la pregunta: ¿Cómo debemos definir la similitud entre dos palabras o cadenas? ?\\
+Transmitamos la segunda pregunta a un libro diferente y pensemos un poco en la primera. Para decidir lo que probablemente quiso decir, sería natural buscar en el diccionario la palabra más ``similar'' a la que escribió. Para hacer esto, debemos responder la pregunta: ¿Cómo debemos definir la similitud entre dos palabras o cadenas? ?\\
 
 Intuitivamente, nos gustaría decir que ocurrencia y ocurrencia son similares porque podemos hacer que las dos palabras sean idénticas si agregamos una c a la primera palabra y cambiamos la a por una e. Como ninguno de estos cambios parece ser tan grande, concluimos que las palabras son muy similares. Para decirlo de otra manera, casi podemos alinear las dos palabras letra por letra:\\
 
@@ -3533,14 +3542,14 @@ Las interfaces de diccionario y los correctores ortográficos no son la aplicaci
 
 Las cuerdas surgen de forma muy natural en la biología: el genoma de un organismo, su conjunto completo de material genético, se divide en moléculas de ADN lineales gigantes conocidas como cromosomas, cada una de las cuales sirve conceptualmente como un dispositivo de almacenamiento químico unidimensional. De hecho, no oculta mucho la realidad pensarla como una enorme cinta lineal, que contiene una cadena sobre el alfabeto {A, C, G, T}. La cadena de símbolos codifica las instrucciones para construir moléculas de proteínas; Usando un mecanismo químico para leer partes del cromosoma, una célula puede construir proteínas que a su vez controlan su metabolismo.\\
 
-¿Por qué es importante la similitud en esta imagen? Para una primera aproximación, la secuencia de símbolos en el genoma de un organismo se puede ver como determinante de las propiedades del organismo. Entonces, supongamos que tenemos dos cepas de bacterias, X e Y, que están estrechamente relacionadas evolutivamente. Supongamos además que hemos determinado que una cierta subcadena en el ADN de X codifica un cierto tipo de toxina. Luego, si descubrimos una subcadena muy "similar" en el ADN de Y, podríamos suponer, antes de realizar cualquier experimento, que esta parte del ADN en Y codifica para un tipo similar de toxina. Este uso de la computación para guiar decisiones sobre experimentos biológicos es uno de los
+¿Por qué es importante la similitud en esta imagen? Para una primera aproximación, la secuencia de símbolos en el genoma de un organismo se puede ver como determinante de las propiedades del organismo. Entonces, supongamos que tenemos dos cepas de bacterias, X e Y, que están estrechamente relacionadas evolutivamente. Supongamos además que hemos determinado que una cierta subcadena en el ADN de X codifica un cierto tipo de toxina. Luego, si descubrimos una subcadena muy ``similar'' en el ADN de Y, podríamos suponer, antes de realizar cualquier experimento, que esta parte del ADN en Y codifica para un tipo similar de toxina. Este uso de la computación para guiar decisiones sobre experimentos biológicos es uno de los
 Señas de identidad del campo de la biología computacional.\\
 
 Todo esto nos deja con la misma pregunta que hicimos inicialmente, mientras escribíamos palabras mal escritas en nuestro diccionario en línea: ¿Cómo debemos definir la noción de similitud entre dos cadenas?\\
 
 A principios de la década de 1970, los dos biólogos moleculares Needleman y Wunsch propusieron una definición de similitud, que, básicamente, sin cambios, se ha convertido en la definición estándar actualmente en uso. Su posición como estándar se vio reforzada por su simplicidad y su atractivo intuitivo, así como a través de su descubrimiento independiente por varios otros investigadores casi al mismo tiempo. Además, esta definición de similitud vino con un algoritmo de programación dinámico eficiente para computarlo. De esta manera, el paradigma de la programación dinámica fue descubierto independientemente por los biólogos unos veinte años después de que los matemáticos y los científicos informáticos lo articularon por primera vez.\\
 
-La definición está motivada por las consideraciones que discutimos anteriormente, y en particular por la noción de "alinear" dos cadenas. Supongamos que nos dan dos cadenas X e Y, donde X consiste en la secuencia de símbolos x1x2 ... xm e Y consiste en la secuencia de símbolos y1y2 ... yn. Considera los conjuntos {1, 2,. . . , m} y {1, 2,. . . , n} como representación de las diferentes posiciones en las cadenas X e Y, y considera una coincidencia de estos conjuntos; recuerde que una coincidencia es un conjunto de pares ordenados con la propiedad en la que cada elemento aparece como máximo un par. Decimos que una M coincidente de estos dos conjuntos es una alineación si no hay pares "cruzados": si $(i, j), (i, j)  \in  M$ e $i <i$, entonces $j <j$. Intuitivamente, una alineación permite alinear las dos cuerdas, al decirnos qué pares de posiciones se alinearán entre sí. Así, por ejemplo, \\
+La definición está motivada por las consideraciones que discutimos anteriormente, y en particular por la noción de ``alinear'' dos cadenas. Supongamos que nos dan dos cadenas X e Y, donde X consiste en la secuencia de símbolos x1x2 ... xm e Y consiste en la secuencia de símbolos y1y2 ... yn. Considera los conjuntos {1, 2,. . . , m} y {1, 2,. . . , n} como representación de las diferentes posiciones en las cadenas X e Y, y considera una coincidencia de estos conjuntos; recuerde que una coincidencia es un conjunto de pares ordenados con la propiedad en la que cada elemento aparece como máximo un par. Decimos que una M coincidente de estos dos conjuntos es una alineación si no hay pares ``cruzados'': si $(i, j), (i, j)  \in  M$ e $i <i$, entonces $j <j$. Intuitivamente, una alineación permite alinear las dos cuerdas, al decirnos qué pares de posiciones se alinearán entre sí. Así, por ejemplo, \\
 
 \begin{figure}[h]
 \centering
@@ -3656,14 +3665,14 @@ El algoritmo en sí será una buena aplicación de ideas de dividir y conquistar
 
 \subsubsection*{Diseñando el algoritmo}
 
-Primero mostramos que si solo nos importa el valor de la alineación óptima, y no la alineación en sí, es fácil salirse con el espacio lineal. La observación crucial es que para completar una entrada de la matriz A, la recurrencia en (6.16) solo necesita información de la columna actual de A y la columna anterior de A. Por lo tanto, vamos a "contraer" la matriz A a una m × 2 matriz B: a medida que el algoritmo recorre los valores de j, las entradas de la forma B [i, 0] mantendrán el valor A de la columna "anterior" [i, j - 1], mientras que las entradas de la forma B [i, 1 ] mantendrá el valor de la columna "actual" A [i, j].\\
+Primero mostramos que si solo nos importa el valor de la alineación óptima, y no la alineación en sí, es fácil salirse con el espacio lineal. La observación crucial es que para completar una entrada de la matriz A, la recurrencia en (6.16) solo necesita información de la columna actual de A y la columna anterior de A. Por lo tanto, vamos a ``contraer'' la matriz A a una m × 2 matriz B: a medida que el algoritmo recorre los valores de j, las entradas de la forma B [i, 0] mantendrán el valor A de la columna ``anterior'' [i, j - 1], mientras que las entradas de la forma B [i, 1 ] mantendrá el valor de la columna ``actual'' A [i, j].\\
 
 \begin{figure}[h]
 \centering
 \includegraphics[scale=1]{Imagenes-Seccion6/cod6_14.PNG}
 \end{figure}
 
-Es fácil verificar que cuando este algoritmo se completa, la entrada de la matriz B [i, 1] contiene el valor de OPT (i, n) para i = 0, 1,. . . , m. Por otra parte, utiliza el tiempo O (mn) y el espacio O (m). El problema es: ¿dónde está la alineación? No hemos dejado suficiente información para poder ejecutar un procedimiento como Find-Alignment. Ya que B al final del algoritmo solo contiene las dos últimas columnas de la matriz de programación dinámica A, si intentáramos rastrear para obtener la ruta, nos quedaríamos sin información solo después de estas dos columnas. Podríamos imaginarnos sortear esta dificultad al tratar de "predecir" cuál será la alineación en el proceso de ejecución de nuestro procedimiento de espacio eficiente. En particular, como calculamos los valores en la columna j th de la
+Es fácil verificar que cuando este algoritmo se completa, la entrada de la matriz B [i, 1] contiene el valor de OPT (i, n) para i = 0, 1,. . . , m. Por otra parte, utiliza el tiempo O (mn) y el espacio O (m). El problema es: ¿dónde está la alineación? No hemos dejado suficiente información para poder ejecutar un procedimiento como Find-Alignment. Ya que B al final del algoritmo solo contiene las dos últimas columnas de la matriz de programación dinámica A, si intentáramos rastrear para obtener la ruta, nos quedaríamos sin información solo después de estas dos columnas. Podríamos imaginarnos sortear esta dificultad al tratar de ``predecir'' cuál será la alineación en el proceso de ejecución de nuestro procedimiento de espacio eficiente. En particular, como calculamos los valores en la columna j th de la
 (ahora implícito) matriz A, podríamos intentar hipotetizar que una determinada entrada tiene un valor muy pequeño, y por lo tanto, la alineación que pasa a través de esta entrada es un candidato prometedor para ser el óptimo. Pero esta alineación prometedora podría convertirse en grandes problemas más adelante, y una alineación diferente que actualmente parece mucho menos atractiva podría resultar la óptima.\\
 
 Existe, de hecho, una solución a este problema: podremos recuperar la alineación utilizando el espacio O (m + n), pero requiere una idea realmente nueva. La idea se basa en emplear la técnica de dividir y vencer que hemos visto anteriormente en el libro. Comenzamos con una forma alternativa simple de implementar la solución de programación dinámica básica.\\
@@ -3676,7 +3685,7 @@ Una formulación hacia atrás del programa dinámico Recordemos que usamos f (i,
 $g(i, j) = min[ \alpha xi+1yj+1 + g(i + 1, j + 1),  \delta  + g(i, j + 1),  \delta  + g(i + 1, j)]$
 }}
 
-Esta es solo la recurrencia que se obtiene al tomar el gráfico GXY, "rotarlo" de modo que el nodo (m, n) esté en la esquina inferior izquierda y usar el enfoque anterior. Usando esta imagen, también podemos calcular el algoritmo de programación dinámico completo para construir los valores de g, comenzando desde atrás (m, n). De manera similar, existe una versión eficiente en espacio de este algoritmo de programación dinámica hacia atrás, análoga a la alineación eficiente en espacio, que calcula el valor de la alineación óptima utilizando solo el espacio O (m + n). Nos referiremos a esta versión anterior, como es lógico, como Alineación eficiente de espacio hacia atrás.\\
+Esta es solo la recurrencia que se obtiene al tomar el gráfico GXY, ``rotarlo'' de modo que el nodo (m, n) esté en la esquina inferior izquierda y usar el enfoque anterior. Usando esta imagen, también podemos calcular el algoritmo de programación dinámico completo para construir los valores de g, comenzando desde atrás (m, n). De manera similar, existe una versión eficiente en espacio de este algoritmo de programación dinámica hacia atrás, análoga a la alineación eficiente en espacio, que calcula el valor de la alineación óptima utilizando solo el espacio O (m + n). Nos referiremos a esta versión anterior, como es lógico, como Alineación eficiente de espacio hacia atrás.\\
 
 Combinando las formulaciones hacia adelante y hacia atrás Así que ahora tenemos algoritmos simétricos que construyen los valores de las funciones f y g. La idea será utilizar estos dos algoritmos en concierto para encontrar la alineación óptima. Primero, aquí hay dos hechos básicos que resumen algunas relaciones entre las funciones f y g.\\
 
@@ -3730,7 +3739,7 @@ Prueba. Sea T (m, n) el tiempo máximo de ejecución del algoritmo en cadenas de
 \includegraphics[scale=1]{Imagenes-Seccion6/form6_2.PNG}
 \end{figure}
 
-Esta recurrencia es más compleja que las que hemos visto en nuestras aplicaciones anteriores de dividir y conquistar en el Capítulo 5. En primer lugar, el tiempo de ejecución es una función de dos variables (m y n) en lugar de solo una; Además, la división en subproblemas no es necesariamente una "división uniforme", sino que depende del valor q que se encuentra en el trabajo anterior realizado por el algoritmo.\\
+Esta recurrencia es más compleja que las que hemos visto en nuestras aplicaciones anteriores de dividir y conquistar en el Capítulo 5. En primer lugar, el tiempo de ejecución es una función de dos variables (m y n) en lugar de solo una; Además, la división en subproblemas no es necesariamente una ``división uniforme'', sino que depende del valor q que se encuentra en el trabajo anterior realizado por el algoritmo.\\
 
 Entonces, ¿cómo deberíamos resolver tal recurrencia? Una forma es intentar adivinar el formulario considerando un caso especial de recurrencia y luego usar una sustitución parcial para completar los detalles de esta suposición. Específicamente, supongamos que estábamos en un caso en el que m = n, y en el que el punto de división q estaba exactamente en el medio. En este caso especial (admitidamente restrictivo), podríamos escribir la función T (·) en términos de la variable única n, establecer q = n / 2 (ya que estamos asumiendo una bisección perfecta), y\\
 
@@ -3819,7 +3828,7 @@ Prueba. Como cada ciclo tiene un costo no negativo, la ruta más corta P de s a 
 
 Usemos OPT (i, v) para denotar el costo mínimo de una ruta v-t usando a lo sumo i bordes. Para (6.22), nuestro problema original es calcular OPT (n - 1, s). (En lugar de eso, podríamos diseñar un algoritmo cuyos subproblemas se correspondan con el costo mínimo de una ruta sv usando como máximo i confines. Esto formaría un paralelo más natural con el algoritmo de Dijkstra, pero no sería tan natural en el contexto de los protocolos de enrutamiento que discutir más tarde.)\\
 
-Ahora necesitamos una forma sencilla de expresar OPT (i, v) utilizando subproblemas más pequeños. Veremos que el enfoque más natural implica la consideración de muchas opciones diferentes; Este es otro ejemplo del principio de "opciones de múltiples vías" que vimos en el algoritmo para el problema de mínimos cuadrados segmentados.\\
+Ahora necesitamos una forma sencilla de expresar OPT (i, v) utilizando subproblemas más pequeños. Veremos que el enfoque más natural implica la consideración de muchas opciones diferentes; Este es otro ejemplo del principio de ``opciones de múltiples vías'' que vimos en el algoritmo para el problema de mínimos cuadrados segmentados.\\
 
 Corrigamos una ruta óptima P que representa OPT (i, v) como se muestra en la Figura 6.22\\
 
@@ -3898,7 +3907,7 @@ Búsqueda de las rutas más cortas Un problema que debe preocupar es si esta ver
 
 Para ayudar a recuperar las rutas más cortas, mejoraremos el código haciendo que cada nodo v mantenga el primer nodo (después de sí mismo) en su ruta hacia el destino t; Vamos a denotar este primer nodo por primera [v]. Para mantener primero [v], actualizamos su valor cada vez que se actualiza la distancia M [v]. En otras palabras, siempre que el valor de M [v] se restablece al mínimo mínimo $w \in V$ (cvw + M [w]), establecemos primero [v] en el nodo w que alcanza este mínimo.\\
 
-Ahora vamos a P denotar el "gráfico de puntero" dirigido cuyos nodos son V, y cuyos bordes son {(v, primero [v])}. La observación principal es la siguiente.\\
+Ahora vamos a P denotar el ``gráfico de puntero'' dirigido cuyos nodos son V, y cuyos bordes son {(v, primero [v])}. La observación principal es la siguiente.\\
 
 \textbf{(6.27)} Si el gráfico de puntero P contiene un ciclo C, este ciclo debe tener un costo negativo\\
 
@@ -3969,7 +3978,7 @@ Por lo tanto, decimos que una concatenación sobre L es cualquier secuencia de l
 
 Dé un algoritmo de tiempo polinomial para este problema.\\
 
-\textbf{Solución} Este problema recuerda vagamente a los mínimos cuadrados segmentados: tenemos una larga secuencia de "datos" (la cadena A) que queremos "ajustar" con segmentos más cortos (las cadenas en L).\\
+\textbf{Solución} Este problema recuerda vagamente a los mínimos cuadrados segmentados: tenemos una larga secuencia de ``datos'' (la cadena A) que queremos ``ajustar'' con segmentos más cortos (las cadenas en L).\\
 
 Si quisiéramos seguir esta analogía, podríamos buscar una solución de la siguiente manera. Deje B = B1B2 ... B? denota una concatenación sobre L que se alinea lo mejor posible con la cadena A dada. (Es decir, B es una solución óptima para la instancia de entrada). Considere una alineación óptima M de A con B, sea t la primera posición en A que se empareja con algún símbolo en B ?, y deja A? denota la subcadena de A desde la posición t hasta el final. (Consulte la Figura 6.27 para ver una ilustración de esto con? = 3). Ahora, el punto es que en esta alineación óptima M, ¿la subcadena A? está alineado óptimamente con B ?; de hecho, si hubiera una manera de alinear mejor A? con B ?, podríamos sustituirlo por la porción de M que alinea A? ¿con B? y obtener una mejor alineación general de A con B.\\
 
@@ -3979,7 +3988,7 @@ Pensar en el problema de esta manera no nos dice exactamente cómo proceder, no 
 
 Así que vamos a configurar cosas para hacer la búsqueda de A? posible. Primero, digamos que A [x: y] denota la subcadena de A que consiste en sus símbolos desde la posición x a la posición y, inclusive. Supongamos que c (x, y) denota el costo de la alineación óptima de A [x: y] con cualquier cadena en L. (Es decir, buscamos en cada cadena en L y encontramos la que se alinea mejor con A [x: y].) Deje que OPT (j) denote el costo de alineación de la solución óptima en la cadena A [1: j].\\
 
-El argumento anterior dice que una solución óptima en A [1: j] consiste en identificar un "límite de segmento" t <j final, encontrar la alineación óptima de A [t: j] con una sola cadena en L e iterar en A [1: t - 1]. El costo de esta alineación de A [t: j] es solo c (t, j), y el costo de alinearse con lo que queda es solo OPT (t - 1). Esto sugiere que nuestros subproblemas encajan muy bien, y justifica la siguiente recurrencia.\\
+El argumento anterior dice que una solución óptima en A [1: j] consiste en identificar un ``límite de segmento'' t <j final, encontrar la alineación óptima de A [t: j] con una sola cadena en L e iterar en A [1: t - 1]. El costo de esta alineación de A [t: j] es solo c (t, j), y el costo de alinearse con lo que queda es solo OPT (t - 1). Esto sugiere que nuestros subproblemas encajan muy bien, y justifica la siguiente recurrencia.\\
 
 \textbf{(6.37)} $OPT(j) = \min_{t<j} c(t, j) + OPT(t − 1) Para j ≥ 1, y OPT(0) = 0.$\\
 
@@ -4029,7 +4038,7 @@ Aunque la motivación inicial para los problemas de red de flujo proviene del pr
 
 \subsection*{El problema} 
 
-A menudo se utilizan grafos para modelar redes de transporte, es decir, redes cuyas aristas transportan algún tipo de tráfico y cuyos nodos actúan como "conmutadores" que pasan el tráfico entre diferentes aristas. Consideremos, por ejemplo, un sistema de autopistas en el que las aristas son carreteras y los nodos son intercambiadores; o una red informática en la que las aristas son enlaces que pueden transportar paquetes y los nodos son conmutadores; o una red de fluidos en la que las aristas son tuberías que transportan líquido, y los nodos son cruces en los que se conectan las tuberías. Los modelos de red de este tipo tienen varios ingredientes: las capacidades de las aristas, que indican cuánto pueden transportar; los nodos fuente del grafo, que generan tráfico; los nodos sumideros (o de destino) del grafo, que pueden "absorber" el tráfico a medida que llega; y, por último, el propio tráfico, que se transmite a través de las aristas.
+A menudo se utilizan grafos para modelar redes de transporte, es decir, redes cuyas aristas transportan algún tipo de tráfico y cuyos nodos actúan como ``conmutadores'' que pasan el tráfico entre diferentes aristas. Consideremos, por ejemplo, un sistema de autopistas en el que las aristas son carreteras y los nodos son intercambiadores; o una red informática en la que las aristas son enlaces que pueden transportar paquetes y los nodos son conmutadores; o una red de fluidos en la que las aristas son tuberías que transportan líquido, y los nodos son cruces en los que se conectan las tuberías. Los modelos de red de este tipo tienen varios ingredientes: las capacidades de las aristas, que indican cuánto pueden transportar; los nodos fuente del grafo, que generan tráfico; los nodos sumideros (o de destino) del grafo, que pueden ``absorber'' el tráfico a medida que llega; y, por último, el propio tráfico, que se transmite a través de las aristas.
 
 \paragraph{Redes de flujo} Consideraremos los grafos de esta forma, y nos referiremos al tráfico como flujo, una entidad abstracta que se genera en los nodos fuente, se transmite a través de las aristas y se absorbe en los nodos sumidero. Formalmente, diremos que una red de flujo es un grafo dirigido G = (V , E) con las siguientes características.
 
@@ -4081,7 +4090,7 @@ $$
 
 \section{Polynomial-Time Reduction}
 
-\section{Reductions via "Gadgets": The Satisfiability Problem}
+\section{Reductions via ``Gadgets'': The Satisfiability Problem}
 
 \section{Efficient Certification and the Definition of NP}
 

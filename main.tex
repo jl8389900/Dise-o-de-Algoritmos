@@ -744,7 +744,8 @@ Del hecho de que
 %
 $$\lim_{n \to \infty} \frac{f(n)}{g(n)} = c > 0$$
 %
-Se sigue de la definición de limite que existe algún $n_0$ a partir del cual la relación esta entre $\frac{1}{2}c$ y $2c$ $.:.$ $f(n) \leq 2c g(n)$ para todo $n \geq n_0$, lo que implica que $f(n) = O(g(n))$; y $f(n) \geq \frac{1}{2}c g(n)$ para todo $n \geq n_0$, lo que implica que $f(n) = \Omega(g(n))$.
+De la definición de límite se deduce que existe algún $n_0$ a partir del cual la relación esta entre $\frac{1}{2}c$ y $2c$.
+Entonces, $f(n) \leq 2cg(n)$ para todo $n \geq n_0$, lo que implica que $f(n) = O(g(n))$; y $f(n) \geq \frac{1}{2}cg(n)$ para todo $n \geq n_0$, lo que implica que $f(n) = \Omega(g(n))$.
 %
 \end{proof}
 
@@ -801,7 +802,7 @@ Supongamos que $f$ y $g$ son dos funciones (que toman valores no negativos) tale
 \end{theorem}
 
 \begin{proof}
-Claramente, $f + g = \Theta (f)$, ya que para todo $n ≥ 0$, tenemos $f (n) + g (n) ≥ f (n)$. Entonces, para completar la prueba, necesitamos mostrar que $f + g = O(f)$.
+Claramente, $f + g = \Omega (f)$, ya que para todo $n ≥ 0$, tenemos $f (n) + g (n) ≥ f (n)$. Entonces, para completar la prueba, necesitamos mostrar que $f + g = O(f)$.
 
 Pero esta es una consecuencia directa de \ref{thm:sumadedosfunc}: se nos da el hecho de que $g = O(f)$, y también $f = O (f)$ se cumple para cualquier función, entonces por \ref{thm:sumadedosfunc} tenemos $f + g = O(f)$. 
 \end{proof}

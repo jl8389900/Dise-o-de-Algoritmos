@@ -34,25 +34,43 @@
 \usepackage{verbatim}
 \usepackage{capt-of}
 \usepackage[font=footnotesize]{caption}
-\usepackage{calc}% so we can do inline math within \setlength
+\usepackage{calc} % so we can do inline math within \setlength
 \usepackage{crimson}
+\usepackage{enumerate}
 
 \usepackage[compact]{titlesec}
 
 \titleformat{\chapter}[display]
-{\itshape\bfseries\color{gray}}
-{\fontsize{42}{40}\selectfont\chaptertitlename\hspace{5pt}\thechapter}
-{0pt}
-{\vspace{1pc}\fontsize{28}{32}\selectfont}[\vspace{3pc}]
+    {\itshape\bfseries\color{gray}}
+    {\fontsize{42}{40}\selectfont\chaptertitlename\hspace{5pt}\thechapter}
+    {0pt}
+    {\vspace{1pc}\fontsize{28}{32}\selectfont}[\vspace{3pc}]
 
+% Set vertical positioning of LaTeX minipage
+% This text is
+% \raisebox{-10ex}
+% {
+%     \begin{minipage}{2cm}
+%         \textit{way below}
+%     \end{minipage}
+% } the base line of text
+    
 \titleformat{\subsection}
-  {\normalfont\large\bfseries}{\includegraphics[width=0.9cm]{subsection.PNG}}{0em}{}
+    {\normalfont\large\bfseries}
+    {\includegraphics[width=0.9cm]{fig/subsection.png}}
+    {0em}
+    {}
+    
+\titleformat{\subsubsection}[runin]
+    {\normalfont\bfseries\itshape}
+    {}
+    {0.5em}
+    {}
 
-\titleformat{\subsubsection}[runin]{\normalfont\bfseries\itshape}{}{0.5em}{}
 \titlespacing{\subsubsection}{0pc}{1.5ex plus .1ex minus .2ex}{1pc}
 
 \usepackage{fancyhdr}
-%\setlength{\headheight}{15pt}
+\setlength{\headheight}{15pt}
 
 \pagestyle{fancy}
 
@@ -70,12 +88,12 @@
 \renewcommand{\headrulewidth}{0pt} % remove lines as well
 \renewcommand{\footrulewidth}{0pt}
 
-\newtheoremstyle{dotless}{}{}{\itshape}{}{\bfseries}{}{ }{}
+\newtheoremstyle{dotless}{3pt}{3pt}{\itshape}{3pt}{\bfseries}{\hspace{12pt}}{ }{}
 \theoremstyle{dotless}
 \newtheorem{theorem}{}[section]
 \renewcommand*\thetheorem{\bfseries(\arabic{chapter}.\arabic{theorem})}
 \renewcommand{\qedsymbol}{$\blacksquare$}
-\renewenvironment{proof}{{\noindent\bfseries Demostración.}}{\qed\vspace{12pt}}
+\renewenvironment{proof}{\vspace{12pt}{\noindent\bfseries Demostración.}}{\qed\vspace{12pt}}
 
 
 %% para definir los forEach
@@ -89,21 +107,39 @@
 \title{Diseño de Algoritmos}
 \author{Jon Kleinberg y Éva Tardos\\ Traducción realizada por alumnos del curso de Programación 3 (2018)\\ de la Facultad de Ingeniería, UdelaR, y otros colaboradores.}
 
+
+
+% para introducir una propiedad o teorema
+
+% \begin{theorem}
+% \label{thm:ordendepoli}
+% \end{theorem}
+
+% \begin{proof}
+% \end{proof}
+
+% lo mismo pero en caja gris 
+
+% \noindent\colorbox{mygray}{\parbox{\textwidth}{
+% \begin{theorem}
+% El algoritmo G-S finaliza después de un máximo de $n^2$ iteraciones en el ciclo del \texttt{While}.
+% \end{theorem}
+% }}
+
+% una imagen al margen
+
+% \marginpar{
+% \centering
+% \includegraphics[width=\marginparwidth]{Imagenes-Seccion1/figura1_1.PNG}
+% \captionof{figure}{Emparejamiento perfecto $S$ con inestabilidad $(m,w')$.}
+% \label{fig:Imagenes-Seccion1/figura1_1.PNG}
+% }
+
+
+
 \begin{document}
 
 \maketitle	
-
-% h (here), le decimos que ponga la imagen más o menos aquí
-
-% t (top), preferiblemente en la parte superior de la página
-
-% b (bottom), preferiblemente en la parte inferior de la página
-
-% p (page), que junte los objetos flotantes en una página
-
-% ! que ignore sus reglas internas de posicionamiento
-
-% H que ponga la imagen justo aquí, similar a h! y con muchas papeletas de hacer cosas rarunas
 
 
 \chapter*{}
@@ -238,7 +274,7 @@ Consideremos algunas ideas básicas que motivan el algoritmo.
 \captionof{figure}{Un estado intermedio  del algoritmo G-S cuando un hombre libre $m$ se está proponiendo a una mujer $w$.}
 \label{fig:Imagenes-Seccion2/figura1_2.PNG}
 }
-
+\itemsep0em
 \begin{itemize}
     \item Inicialmente, todos están solteros. Supongamos que un hombre soltero $m$ elige la mujer $w$ quien está en lo más alto de su lista de preferencias, y se le propone. ¿Inmediatamente podemos declarar que $(m,w)$ será uno de los pares de nuestro emparejamiento estable final? No necesariamente, puede pasar que en el futuro un hombre $m'$ al cual $w$ prefiere se le proponga. Por otro lado, puede ser peligroso para $w$ rechazar a $m$, ya que tal vez nunca reciba una propuesta de alguien que este más arriba en su lista que $m$. Entonces, una idea natural seria que el par $(m,w)$ entre en estado intermedio de compromiso.
     \item Supongamos que ahora estamos en un estado en el cual un hombre y una mujer están uno soltero y uno comprometido. El siguiente paso podría verse como este. Un hombre soltero cualquiera $m$ elige la mujer $w$ con la posición más alta en su lista a quien aún no se le ha propuesto, y se le propone. Si $w$ esta soltera, entonces $m$ y $w$ se comprometen. Si no, $w$ ya está comprometida con otro $m'$. En este caso, ella determina si prefiere a $m$ o a $m'$; el hombre elegido se compromete con ella y el otro queda soltero. 
@@ -296,6 +332,7 @@ Esencialmente, tenemos que demostrar que ningún hombre puede ``caerse'' del fin
 En este caso, el conjunto de parejas comprometidas sería efectivamente un emparejamiento perfecto.
 Así que lo más importante que tenemos que demostrar es lo siguiente.
 
+\vspace{12pt}
 \begin{theorem}
 Si $m$ esta soltero en algún punto de la ejecución del algoritmo, entonces hay una mujer a la que aún no se le ha propuesto.
 \end{theorem}
@@ -315,6 +352,7 @@ El conjunto de pares comprometidos siempre forma un emparejamiento. Supongamos q
 
 Finalmente probamos la propiedad principal del algoritmo, es decir, que resulta en un emparejamiento estable.
 
+\vspace{12pt}
 \noindent\colorbox{mygray}{\parbox{0.98\textwidth}{
 \begin{theorem}
 Consideremos una ejecución del algoritmo G-S, que devuelve un conjunto S de pares. El conjunto S es un emparejamiento estable.
@@ -325,6 +363,7 @@ Consideremos una ejecución del algoritmo G-S, que devuelve un conjunto S de par
 Ya vimos en \ref{thm:1.5}, que $S$ es un emparejamiento perfecto. De esta forma, para probar que S es un emparejamiento estable, asumiremos que hay una inestabilidad con respecto a $S$, y obtener una contradicción. Como definimos anteriormente, dicha inestabilidad abarca dos pares, $(m,w)$ y $(m',w')$, en $S$, con las propiedades de que:
 
 \begin{itemize}
+    \itemsep0em
     \item $m$ prefiere a $w'$ antes que a $w$ 
     \item $w'$ prefiere a $m$ antes que a $m'$
 \end{itemize}
@@ -339,10 +378,11 @@ Hemos empezado por definir la noción de emparejamiento estable; acabamos de dem
 Para empezar, recordemos que antes vimos un ejemplo en el que podía haber múltiples emparejamientos estables. Para recapitular, las listas de preferencias en este ejemplo eran las siguientes:
 
 \begin{itemize}
-  \item $m$ prefiere a $w$ antes que a $w'$
-  \item $m'$ prefiere a $w'$ antes que a $w$
-  \item $w$ prefiere a $m'$ antes que a $m$
-  \item $w'$ prefiere $m$ antes que $m'$
+    \itemsep0em
+    \item $m$ prefiere a $w$ antes que a $w'$
+    \item $m'$ prefiere a $w'$ antes que a $w$
+    \item $w$ prefiere a $m'$ antes que a $m$
+    \item $w'$ prefiere $m$ antes que $m'$
 \end{itemize}
 
 Ahora en cualquier ejecución del algoritmo, $m$ estará emparejado con $w$, $m'$ estará emparejado con $w'$ (quizás en el otro orden), y todo terminaría ahí. Así, el otro emparejamiento estable, que consiste en los pares $(m',w)$ y $(m,w')$, no es alcanzable en una ejecución del algoritmo en el que el hombre propone. Por otro lado, si sería posible lograrlo si ejecutaremos una versión modificada del algoritmo, en la cual las mujeres propusieran. Y, en ejemplos más grandes con más de dos personas de cada lado, podríamos tener una gran colección de emparejamientos estables posibles, muchos de ellos no pudiendo ser obtenidos por un algoritmo natural.
@@ -1327,15 +1367,21 @@ Para nuestros propósitos aquí, enraizar un árbol $T$  hace surgir ciertas pre
 
 De este hecho, se sigue una conjetura que aún no probaremos:\\
 \\
- \colorbox{mygray}{\parbox{15cm}{
-	\textbf{(3.2):} Sea $G$ grafo no dirigido con $n$ nodos, entonces dos de estas afirmaciones implican la restante:
-    \begin{enumerate}
+
+
+\noindent\colorbox{mygray}{\parbox{\textwidth}{
+\begin{theorem}
+Sea $G$ grafo no dirigido con $n$ nodos, entonces dos de estas afirmaciones implican la restante:
+    \begin{enumerate}[(i)]
+    \itemsep0em
     \item $G$ es conexo
     \item $G$ no contiene un ciclo 
     \item $G$ tiene $n-1$ aristas
     \end{enumerate}
+ \end{theorem}
+ }}
 
-  }}\\
+
 
 \section{Conexión de grafos y recorrido de grafos}
 Teniendo ahora algunas nociones fundamentales sobre grafos, nos centramos en una pregunta algorítmica muy importante: la conexión nodo a nodo. Supongamos que se nos da un grafo $G = (V,E)$ y dos nodos particulares $s$ y $t$. Queremos encontrar un algoritmo eficiente que responda la pregunta: ¿Existe un camino desde $s$ hasta $t$ en $G$? Llamaremos a este problema el ``Problema de determinar la conexión $s-t$".\\
@@ -4019,7 +4065,7 @@ Recordemos la configuración del Problema de Emparejamiento Bipartito. Un grafo 
 Ahora bien, ya hemos visto la noción de emparejamiento en varios puntos del curso: Hemos utilizado el término para describir colecciones de pares sobre un conjunto, con la propiedad de que ningún elemento del conjunto aparece en más de un par. (Piense en hombres (X) emparejados con mujeres (Y) en el Problema de Emparejamiento Estable, o en caracteres en el Problema de Alineación de Secuencias). En el caso de un grafo, las aristas constituyen pares de nodos, y en consecuencia decimos que un emparejamiento en un grafo G = (V , E) es un conjunto de aristas M ⊆ E con la propiedad de que cada nodo aparece como máximo en una arista de M. Un conjunto de aristas M es un emparejamiento perfecto si cada nodo aparece exactamente en una arista de M.
 
 \marginpar{
-\includegraphics[width=\marginparwidth]{Imagenes-Capitulo7/figura_7_1.jpg}
+\includegraphics[width=\marginparwidth]{Imagenes-Seccion7/figura_7_1.jpg}
 \captionof{figure}{Un grafo bipartito.}
 \label{Imagenes-Capitulo7/figura_7_1.jpg}
 }

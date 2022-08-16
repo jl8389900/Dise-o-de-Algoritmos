@@ -788,7 +788,7 @@ Supongamos que $f$ y $g$ son dos funciones tales que para alguna otra función $
 Se nos da que para algunas constantes $c$ y $n_0$, tenemos $f(n)≤ch(n)$ para todo $n≥n_0$. Además, para algunas constantes (potencialmente diferentes) $c'$ y $n_0'$, tenemos $g(n)≤c'h(n)$ para todo $n≥n_0'$. Por lo tanto, considere cualquier número $n$ que sea al menos tan grande como $n_0$ y $n_0'$. Tenemos $f(n) + g (n) ≤ ch (n) + c'h (n)$. Así $f (n) + g (n) ≤ (c' + c) h (n)$ para todo $n≥max(n0, n_0')$, que es exactamente lo que se requiere para mostrar que $f + g = O (h)$.
 \end{proof}
 
-Hay una generalización de esto a sumas de un número constante fijo de funciones $k$, donde $k$ puede ser mayor que dos. El resultado se puede expresar de la siguiente manera; omitimos la prueba, ya que es esencialmente la misma que la prueba de \ref{thm:sumadefunc}, adaptada a sumas de $k$ términos en lugar de solo dos.
+Hay una generalización de esto a sumas de un número constante fijo de funciones $k$, donde $k$ puede ser mayor que dos. El resultado se puede expresar de la siguiente manera; omitimos la prueba, ya que es esencialmente la misma que la prueba de \ref{thm:sumadedosfunc}, adaptada a sumas de $k$ términos en lugar de solo dos.
 
 \begin{theorem}
 \label{thm:sumadekfunc}
@@ -1209,111 +1209,112 @@ Sean $f$ y $g$ dos funciones que toman valores no negativos, y supongamos que $f
 \textbf{Solución} Este ejercicio es una manera de formalizar la intuición de que $O(.)$ y $\Omega(·)$ son en cierto sentido opuestos. De hecho, no es difícil de probar; es solo cuestión de deshacer las definiciones.\\
 Se nos da que, para algunas constantes $c$ y $n0$, tenemos $f(n)≤cg(n)$ para todo $n≥n0$. Dividiendo ambos lados por $c$, podemos concluir que $g(n)≥(1/c).f(n)$ para todo $n≥n0$. Pero esto es exactamente lo que se requiere para demostrar que $g=\Omega(f)$: hemos establecido que $g(n)$ es al menos un múltiplo constante de $f(n)$ (donde la constante es $1/c$), para todos los suficientemente grandes $n$ (al menos $n0$).\\
 
+
 \chapter{Grafos}
 \label{ch:grafos}
 
-Nuestro enfoque en este libro sera sobre problemas en los cuales se puedan utilizar herramientas de matemática discreta. Las matemáticas en espacios continuas han desarrollado ciertas estructuras básicas como números reales, vectores y matrices, sin embargo las matemáticas discretas han desarrollado la combinatoria, las cuales son unas estructuras que se encuentran en el corazón del tema. Uno de las estructuras más fundamentales y visuales de esta son los grafos. \\
+\todo{empiezo a revisar acá de nuevo}
 
-Mientras más se trabaja con grafos, más se tiende a verlos en todas partes.
-Por lo tanto, comenzamos por introducir las definiciones básicas sobre los grafos, también enumeraremos diferentes configuraciones algorítmicas donde intuitivamente pueden interpretarse como grafos. Luego discutiremos algunos algoritmos básicos para grafos, comenzando
-con el problema de la conexión y el desarrollo de algunas técnicas fundamentales de búsqueda en grafos.\\
+En este libro nos centramos en los problemas de carácter discreto. Al igual que las matemáticas continuas se ocupan de ciertas estructuras básicas como los números reales, los vectores y las matrices, las matemáticas discretas han desarrollado estructuras combinatorias básicas que se encuentran en el centro de la materia. Una de las más fundamentales y expresivas es el grafo.
+
+Cuanto más se trabaja con grafos, más se tiende a verlos en todas partes. Por ello, comenzamos introduciendo las definiciones básicas de los grafos y enumeramos una serie de entornos algorítmicos diferentes en los que los grafos surgen de forma natural. A continuación, discutiremos algunas primitivas algorítmicas básicas para los grafos, empezando por el problema de la conectividad y desarrollando algunas técnicas fundamentales de búsqueda de grafos.
 
 \section{Definiciones básicas y aplicaciones}
 
-Recuerde del Capítulo 1 que un grafo $G$ es simplemente una forma de codificar por pares las
-relaciones entre un conjunto de objetos: La misma consiste en un conjunto $V$ de nodos
-y un conjunto $E$ de aristas, las cuales ``unen'' dos nodos. Por lo tanto
-representaremos una arista $e \in E$ como un subconjunto de dos elementos de $V$: $e = \{u, v\}$ para algún $u, v \in V$.  Entonces dada una arista  $e = \{u, v\}$ a los nodos $u$ y $v$ los llamaremos vértices de $e$.\\
+Recuerde del Capítulo 1 que un grafo $G$ es simplemente una forma de codificar por pares las relaciones entre un conjunto de objetos: La misma consiste en un conjunto $V$ de nodos y un conjunto $E$ de aristas, las cuales ``unen'' dos nodos. Por lo tanto representaremos una arista $e \in E$ como un subconjunto de dos elementos de $V$: $e = \{u, v\}$ para algún $u, v \in V$.  Entonces, dada una arista $e = \{u, v\}$ a los nodos $u$ y $v$ los llamaremos vértices de $e$.
 
 Las aristas de un grafo indican una relación simétrica entre sus extremos.
 A menudo queremos codificar relaciones asimétricas, y para esto usamos la
-noción de grafo dirigido. Un grafo dirigido $G^{'}$ consiste en un conjunto
-de nodos $V$ y un conjunto de aristas dirigidas $E^{'}$.  Cada $e^{'} \in E^{'}$ es un par ordenado $(u, v)$; en otras palabras, los roles de $u$ y $v$ no son intercambiables,   denominaremos cola de la arista al vértice $u$ y a $v$ le llamaremos la cabeza de $e$. Aveces, también diremos que la arista $e^{'}$ sale del nodo $u$ y entra en el nodo $v$. \\
+noción de grafo dirigido. 
+Un grafo dirigido $G'$ consiste en un conjunto de nodos $V$ y un conjunto de aristas dirigidas $E'$.  Cada $e' \in E'$ es un par ordenado $(u, v)$; en otras palabras, los roles de $u$ y $v$ no son intercambiables, denominaremos cola de la arista al vértice $u$ y a $v$ le llamaremos la cabeza de $e$. Aveces, también diremos que la arista $e'$ sale del nodo $u$ y entra en el nodo $v$.
 
-Por defecto, en este libro cuando hagamos referencia a un grafo, estaremos haciendo referencia a un grafo no dirigido. También vale la pena mencionar dos advertencia sobre nuestro uso en la terminología de grafos. Primero, aunque una arista $e$ en un grafo no dirigido debe escribirse correctamente como un conjunto de nodos $\{u, v\}$,  a menudo uno lo verá escrito (incluso en este libro) con la notación utilizada para pares ordenados: $e = (u,v)$. En segundo lugar, a los nodos de un grafo se les denomina frecuentemente como vértices; en este contexto, las dos palabras tienen exactamente el mismo significado.  \\
+Por defecto, en este libro cuando hagamos referencia a un grafo, estaremos haciendo referencia a un grafo no dirigido. También vale la pena mencionar dos advertencia sobre nuestro uso en la terminología de grafos. 
+Primero, aunque una arista $e$ en un grafo no dirigido debe escribirse correctamente como un conjunto de nodos $\{u, v\}$,  a menudo uno lo verá escrito (incluso en este libro) con la notación utilizada para pares ordenados: $e = (u,v)$. 
+En segundo lugar, a los nodos de un grafo se les denomina frecuentemente como vértices; en este contexto, las dos palabras tienen exactamente el mismo significado. 
 
-\textbf{Ejemplos de grafo:} Los grafos son muy simples de definir: simplemente tomamos una colección
-de vértices y unimos a algunos de ellos mediante líneas. Pero en este nivel de abstracción,
-es difícil apreciar las típicas situaciones que pueden modelarse mediante ellos. Por lo cual, a continuación daremos una lista de situaciones donde los grafos juegan un papel fundamental en su modelado. La lista es muy amplia, y no es importante recordarla toda; más bien, nos proporcionará muchos ejemplos útiles con los cuales podremos verificar las definiciones básicas y problemas algorítmicos que encontraremos más adelante en el capítulo. Además, al dar esta lista, se podrá entender mejor el significado de los nodos y el significado de las aristas en
-el contexto del modelado y aplicación de los grafos. En algunos casos, los nodos y aristas se corresponden a objetos físicos del mundo real, en otros los nodos son objetos reales
-mientras que las aristas son virtuales, y en otros, tanto los nodos como las aristas son puros
-abstracciones. \\
+\subsubsection{Ejemplos de grafo} 
+Los grafos se definen fácilmente: simplemente tomamos una colección de vértices y unimos a algunos de ellos mediante aristas. 
+Pero en este nivel de abstracción, es difícil apreciar las típicas situaciones que pueden modelarse mediante ellos. 
+Por lo cual, a continuación daremos una lista de situaciones donde los grafos juegan un papel fundamental en su modelado. 
+La lista es muy amplia, y no es importante recordarla toda; más bien, nos proporcionará muchos ejemplos útiles con los cuales podremos verificar las definiciones básicas y problemas algorítmicos que encontraremos más adelante en el capítulo. 
+Además, al dar esta lista, se podrá entender mejor el significado de los nodos y el significado de las aristas en el contexto del modelado y aplicación de los grafos. 
+En algunos casos, los nodos y las aristas se corresponden a objetos físicos del mundo real, en otros solo los nodos son objetos reales mientras que las aristas son virtuales, y en otros, tanto los nodos como las aristas son abstracciones. 
 
 \begin{enumerate}
-\item \textbf{Redes de transporte:} El mapa de las rutas realizadas por aviones de una aerolínea forma naturalmente un grafo: los nodos son aeropuertos y la arista $(u,v)$ pertenece al grafo si hay un vuelo sin escalas que parte de $u$ y arriba a $v$. Descrita de esta manera, el grafo está dirigido; pero en la realidad cuando hay una arista $(u,v)$ casi siempre también hay una $(v,u)$, así que lo supondremos, ya que no perdemos demásiado si tratamos el mapa de rutas de la aerolínea como un grafo no dirigido con aristas que unen pares de aeropuertos que tienen vuelos sin escalas en cada sentido. Mirando el grafo (por lo general, se pueden encontrar grafos de este tipo en revistas de aeronáutica), notamos rápidamente algunas cosas: a menudo se pueden observar que existen vértices con una cantidad de aristas incidentes mayor al promedio; y además, dados dos nodos del grafo, es posible llegar de uno al otro, pasando por pocos vértices intermedios. \\
+\item \textit{Redes de transporte:} El mapa de las rutas realizadas por aviones de una aerolínea forma naturalmente un grafo: los nodos son aeropuertos y la arista $(u,v)$ pertenece al grafo si hay un vuelo sin escalas que parte de $u$ y arriba a $v$. Descrito de esta manera, el grafo está dirigido; pero en la realidad cuando hay una arista $(u,v)$ casi siempre también hay una $(v,u)$, así que supondremos eso, ya que no perdemos demasiado si tratamos el mapa de rutas de la aerolínea como un grafo no dirigido con aristas que unen pares de aeropuertos que tienen vuelos sin escalas en cada sentido. Mirando el grafo (por lo general, se pueden encontrar grafos de este tipo en las revistas de las compañías de aviación), notamos rápidamente algunas cosas: a menudo se puede observar que existen vértices con una cantidad de aristas incidentes mayor al promedio; y además, dados dos nodos del grafo, es posible llegar de uno al otro, pasando por pocos vértices intermedios. 
 
-Otras redes de transporte se pueden modelar de manera similar. Por
-ejemplo, podríamos tomar una red ferroviaria y tener un nodo para cada terminal,
-y una arista que une $(u,v)$ si hay una vía férrea que va entre ellos sin detenerse en ninguna terminal intermedia. La representación estándar del mapa del metro en una ciudad importante es un dibujo de un grafo. \\
+Otras redes de transporte se pueden modelar de manera similar. 
+Por ejemplo, podríamos tomar una red ferroviaria y tener un nodo para cada estación, y una arista que une $(u,v)$ si hay una vía férrea que va entre ellas sin detenerse en ninguna estación intermedia. 
+La representación estándar del mapa del metro en una ciudad o de la red de ómnibuses es el dibujo de un grafo.
 
-\item \textbf{Redes de comunicación:} Un grupo de computadoras conectadas a través de
-una red de comunicación se puede modelar de forma natural con un grafo, existen diferentes formás de hacerlo. Primero, podríamos tener un nodo para cada computadora y
-una arista que une $u$ y $v$ si hay un enlace físico directo que las conecta. Alternativamente, para estudiar estructuras a gran escala como Internet,
-las personas a menudo definen un nodo como el conjunto de todas las máquinas controladas por un solo proveedor de servicios de Internet, y una arista que une $u$ y $v$ si hay una relación directa de conexión entre ellas, en otras palabras si existe un acuerdo para intercambiar datos bajo el protocolo estándar BGP que gobierna de forma global el Enrutamiento de Internet. Tenga en cuenta que esta última red es más ``virtual'' que la primera, ya que los enlaces indican un acuerdo formal además de
-una conexión física.\\
+\item \textit{Redes de comunicación:} 
+Un grupo de computadoras conectadas a través de una red de comunicación se puede modelar de forma natural con un grafo, existen diferentes formas de hacerlo. 
+Primero, podríamos tener un nodo para cada computadora y una arista que une $u$ y $v$ si hay un enlace físico directo que las conecta. 
+Alternativamente, para estudiar estructuras a gran escala como Internet, las personas a menudo definen un nodo como el conjunto de todas las máquinas controladas por un solo proveedor de servicios de Internet, y una arista que une $u$ y $v$ si hay una relación directa de conexión entre ellas, en otras palabras si existe un acuerdo para intercambiar datos bajo el protocolo estándar BGP que gobierna de forma global el enrutamiento de Internet. 
+Tenga en cuenta que esta última red es más ``virtual'' que la primera, ya que los enlaces indican un acuerdo formal además de una conexión física.
 
-Al estudiar las redes inalámbricas, uno típicamente define un grafo donde
-los nodos son dispositivos de computación situados en ubicaciones en el espacio físico,
-y hay una arista de $u$ a $v$ si $v$ está lo suficientemente cerca como para recibir una señal del dispositivo de red inalámbrica. Tenga en cuenta que a menudo es útil ver esta situacion de esta forma (como un grafo dirigido), ya que puede darse el caso de que $v$ pueda recibir tu señal pero no puedas recibir la señal de $v$
-(si, por ejemplo, $u$ tiene un transmisor más fuerte). Estos grafo también son
-interesante desde una perspectiva geométrica, ya que corresponden aproximadamente
-a poner puntos en el plano y luego unir los pares de vértices que están cerca. \\
+Al estudiar las redes inalámbricas, típicamente se define un grafo donde los nodos son dispositivos de computación situados en lugares del espacio físico, y hay una arista de $u$ a $v$ si $v$ está lo suficientemente cerca como para recibir una señal del dispositivo de red inalámbrica. 
+Tenga en cuenta que a menudo es útil ver esta situación de esta forma (como un grafo dirigido), ya que puede darse el caso de que $v$ pueda recibir tu señal pero no puedas recibir la señal de $v$ (si, por ejemplo, $u$ tiene un transmisor más fuerte). 
+Estos grafos también son interesantes desde una perspectiva geométrica, ya que corresponden aproximadamente a poner puntos en el plano y luego unir los pares de vértices que están cerca.
 
-\item \textbf{Redes de información:}
-La World Wide Web (red informática mundial) se puede ver naturalmente como un grafo dirigido, en el que los nodos corresponden a páginas web y hay una
-arista de $u$ a $v$ si $u$ tiene un hipervínculo (enlace) a $v$. La dirección del grafo es crucial aquí; muchas páginas, por ejemplo, enlazan a sitios de noticias populares,
-pero estos sitios claramente no corresponden a todos estos enlaces. La estructura de
-todos estos hipervínculos pueden ser utilizados por algoritmos (como el de google) para tratar de inferir cuales son las páginas más importantes en la web, esta es una técnica empleada por la mayoría de los motores de búsqueda actuales.\\
+\item \textit{Redes de información:}
+La \textit{World Wide Web} se puede ver naturalmente como un grafo dirigido, en el que los nodos corresponden a páginas web y hay una arista de $u$ a $v$ si $u$ tiene un hipervínculo (enlace) a $v$. 
+La dirección del grafo es crucial aquí; muchas páginas, por ejemplo, enlazan a sitios de noticias populares, pero estos sitios claramente no corresponden a todos estos enlaces. 
+La estructura de todos estos hipervínculos pueden ser utilizados por algoritmos para tratar de inferir cuales son las páginas más importantes en la web, esta es una técnica empleada por la mayoría de los motores de búsqueda actuales.
 
-La estructura de hipervínculos de la web es precedida por redes de información que surgieron muchas décadas antes. Entre las redes que la preceden se encuentran las redes de citación biográfica de informes científicos.
+La estructura de hipervínculos de la web es precedida por redes de información que surgieron muchas décadas antes. Entre las redes que la preceden se encuentran las redes de citación bibliográfica de artículos científicos.
+
 \item \textbf{Redes de sociales:}
-Dada un conjunto de personas que interactúan entre si (los empleados
-de una compañía, los estudiantes en una escuela secundaria o los habitantes de
-un pueblo pequeño), podemos definir una red cuyos nodos son personas, con
-una arista que une $u$ y $v$ si son amigos entre sí. Podríamos
-definir las aristas con otros significados en lugar de amistad:
-por ejemplo la arista no dirigida $(u, v)$ podría significar que $u$ y $v$ han tenido una relación romántica o una relación financiera; la arista dirigida $(u, v)$ podría
- decir que $u$ busca consejo de $v$, o que $u$ tiene a $v$ en su lista de correo electrónico. También se pueden imaginar redes sociales bipartitas basadas en una noción de afiliación: dado un conjunto $X$ de personas y un conjunto $Y$ de organizaciones,
-podríamos definir una entre $u \in X$ y $v \in Y$ si la persona $u$ pertenece
-a la organización $v$.
+Dado un conjunto de personas que interactúan entre si (los empleados
+de una compañía, los estudiantes en una escuela secundaria o los habitantes de un pueblo), podemos definir una red cuyos nodos son personas, con una arista que une $u$ y $v$ si son amigos entre sí. 
+Podríamos definir las aristas con otros significados en lugar de amistad: por ejemplo la arista no dirigida $(u, v)$ podría significar que $u$ y $v$ han tenido una relación romántica o una relación financiera; 
+la arista dirigida $(u, v)$ podría decir que $u$ busca consejo de $v$, o que $u$ tiene a $v$ en su lista de correo electrónico. 
+También se pueden imaginar redes sociales bipartitas basadas en una noción de afiliación: dado un conjunto $X$ de personas y un conjunto $Y$ de organizaciones, podríamos definir una arista entre $u \in X$ y $v \in Y$ si la persona $u$ pertenece a la organización $v$.
 Redes como esta son usadas ampliamente por los sociólogos para estudiar
-la dinámica de la interacción entre las personas. Se pueden usar para identificar
-las personas más ``influyentes'' en una empresa u organización, para modelar
-la confianza en las relaciones en un contexto financiero o político, y seguir la propagación de modas, rumores, bromás, enfermedades y virus de correo electrónico.
-\item \textbf{Redes de dependencia:} 
-Es natural definir grafo dirigidos que capturen
-las dependencias entre un conjunto de objetos. Por ejemplo, dada la lista de cursos ofrecidos por un colegio o universidad, podríamos tener un nodo para cada curso y una arista de $u$ a $v$ si $u$ es previa de $v$. (Véase grafo de previas de ingeniería en computación - Udelar) Dada una lista de funciones o módulos en un gran sistema de software, podríamos tener un nodo para cada función y una arista de $u$ a $v$ si $u$ invoca a $v$ por una llamada a la función. O dado un conjunto de especies en un ecosistema, podríamos definir un grafo de una red alimentaria en el que los nodos son las diferentes especies y hay una arista de $u$ a $v$ si $u$ consume $v$.
-\end{enumerate}
-Esto está lejos de ser una lista completa, demásiado lejos para siquiera comenzar a escribir. Simplemente se trata de sugerir algunos ejemplos que son útiles para tener en cuenta cuando comencemos a pensar en grafos en un contexto algorítmico.\\
+la dinámica de la interacción entre las personas. 
+Se pueden usar para identificar las personas más ``influyentes'' en una empresa u organización, para modelar la confianza en las relaciones en un contexto financiero o político, y seguir la propagación de modas, rumores, bromas, enfermedades y virus de correo electrónico.
 
-\textbf{Caminos y conectividad:} Una de las operaciones fundamentales en un grafo es
-el de recorrer una secuencia de nodos conectados por las aristas. En los ejemplos
-que acabamos de enumerar, un cruce de este tipo podría corresponder a un usuario que navega por páginas web siguiendo hipervínculos; un rumor que pasa de boca en boca de usted a alguien a través de todo el mundo; o un pasajero de una aerolínea que viaja desde San Francisco a Roma en una secuencia de vuelos.
+\item \textit{Redes de dependencia:} 
+Es natural definir grafo dirigidos que capturen las dependencias entre un conjunto de objetos. Por ejemplo, dada la lista de cursos ofrecidos por un colegio o universidad, podríamos tener un nodo para cada curso y una arista de $u$ a $v$ si $u$ es previa de $v$. Dada una lista de funciones o módulos en un gran sistema de software, podríamos tener un nodo para cada función y una arista de $u$ a $v$ si $u$ invoca a $v$ por una llamada a la función. O dado un conjunto de especies en un ecosistema, podríamos definir un grafo de una red alimentaria en el que los nodos son las diferentes especies y hay una arista de $u$ a $v$ si $u$ consume $v$.
+
+\end{enumerate}
+
+Esto está lejos de ser una lista completa, demasiado lejos para siquiera comenzar a escribir. Simplemente se trata de sugerir algunos ejemplos que son útiles para tener en cuenta cuando comencemos a pensar en grafos en un contexto algorítmico.
+
+\subsubsection{Caminos y conectividad:} 
+Una de las operaciones fundamentales en un grafo es el de recorrer una secuencia de nodos conectados por las aristas. 
+En los ejemplos que acabamos de enumerar, un cruce de este tipo podría corresponder a un usuario que navega por páginas web siguiendo hipervínculos; 
+un rumor que pasa de boca en boca de usted a alguien a través de todo el mundo; 
+o un pasajero de una aerolínea que viaja desde San Francisco a Roma en una secuencia de vuelos.
 
 Con esta idea en mente, definimos un camino en un grafo no dirigido
-$G = (V, E)$ como una secuencia $P$ de nodos $v_1, v_2, ..., v_{k-1},v_k$ con la propiedad de que cada par consecutivo $v_i, v_{i+1}$ está unido por una arista en $G$. A menudo se dice que $P$ es un camino de $v_1$ a $v_k$, o un camino $v_1-v_k$. Por ejemplo, los nodos 4, 2, 1, 7, 8 forman un camino en la Figura 3.1. Se dice que un camino es un camino simple si todos sus vértices son distintos. Un ciclo es un camino $v_1, v_2, ..., v_{k-1}, v_k$ en el cual $k> 2$, y los primero $k-1$
- nodos son todos distintos, y $v_1 = v_k$; en otras palabras, la secuencia de nodos
-``regresa'' al punto de partida. Todas estas definiciones se heredan naturalmente
-a los grafos dirigidos, con el siguiente cambio: en un camino o ciclo dirigido,
-cada par de nodos consecutivos tiene la propiedad de que $(v_i, v_{i+1})$ es una arista. En otras palabras, la secuencia de nodos en el camino o ciclo debe respetar el direccionalidad de las aristas.\\
+$G = (V, E)$ como una secuencia $P$ de nodos $v_1, v_2, ..., v_{k-1},v_k$ con la propiedad de que cada par consecutivo $v_i, v_{i+1}$ está unido por una arista en $G$. A menudo se dice que $P$ es un camino de $v_1$ a $v_k$, o un camino $v_1-v_k$. Por ejemplo, los nodos 4, 2, 1, 7, 8 forman un camino en la Figura \ref{fig:Imagenes-Seccion3/fig3_1.PNG}. 
+Se dice que un camino es un camino simple si todos sus vértices son distintos. 
+Un ciclo es un camino $v_1, v_2, ..., v_{k-1}, v_k$ en el cual $k>2$, los primeros $k-1$ nodos son todos distintos, y $v_1=v_k$; en otras palabras, la secuencia de nodos ``regresa'' al punto de partida. 
+Todas estas definiciones se traducen naturalmente a los grafos dirigidos, con el siguiente cambio: en un camino o ciclo dirigido cada par de nodos consecutivos tiene la propiedad de que $(v_i, v_{i+1})$ es una arista. En otras palabras, la secuencia de nodos en el camino o ciclo debe respetar el direccionalidad de las aristas.
 
-\begin{figure}[h]
+\begin{figure}[t]
 \centering
 \includegraphics[width=1\textwidth]{Imagenes-Seccion3/fig3_1.PNG}
 \caption{ }
  \label{fig:Imagenes-Seccion3/fig3_1.PNG}
 \end{figure}
 
-Decimos que un grafo no dirigido es conexo si, por cada par de nodos $u,v$, existe un camino desde $u$ hasta $v$. Elegir cómo definir la conectividad de un  grafo dirigido es un poco más sutil, ya que es posible que tengas un camino desde $u$ hacia $v$ mientras que $v$ puede no tener un camino hacia $u$. Decimos que un grafo dirigido es fuertemente conexo si, por cada dos nodos $u$ y $v$, hay una ruta de $u$ a $v$ y una ruta de $v$ a $u$.\\
+Decimos que un grafo no dirigido es conexo si, por cada par de nodos $u,v$, existe un camino desde $u$ hasta $v$. 
+Elegir cómo definir la conectividad de un grafo dirigido es un poco más sutil, ya que es posible que tengas un camino desde $u$ hacia $v$ mientras que $v$ puede no tener un camino hacia $u$. 
+Decimos que un grafo dirigido es fuertemente conexo si, por cada dos nodos $u$ y $v$, hay una ruta de $u$ a $v$ y una ruta de $v$ a $u$.
 
-Además de simplemente saber sobre la existencia de un camino entre algún
-par de nodos $u$ y $v$, también podemos querer saber si hay un camino corto.
-Por lo tanto, definimos la distancia entre dos nodos $u$ y $v$ como el mínimo
-número de aristas con las cuales se pueda lograr un camino $u-v$. (Podemos designar algún símbolo como $\infty$ para denotar la distancia entre dos nodos que no están conectados).  El termino ``distancia'' proviene de imaginar que $G$ representa una comunicación o red de transporte; si queremos pasar de $u$ a $v$, es posible que deseemos una ruta con tan pocos ``desvíos'' como sea posible.\\
+Además de simplemente saber sobre la existencia de un camino entre algún par de nodos $u$ y $v$, también podemos querer saber si hay un camino \textit{corto}.
+Por lo tanto, definimos la distancia entre dos nodos $u$ y $v$ como el mínimo número de aristas con las cuales se pueda lograr un camino $u-v$.
+(Podemos designar algún símbolo como $\infty$ para denotar la distancia entre dos nodos que no están conectados)
+El termino ``distancia'' proviene de imaginar que $G$ representa una red de transporte o de comunicaciones; si queremos pasar de $u$ a $v$, es posible que deseemos una ruta con tan pocos ``saltos'' como sea posible.
 
-\textbf{Árboles:} Decimos que un grafo no dirigido es un árbol si es conexo y no contiene un ciclo. Por ejemplo, los dos grafos representados en la Figura 3.1 son árboles. En un sentido fuerte, los árboles son el tipo más simple de grafo conexo: eliminar cualquier arista de un árbol lo desconectará. \\
+\todo{revisado hasta acá}
 
-Para pensar en la estructura de un árbol $T$, es útil enraizarlo (usar como raíz un nodo particular $r$). Físicamente, esta operación es agarrar el árbol $T$ en el nodo $r$ como raíz y dejar que el resto cuelgue hacia abajo bajo la fuerza de la gravedad. Más precisamente, ``orientamos'' cada arista de $T$ lejos de $r$;  dado un nodo $v$, definimos el padre de $v$ como el nodo $u$ que precede directamente a $v$ en su camino desde $r$; definimos que $w$ es un hijo de $v$ si $v$ es el padre de $w$. Más
+\subsubsection{Árboles:} Decimos que un grafo no dirigido es un árbol si es conexo y no contiene un ciclo. Por ejemplo, los dos grafos representados en la Figura \ref{fig:Imagenes-Seccion3/fig3_1.PNG} son árboles. En un sentido fuerte, los árboles son el tipo más simple de grafo conexo: eliminar cualquier arista de un árbol lo desconectará. 
+
+Para pensar en la estructura de un árbol $T$, es útil \textit{enraizarlo} (usar como raíz un nodo particular $r$). 
+Físicamente, esta operación implica tomar el árbol $T$ en el nodo $r$ como raíz y dejar que el resto \textit{cuelgue} hacia abajo bajo la fuerza de la gravedad. Más precisamente, ``orientamos'' cada arista de $T$ lejos de $r$;  dado un nodo $v$, definimos el padre de $v$ como el nodo $u$ que precede directamente a $v$ en su camino desde $r$; definimos que $w$ es un hijo de $v$ si $v$ es el padre de $w$. Más
 en general, decimos que $w$ es un descendiente de $v$ (o $v$ es un antepasado de $w$) si $v$ esta más abajo de $w$; y decimos que un nodo $x$ es una hoja si no tiene
 descendientes. Por lo tanto, por ejemplo, las dos imágenes en la Figura 3.1 corresponden a el mismo árbol $T$: los mismos pares de nodos se unen por aristas, pero el dibujo a la derecha representa el resultado de enraizar $T$ en el nodo 1.\\
 

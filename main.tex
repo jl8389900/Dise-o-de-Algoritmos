@@ -994,226 +994,165 @@ Las estructuras de datos descritas anteriormente nos permiten implementar el alg
 }}
 
 
+\section{Un Estudio de los Tiempos de Ejecución Comunes}
+
+Tal vez la cuestión más difícil es cómo mantener las preferencias de las mujeres para mantener el paso (4) eficiente. Consideremos un paso del algoritmo, cuando el hombre $m$ propone matrimonio a una mujer $w$. Supongamos que $w$ ya está comprometida, y su pareja actual es $m^{\prime}=$ Actual $[w]$. Nos gustaría decidir en $O(1)$ tiempo si la mujer $w$ prefiere $m$ o $m^{\prime}$. Mantener las preferencias de las mujeres en una matriz WomanPref, análoga a la que utilizamos para los hombres, no funciona, ya que tendríamos que recorrer la lista de $w$ uno por uno, tomando $O(n)$ tiempo para encontrar $m$ y $m^{\prime}$ en la lista. Aunque $O(n)$ sigue siendo polinómico, podemos hacerlo mucho mejor si construimos una estructura de datos auxiliar al principio.
+
+Al principio del algoritmo, creamos una matriz $n veces n$ Ranking, donde Ranking $[w, m]$ contiene el rango del hombre $m$ en el orden de las preferencias de $w$. Por una sola pasada a través de $w $ 's lista de preferencias, podemos crear esta matriz en tiempo lineal para cada mujer, para una inversión total de tiempo inicial proporcional a $ n^ {2} $. A continuación, para decidir cuál de $m$ o $m^{\prime}$ es preferido por $w$, simplemente comparamos los valores Ranking $[w, m]$ y Ranking $\left[w, m^{\prime}\right]$.
+
+Esto nos permite ejecutar el paso (4) en tiempo constante, y por lo tanto tenemos todo lo que necesitamos para obtener el tiempo de ejecución deseado.
+
+(2.10) Las estructuras de datos descritas anteriormente nos permiten implementar el algoritmo G-S en $O\left(n^{2}\right)$ tiempo.
+
+Cuando se trata de analizar un nuevo algoritmo, ayuda a tener una idea aproximada del ``paisaje" de los diferentes tiempos de ejecución. De hecho, hay modelos de análisis que se repiten con frecuencia, y así, cuando uno ve límites de tiempo de ejecución como $O(n)$, $O(n \log n)$, y $O\left(n^{2}\right)$ que aparecen una y otra vez, a menudo es por una de un número muy pequeño de razones distintas. Aprender a reconocer estos estilos comunes de análisis es un objetivo a largo plazo. Para poner las cosas en marcha, ofrecemos la siguiente encuesta de límites comunes de tiempo de ejecución y algunos de los enfoques típicos que conducen a ellos.
+
+Antes hemos hablado de la noción de que la mayoría de los problemas tienen un ``espacio de búsqueda" natural -el conjunto de todas las soluciones posibles- y hemos señalado que un tema unificador en el diseño de algoritmos es la búsqueda de algoritmos cuyo rendimiento sea más eficiente que una enumeración de fuerza bruta de este espacio de búsqueda. Por tanto, al abordar un nuevo problema, a menudo resulta útil pensar en dos tipos de límites: uno sobre el tiempo de ejecución que se espera conseguir y otro sobre el tamaño del espacio de búsqueda natural del problema (y, por tanto, sobre el tiempo de ejecución de un algoritmo de fuerza bruta para el problema). La discusión de los tiempos de ejecución en esta sección comenzará en muchos casos con un análisis del algoritmo de fuerza bruta, ya que es una forma útil de orientarse con respecto a un problema; la tarea de mejorar estos algoritmos será nuestro objetivo en la mayor parte del libro.
+
+\subsection*{Tiempo lineal}
+Un algoritmo que se ejecuta en $O(n)$, o lineal, tiempo tiene una propiedad muy natural: su tiempo de ejecución es como máximo un factor constante veces el tamaño de la entrada. Una forma básica de obtener un algoritmo con este tiempo de ejecución es procesar la entrada en una sola pasada, empleando una cantidad de tiempo constante en cada elemento de entrada encontrado. Otros algoritmos alcanzan un límite de tiempo lineal por razones más sutiles. Para ilustrar algunas de las ideas aquí expuestas, consideraremos dos algoritmos simples de tiempo lineal como ejemplos.
+
+Cálculo del máximo El cálculo del máximo de $n$ números, por ejemplo, se puede realizar en el estilo básico de ``una pasada". Supongamos que los números se proporcionan como entrada en una lista o una matriz. Procesamos los números $a_{1}, a_{2}, \ldots, a_{n}$ en orden, manteniendo una estimación del máximo a medida que avanzamos. Cada vez que encontramos un número $a_{i}$, comprobamos si $a_{i}$ es mayor que nuestra estimación actual, y si es así actualizamos la estimación a $a_{i}$.
+
+\includegraphics[scale=0.3]{./Imagenes-Seccion2/2023_08_07_379b6f7f3185549667e3g-02}
+
+De esta manera, hacemos un trabajo constante por elemento, para un tiempo de ejecución total de $O(n)$.
+
+Por ejemplo, un algoritmo que se ejecuta en un conmutador de alta velocidad en Internet puede ver un flujo de paquetes volando por delante de él, y puede tratar de calcular lo que quiera a medida que este flujo pasa, pero sólo puede realizar una cantidad constante de trabajo computacional en cada paquete, y no puede guardar el flujo con el fin de hacer exploraciones posteriores a través de él. Para estudiar este modelo de cálculo se han desarrollado dos subáreas diferentes de algoritmos: los algoritmos en línea y los algoritmos de flujo de datos.
+
+Fusión de dos listas ordenadas A menudo, un algoritmo tiene un tiempo de ejecución de $O(n)$, pero la razón es más compleja. Ahora describiremos un algoritmo para combinar dos listas ordenadas que estira un poco el estilo de diseño de una sola pasada, pero que sigue teniendo un tiempo de ejecución lineal.
+
+Supongamos que nos dan dos listas de $n$ números cada uno, $a_{1}, a_{2}, \ldots, a_{n}$ y $b_{1}, b_{2}, \ldots, b_{n}$, y cada uno ya está ordenado en orden ascendente. Nos gustaría combinarlas en una sola lista $c_{1}, c_{2}, \ldots, c_{2 n}$ que también esté ordenada de forma ascendente. Por ejemplo, la fusión de las listas 2, 3, 11, 19 y 4, 9, 16, 25 resultados en la salida 2, 3, 4, 9, 11, 16, 19, 25.
+
+Para ello, podríamos simplemente juntar las dos listas, ignorar el hecho de que están ordenadas por separado en orden ascendente y ejecutar un algoritmo de ordenación. Pero esto parece claramente un desperdicio; nos gustaría aprovechar el orden existente en la entrada. Una forma de pensar en el diseño de un algoritmo mejor es imaginar la fusión de las dos listas a mano: supongamos que nos dan dos montones de cartas numeradas, cada una ordenada de forma ascendente, y queremos producir un único montón ordenado que contenga todas las cartas. Si miras la carta superior de cada montón, sabes que la más pequeña de estas dos debe ir primero en el montón de salida; así que podrías quitar esta carta, colocarla en la salida, y ahora iterar sobre lo que queda.
+
+En otras palabras, tenemos el siguiente algoritmo.
+
+
+\includegraphics[scale=0.35]{./Imagenes-Seccion2/2023_08_07_379b6f7f3185549667e3g-03(1)}
+
+Véase la Figura 2.2 para una imagen de este proceso.
+
+\begin{figure}[h!]
+    \centering
+\includegraphics[scale=0.35]{./Imagenes-Seccion2/2023_08_07_379b6f7f3185549667e3g-03}
+    \caption{Para combinar listas ordenadas $A$ y $B$, extraemos repetidamente el elemento más pequeño de la parte delantera de las dos listas y lo añadimos a la salida. }
+    \label{fig:enter-label}
+\end{figure}
+
+Ahora, para mostrar un límite de tiempo lineal, uno se siente tentado a describir un argumento como el que funcionó para el algoritmo de búsqueda de máximos: ``Hacemos un trabajo constante por elemento, para un tiempo total de ejecución de $O(n)$". Pero en realidad no es cierto que hagamos sólo trabajo constante por elemento. Supongamos que $n$ es un número par, y consideremos las listas $A=1,3,5, \ldots, 2 n-1$ y $B=n, n+2, n+4, \ldots, 3 n-2$. El número $b_{1}$ en la parte delantera de la lista $B$ se sentará en la parte delantera de la lista para $n / 2$ iteraciones, mientras que los elementos de $A$ se seleccionan repetidamente, y por lo tanto estará involucrado en $\Omega(n)$ comparaciones. Ahora, es cierto que cada elemento puede estar involucrado en a lo sumo $ O (n) $ comparaciones (en el peor, se compara con cada elemento en la otra lista), y si sumamos esto sobre todos los elementos que obtenemos un límite de tiempo de ejecución de $ O\left (n^ {2}\right) $. Este es un límite correcto, pero podemos mostrar algo mucho más fuerte.
+
+La mejor manera de argumentar es limitar el número de iteraciones del bucle While mediante un esquema de ``contabilidad". Supongamos que cargamos el coste de cada iteración al elemento que se selecciona y se añade a la lista de salida. Un elemento sólo se puede cargar una vez, ya que en el momento en que se carga por primera vez, se añade a la salida y el algoritmo no lo vuelve a ver. Pero sólo hay $2n$ elementos en total, y el coste de cada iteración se contabiliza mediante una carga a algún elemento, por lo que puede haber como máximo $2 n$ iteraciones. Cada iteración implica una cantidad constante de trabajo, por lo que el tiempo total de ejecución es $O(n)$, como se deseaba.
+
+Aunque este algoritmo de fusión itera a través de sus listas de entrada en orden, la forma ``intercalada" en la que procesa las listas requiere un análisis de tiempo de ejecución ligeramente sutil. En el Capítulo 3 veremos algoritmos de tiempo lineal para grafos que tienen un flujo de control aún más complejo: dedican una cantidad de tiempo constante a cada nodo y arista del grafo subyacente, pero el orden en que procesan los nodos y aristas depende de la estructura del grafo.
+
+\subsection*{Tiempo $O(n \log n)$ }
+
+$O(n \log n)$ es también un tiempo de ejecución muy común, y en el capítulo 5 veremos una de las principales razones de su prevalencia: es el tiempo de ejecución de cualquier algoritmo que divide su entrada en dos piezas de igual tamaño, resuelve cada pieza de forma recursiva, y luego combina las dos soluciones en tiempo lineal.
+
+La ordenación es quizá el ejemplo más conocido de un problema que puede resolverse de este modo. En concreto, el algoritmo \textit{Mergesort} divide el conjunto de números de entrada en dos partes del mismo tamaño, ordena cada mitad recursivamente y, a continuación, combina las dos mitades ordenadas en una única lista de salida ordenada. Acabamos de ver que la fusión puede hacerse en tiempo lineal, y en el Capítulo 5 se discutirá cómo analizar la recursividad para obtener un límite de $O(n \log n)$ en el tiempo total de ejecución. También es frecuente encontrar $O(n \log n)$ como tiempo de ejecución simplemente porque hay muchos algoritmos cuyo paso más costoso es ordenar la entrada. Por ejemplo, supongamos que nos dan un conjunto de $n$ marcas de tiempo $x_{1}, x_{2}, \ldots, x_{n}$ en las que llegaron copias de un archivo a un servidor, y nos gustaría encontrar el mayor intervalo de tiempo entre la primera y la última de estas marcas de tiempo durante el cual no llegó ninguna copia del archivo. Una solución sencilla a este problema es ordenar primero las marcas de tiempo $x_{1}, x_{2}, \ldots, x_{n}$ y luego procesarlas en orden, determinando los tamaños de los espacios entre cada número y su sucesor en orden ascendente. El mayor de estos espacios es el subintervalo deseado. Nótese que este algoritmo requiere $O(n \log n)$ de tiempo para ordenar los números, y luego gasta trabajo constante en cada número en orden ascendente. En otras palabras, el resto del algoritmo después de la clasificación sigue la receta básica para el tiempo lineal que hemos discutido anteriormente.
+
+\subsection*{Tiempo Cuadrático}
+
+He aquí un problema básico: supongamos que se le da $n$ puntos en el plano, cada uno especificado por $(x,y)$ coordenadas, y le gustaría encontrar el par de puntos que están más juntos. El algoritmo natural de fuerza bruta para este problema sería enumerar todos los pares de puntos, calcular la distancia entre cada par, y luego elegir el par para el que esta distancia es menor.
+
+¿Cuál es el tiempo de ejecución de este algoritmo? El número de pares de puntos es $\binom{n}{2}=\frac{n(n-1)}{2}$, y puesto que esta cantidad está limitada por $\frac{1}{2} n^{2}$, es $\left(n^{2}\right)$. Más crudamente, el número de pares es $O\left(n^{2}\right)$ porque multiplicamos el número de formas de elegir el primer miembro del par (como máximo $n$ ) por el número de formas de elegir el segundo miembro del par (también como máximo $n$ ). La distancia entre los puntos $\left(x_{i}, y_{i}\right)$ y $\left(x_{j}, y_{j}\right)$ puede calcularse mediante la fórmula $\sqrt{\left(x_{i}-x_{j}\right)^{2}+\left(y_{i}-y_{j}\right)^{2}}$ en tiempo constante, por lo que el tiempo total de ejecución es $O\left(n^{2}\right)$. Este ejemplo ilustra una forma muy común en la que un tiempo de ejecución de $ O\left(n^{2}\right)$ surge: la realización de una búsqueda sobre todos los pares de elementos de entrada y el gasto de tiempo constante por par.
+
+El tiempo cuadrático también surge naturalmente de un par de bucles anidados: Un algoritmo consiste en un bucle con $O(n)$ iteraciones, y cada iteración del bucle lanza un bucle interno que tarda $O(n)$ tiempo. Multiplicando estos dos factores de $n$ se obtiene el tiempo de ejecución.
+
+El algoritmo de fuerza bruta para encontrar el par de puntos más cercano se puede escribir de forma equivalente con dos bucles anidados:
+
+\includegraphics[scale=0.35]{./Imagenes-Seccion2/2023_08_07_379b6f7f3185549667e3g-05}\\
+\includegraphics[scale=0.35]{./Imagenes-Seccion2/2023_08_07_379b6f7f3185549667e3g-06(1)}
+
+Nótese cómo el bucle ``interior", sobre $\left(x_{j}, y_{j}\right)$, tiene $O(n)$ iteraciones, cada una en tiempo constante; y el bucle ``exterior", sobre $\left(x_{i}, y_{i}\right)$, tiene $O(n)$ iteraciones, cada una invocando al bucle interior una vez.
+
+Es importante tener en cuenta que el algoritmo que hemos estado discutiendo para el Closest-Pair Problem realmente es sólo el enfoque de fuerza bruta: el espacio de búsqueda natural para este problema tiene un tamaño de $O\left(n^{2}\right)$, y simplemente estamos enumerando. Al principio, uno siente que hay una cierta inevitabilidad en este algoritmo cuadrático --tenemos que medir todas las distancias, ¿no? -- pero en realidad se trata de una ilusión. En el Capítulo 5 describimos un algoritmo muy inteligente que encuentra el par de puntos más cercanos en el plano en sólo $O(n \log n)$ tiempo, y en el Capítulo 13 mostramos cómo la aleatorización se puede utilizar para reducir el tiempo de ejecución a $O(n)$.
+
+\subsection*{Tiempo cúbico}
+
+Conjuntos más elaborados de bucles anidados a menudo conducen a algoritmos que se ejecutan en $O\left(n^{3}\right)$ tiempo. Consideremos, por ejemplo, el siguiente problema. Se nos dan los conjuntos $S_{1}, S_{2}, \ldots, S_{n}$, cada uno de los cuales es un subconjunto de $\{1,2, \ldots, n\}$, y nos gustaría saber si algún par de estos conjuntos es disjuntos-en otras palabras, no tiene elementos en común.
+
+¿Cuál es el tiempo de ejecución necesario para resolver este problema? Supongamos que cada conjunto $S_{i}$ está representado de tal forma que los elementos de $S_{i}$ se pueden enumerar en tiempo constante por elemento, y también podemos comprobar en tiempo constante si un número dado $p$ pertenece a $S_{i}$. La siguiente es una forma directa de abordar el problema.
+
+\begin{center}
+\includegraphics[width=\textwidth]{./Imagenes-Seccion2/2023_08_07_379b6f7f3185549667e3g-06}
+\end{center}
+
+Este es un algoritmo concreto, pero para razonar sobre su tiempo de ejecución ayuda a abrirlo (al menos conceptualmente) en tres bucles anidados.
+
+\begin{center}
+\includegraphics[width=\textwidth]{./Imagenes-Seccion2/2023_08_07_379b6f7f3185549667e3g-06(2)}
+\end{center}
+
+\begin{center}
+\includegraphics[width=\textwidth]{./Imagenes-Seccion2/2023_08_07_379b6f7f3185549667e3g-07}
+\end{center}
+
+Cada uno de los conjuntos tiene un tamaño máximo $O(n)$, por lo que el bucle más interno tarda $O(n)$. El bucle sobre los conjuntos $S_{j}$ implica $O(n)$ iteraciones alrededor de este bucle más interno; y el bucle sobre los conjuntos $S_{i}$ implica $O(n)$ iteraciones alrededor de este. Multiplicando estos tres factores de $n$ juntos, obtenemos el tiempo de ejecución de $O\left(n^{3}\right)$.
+
+Para este problema, hay algoritmos que mejoran en $ O\left(n^{3}\right)$ tiempo de ejecución, pero son bastante complicados. Además, no está claro si los algoritmos mejorados para este problema son prácticos en entradas de tamaño razonable.
+
+\subsection*{Tiempo $O\left(n^{k}\right)$ }
+De la misma manera que obtuvimos un tiempo de ejecución de $O\left(n^{2}\right)$ realizando una búsqueda por fuerza bruta sobre todos los pares formados a partir de un conjunto de $n$ elementos, obtenemos un tiempo de ejecución de $O\left(n^{k}\right)$ para cualquier constante $k$ cuando buscamos sobre todos los subconjuntos de tamaño $k$.
+
+Consideremos, por ejemplo, el problema de encontrar conjuntos independientes en un grafo, que discutimos en el Capítulo 1. Recordemos que un conjunto de nodos es independiente si no hay dos unidos por una arista. Supongamos, en particular, que para una constante fija $k$, nos gustaría saber si un grafo de entrada $G$ de $n$ nodos tiene un conjunto independiente de tamaño $k$. El algoritmo natural de fuerza bruta para este problema enumeraría todos los subconjuntos de $k$ nodos, y para cada subconjunto $S$ comprobaría si hay una arista que una dos miembros cualesquiera de $S$. Es decir,
+
+\begin{center}
+\includegraphics[width=\textwidth]{./Imagenes-Seccion2/2023_08_07_379b6f7f3185549667e3g-07(1)}
+\end{center}
+
+Para entender el tiempo de ejecución de este algoritmo, tenemos que considerar dos cantidades. En primer lugar, el número total de $k$-elemento subconjuntos en un $n$-elemento conjunto es
+
+$$
+\left(\begin{array}{l}
+n \\
+k
+\end{array}\right)=\frac{n(n-1)(n-2) \cdots(n-k+1)}{k(k-1)(k-2) \cdots(2)(1)} \leq \frac{n^{k}}{k !}
+$$
+
+Dado que estamos tratando $k$ como una constante, esta cantidad es $O\left(n^{k}\right)$. Por lo tanto, el bucle exterior en el algoritmo anterior se ejecutará para $ O\left(n^{k}\right)$ iteraciones, ya que intenta todos los $k$ nodo subconjuntos de los $n$ nodos de la gráfica.
+
+Dentro de este bucle, tenemos que probar si un conjunto dado $S$ de $k$ nodos constituye un conjunto independiente. La definición de conjunto independiente nos dice que tenemos que comprobar, para cada par de nodos, si existe una arista que los una. Por lo tanto, se trata de una búsqueda sobre pares, como vimos anteriormente en la discusión del tiempo cuadrático; se requiere mirar a $\left(\begin{array}{l}k \ 2\end{array}\right)$, es decir, $O\left(k^{2}\right)$, pares y el gasto de tiempo constante en cada uno.
+
+Por lo tanto, el tiempo total de ejecución es $ O\left(k^{2} n^{k}\right)$. Puesto que estamos tratando $k$ como una constante aquí, y puesto que las constantes se pueden eliminar en $O(\cdot)$ notación, podemos escribir este tiempo de ejecución como $O\left(n^{k}\right)$.
+
+El conjunto independiente es un ejemplo principal de un problema que se cree que es computacionalmente difícil, y en particular se cree que ningún algoritmo para encontrar conjuntos independientes de nodos $k$ en grafos arbitrarios puede evitar tener alguna dependencia de $k$ en el exponente. Sin embargo, como discutiremos en el Capítulo 10 en el contexto de un problema relacionado, incluso una vez que hemos concedido que la búsqueda por fuerza bruta sobre $k$ subconjuntos de elementos es necesaria, puede haber diferentes maneras de hacer esto que conducen a diferencias significativas en la eficiencia del cálculo.
+
+\subsection*{Más allá del tiempo polinomial}
+El ejemplo anterior del Problema del Conjunto Independiente nos inicia rápidamente en el camino hacia tiempos de ejecución que crecen más rápido que cualquier polinomio. En particular, dos tipos de límites que aparecen con mucha frecuencia son $2^{n}$ y $n$ !, y ahora discutimos por qué esto es así.
+
+Supongamos, por ejemplo, que nos dan un grafo y queremos encontrar un conjunto independiente de tamaño máximo (en lugar de probar la existencia de uno con un número dado de nodos). De nuevo, no se conocen algoritmos que mejoren significativamente la búsqueda por fuerza bruta, que en este caso sería la siguiente.
+
+\begin{center}
+\includegraphics[width=\textwidth]{./Imagenes-Seccion2/2023_08_07_379b6f7f3185549667e3g-08}
+\end{center}
+
+Esto es muy parecido al algoritmo de fuerza bruta para conjuntos independientes de $k$ nodos, excepto que ahora estamos iterando sobre todos los subconjuntos del grafo. El número total de subconjuntos de un conjunto $n$-elemento es $2^{n}$, por lo que el bucle exterior en este algoritmo se ejecutará durante $2^{n}$ iteraciones, ya que intenta todos estos subconjuntos. Dentro del bucle, estamos comprobando todos los pares de un conjunto $S$ que puede ser tan grande como $n$ nodos, por lo que cada iteración del bucle toma como máximo $O\left(n^{2}\right)$ tiempo. Multiplicando estos dos juntos, obtenemos un tiempo de ejecución de $O\left(n^{2} 2^{n}\right)$.
+
+Por lo tanto ver que $2^{n}$ surge naturalmente como un tiempo de ejecución para un algoritmo de búsqueda que debe considerar todos los subconjuntos. En el caso del Conjunto Independiente, parece necesario algo al menos tan ineficiente; pero es importante tener en cuenta que $2^{n}$ es el tamaño del espacio de búsqueda para muchos problemas, y para muchos de ellos podremos encontrar algoritmos de tiempo polinomial altamente eficientes. Por ejemplo, un algoritmo de búsqueda de fuerza bruta para el problema de programación de intervalos que vimos en el capítulo 1 sería muy similar al algoritmo anterior: probar todos los subconjuntos de intervalos y encontrar el subconjunto más grande que no tenga solapamientos. Pero en el caso del Problema de Programación por Intervalos, a diferencia del Problema de Conjuntos Independientes, veremos (en el Capítulo 4) cómo encontrar una solución óptima en $O(n \log n)$ tiempo. Este es un tipo recurrente de dicotomía en el estudio de algoritmos: dos algoritmos pueden tener espacios de búsqueda muy similares, pero en un caso se puede evitar el algoritmo de búsqueda de fuerza bruta, y en el otro no.
+
+La función $n$ ! crece aún más rápidamente que $2^{n}$, por lo que es aún más amenazadora como límite del rendimiento de un algoritmo. Los espacios de búsqueda de tamaño $n$ ! tienden a surgir por una de dos razones. En primer lugar, $n$ ! es el número de formas de emparejar $n$ elementos con $n$ otros elementos; por ejemplo, es el número de posibles emparejamientos perfectos de $n$ hombres con $n$ mujeres en un caso del Problema del Emparejamiento Estable. Para verlo, hay $n$ opciones para emparejar al primer hombre; una vez eliminada esta opción, hay $n-1$ opciones para emparejar al segundo hombre; una vez eliminadas estas dos opciones, hay $n-2$ opciones para emparejar al tercer hombre; y así sucesivamente. Si multiplicamos todas estas opciones, obtenemos $n(n-1)(n-2) puntos(2)(1)=n$.
+
+A pesar de este enorme conjunto de posibles soluciones, hemos sido capaces de resolver el Problema de Emparejamiento Estable en $O\left(n^{2}\right)$ iteraciones del algoritmo de propuesta. En el Capítulo 7, veremos un fenómeno similar para el Problema de Emparejamiento Bipartito que discutimos anteriormente; si hay $n$ nodos en cada lado del grafo bipartito dado, puede haber hasta $n$ ! maneras de emparejarlos. Sin embargo, por un algoritmo de búsqueda bastante sutil, seremos capaces de encontrar el mayor emparejamiento bipartito en $O\left(n^{3}\right)$ tiempo.
+
+La función $n$ ! también se plantea en problemas en los que el espacio de búsqueda consiste en todas las formas de ordenar $n$ elementos. Un problema básico en este género es el Problema del Vendedor Viajero: dado un conjunto de $n$ ciudades, con distancias entre todos los pares, ¿cuál es el recorrido más corto que visita todas las ciudades? Suponemos que el vendedor comienza y termina en la primera ciudad, por lo que el quid del problema es la búsqueda implícita sobre todos los órdenes de las restantes $n-1$ ciudades, lo que conduce a un espacio de búsqueda de tamaño $(n-1)$ !. En el Capítulo 8, veremos que Traveling Salesman es otro problema que, como Independent Set, pertenece a la clase de problemas NPcompletos y se cree que no tiene solución eficiente.
+
+\subsection*{Tiempo Sublineal}
+Por último, hay casos en los que uno se encuentra con los tiempos de ejecución que son asintóticamente más pequeño que lineal. Dado que se necesita tiempo lineal sólo para leer la entrada, estas situaciones tienden a surgir en un modelo de computación donde la entrada puede ser ``consultada" indirectamente en lugar de leerse completamente, y el objetivo es reducir al mínimo la cantidad de consultas que se deben hacer.
+
+Quizá el ejemplo más conocido sea el algoritmo de búsqueda binaria. Dada una matriz ordenada $A$ de $n$ números, nos gustaría determinar si un número dado $p$ pertenece a la matriz. Podríamos hacerlo leyendo toda la matriz, pero nos gustaría hacerlo de forma mucho más eficiente, aprovechando el hecho de que la matriz está ordenada, sondeando cuidadosamente entradas concretas. En concreto, sondeamos la entrada central de $A$ y obtenemos su valor -digamos que es $q$- y comparamos $q$ con $p$. Si $q=p$, hemos terminado. Si $q>p$, entonces para que $p$ pertenezca a la matriz $A$, debe estar en la mitad inferior de $A$; así que ignoramos la mitad superior de $A$ a partir de ahora y aplicamos recursivamente esta búsqueda en la mitad inferior. Por último, si $q<p$, entonces aplicamos el razonamiento análogo y buscamos recursivamente en la mitad superior de $A$.
+
+La cuestión es que en cada paso, hay una región de $A$ donde $p$ posiblemente podría ser; y estamos reduciendo el tamaño de esta región por un factor de dos con cada sonda. Entonces, ¿qué tamaño tiene la región ``activa" de $A$ después de $k$ sondas? Se inicia en el tamaño $ n $, por lo que después de $ k $ sondas que tiene un tamaño máximo de $(\frac{1}{2})^{k}n$.
+
+Dado esto, ¿cuánto tiempo tardará en reducirse el tamaño de la región activa a una constante? Necesitamos que $k$ sea lo suficientemente grande para que $\left(\frac{1}{2}\right)^{k}=O(1 / n)$, y para ello podemos elegir $k=\log _{2} n$. Así, cuando $k=log _{2} n$, el tamaño de la región activa se ha reducido a una constante, momento en el que la recursión toca fondo y podemos buscar el resto de la matriz directamente en tiempo constante.
+
+Así que el tiempo de ejecución de la búsqueda binaria es $O(\log n)$, debido a esta reducción sucesiva de la región de búsqueda. En general, $O(\log n)$ surge como un límite de tiempo cada vez que estamos tratando con un algoritmo que hace una cantidad constante de trabajo con el fin de tirar una fracción constante de la entrada. El hecho crucial es que $O(\log n)$ tales iteraciones son suficientes para reducir la entrada a un tamaño constante, momento en el que el problema generalmente se puede resolver directamente.
+
+
+
 \todo[inline]{revisado hasta acá}
 
-\section{Una compilación de tiempos de ejecución comunes.}
-
-Al tratar de analizar un nuevo algoritmo, ayuda a tener un sentido aproximado del ``paisaje'' de diferentes tiempos de ejecución. De hecho, hay estilos de análisis que se repiten con frecuencia, por lo que cuando uno ve límites de tiempo de ejecución como $O(n)$, $O(n*log n)$, y $O(n^2)$ que aparecen una y otra vez, a menudo es por un pequeño número de razones distintas. Aprender a reconocer estos estilos comunes de análisis es un objetivo a largo plazo. Para poner las cosas en marcha, ofrecemos la siguiente encuesta de los límites comunes de tiempo de ejecución y algunos de los enfoques típicos que conducen a ellos.\\
-
-Anteriormente discutimos la noción de que la mayoría de los problemas tienen un ``espacio de búsqueda'': el conjunto de todas las soluciones posibles, y notamos que un tema común en el diseño de algoritmos es la búsqueda de algoritmos cuyo rendimiento sea más eficiente que una búsqueda por fuerza bruta en el espacio de búsqueda. Al acercarse a un nuevo problema, entonces, a menudo ayuda pensar en dos tipos de límites: uno en el tiempo de ejecución que se espera alcanzar, y el otro sobre el tamaño del espacio de búsqueda del problema (y por lo tanto en el tiempo de ejecución de un algoritmo por fuerza bruta para el problema). La discusión de los tiempos de ejecución en esta sección comenzará en muchos casos con un análisis del algoritmo de fuerza bruta, ya que es útil como forma de orientarse con respecto a un problema; la tarea de mejorar tales algoritmos será nuestro objetivo en la mayor parte del libro.\\
-
-\subsubsection*{Tiempo lineal} 
-
-Un algoritmo que se ejecuta en $O(n)$, o tiempo lineal, tiene una propiedad muy natural: su tiempo de ejecución es a lo sumo un factor constante multiplicado por el tamaño de la entrada.La forma básica de obtener un algoritmo con este tiempo de ejecución es procesar la entrada en una sola pasada, gastando una cantidad constante de tiempo en cada elemento de entrada encontrado. Otros algoritmos logran un límite de tiempo lineal por razones más sutiles. Para ilustrar algunas de las ideas aquí, consideramos dos algoritmos simples como ejemplo.\\
-
-\subsubsection*{Calculando el máximo}
-
-Calculando el máximo de $n$ números, por ejemplo, se puede realizar en el estilo básico ``one-pass''. Supongamos que los números se proporcionan como entrada en una lista o en una matriz. Procesamos los números $a_1, a_2,. . ., a_n$ en orden, manteniendo un estimado del máximo a medida que avanzamos. Cada vez que encontramos un número $a_i$, comprobamos si $a_i$ es más grande que nuestra estimación actual, y si es así, actualizamos la estimación del máximo.\\
-
-\begin{lstlisting}
-	max = a[1];
-	For i = 2 to n
-	If a[i] > max then
-	   set max = a[i];
-	   Endif
-	Endfor
-\end{lstlisting}
-
-De esta forma, hacemos un trabajo constante por elemento, para un tiempo de ejecución total de $O(n)$. A veces, las restricciones de una aplicación obligan a este tipo de algoritmo, por ejemplo, un algoritmo que se ejecuta en un interruptor de alta velocidad en Internet puede ver una secuencia de paquetes que pasan volando, y puede intentarlo calculando todo lo que quiera a medida que esta corriente pasa, pero solo puede funcionar una cantidad constante de trabajo computacional en cada paquete, y no puede guardar la corriente para hacer exploraciones posteriores a través de ella.Dos subáreas diferentes de algoritmos, algoritmos en línea y algoritmos de flujo de datos, se han desarrollado para estudiar este modelo de computación.\\
-
-\subsubsection*{Fusionando dos listas ordenadas}
-
-A menudo, un algoritmo tiene un tiempo de ejecución de $O(n)$, pero la razón es más compleja. Ahora describimos un algoritmo para fusionar dos listas ordenadas que extiende un poco el estilo de diseño de un solo paso, pero aún así tiene un tiempo de ejecución lineal. Supongamos que nos dan dos listas de n números cada una, $ \{a_1, a_2,. . . , a_n\}$ y $\{b_1, b_2,. . . , b_n\}$, y cada uno ya está organizado en orden ascendente. A nosotros nos gustaría fusionar estos en una sola lista $\{c_1, c_2,. . . , c_{2n}\}$ que también está dispuesto en orden ascendente. Por ejemplo, combinar las listas $\{2, 3, 11, 19\}$ y $\{4, 9, 16, 25\}$ resulta en el salida $\{2, 3, 4, 9, 11, 16, 19, 25\}$. Para hacer esto, podríamos simplemente juntar las dos listas, ignorar el hecho de que se organizan por separado en orden ascendente y ejecutar un algoritmo de ordenación. Pero esto claramente parece un desperdicio; nos gustaría hacer uso del orden existente en la entrada. Una manera de pensar en diseñar un mejor algoritmo es imaginar realizar la fusión de las dos listas a mano: supongamos que te dan dos montones de tarjetas numeradas, cada una ordenada en orden ascendente, y le gustaría producir una sola pila ordenada que contenga todas las cartas. Si miramos la tarjeta superior en cada pila, sabemos que el más pequeño de estos dos debería ir primero en la pila de salida; quitamos esta tarjeta, la colocamos en la salida y ahora iteramos en lo que queda. En otras palabras, tenemos el siguiente algoritmo.\\
-
-\begin{lstlisting}
-	Para combinar listas ordenadas A = a[1],. . . , a[n] y B = b[1],. . . , b[n]:
-      Mantenga un puntero actual en cada lista, inicializado en los elementos frontales;
-      While Si ambas listas no son vacias:
-         Deje que a[i] y b[j] sean los elementos senalados por el puntero actual;
-         Adjunte el mas pequeno de estos dos a la lista de salida;
-         Avance el punterio actual de la lista de donde fue seleccionado el elemento;
-      EndWhile
-      Cuando una lista quede vacia, se agrega el resto de la otra a la salida;
-\end{lstlisting}
-
-
-
-\begin{figure}[h] 
-  \centering
-    \includegraphics[width=0.8\textwidth]{Imagenes-Seccion2/fig2_2_real.PNG}
-\end{figure}
-
-
-Ahora, para mostrar un límite de tiempo lineal, uno tiene la tentación de describir un argumento como lo que funcionó para el algoritmo de búsqueda del máximo: ``Hacemos un trabajo constante por elemento, para un tiempo de ejecución total de $O(n)$." Pero en realidad no es cierto que hacemos solo un trabajo constante por elemento. Supongamos que $n$ es un número par, y considere las listas $A =\{ 1, 3, 5,. . . , 2n-1\}$ y $B =\{ n, n + 2, n + 4,. . . , 3n-2 \}$. El número $b_1$ en el frente de la lista B se ubicará al principio de la lista durante $n / 2$ iteraciones mientras que los elementos de A se seleccionan repetidamente, y por lo tanto estará involucrado en $\Omega(n)$ comparaciones. Ahora bien, es cierto que cada elemento puede participar en la mayoría de las comparaciones de $O(n)$ (en el peor de los casos, se compara con cada elemento en la otra lista), y si sumamos esto sobre todos los elementos obtenemos un límite de $O(n^2)$ en tiempo de ejecución. Este es un límite correcto, pero podemos mostrar algo mucho más fuerte.\\
-
-La mejor manera de argumentar es limitar el número de iteraciones del While por un esquema de ``contabilidad''. Supongamos que cobramos el costo de cada iteración al elemento que se selecciona y agrega a la lista de salida. A cada elemento se le cobrará solo una vez, ya que en el momento en que se carga por primera vez, se agrega a la salida y no se vuelve a visitar por el algoritmo. Pero solo hay $2n$ total de elementos, y el costo de cada iteración se explica por un cargo a algún elemento, por lo que puede haber como máximo $2*n$ iteraciones. Cada iteración implica una cantidad constante de trabajo, por lo que el tiempo total de ejecución es $O(n)$, según lo deseado.\\
-
- Mientras este algoritmo de fusión iteraba a través de sus listas de entrada en orden,La forma ``intercalada'' en la que procesaba las listas requería un análisis  sutil del tiempo de ejecución. En el Capítulo 3 veremos algoritmos de tiempo lineal para grafos que tienen un flujo de control aún más complejo: gastan una cantidad constante de tiempo en cada nodo y arista subyacente en el grafo, pero el orden en el que procesan los nodos y las aristas depende de la estructura del grafo.\\
-
-\subsubsection*{Tiempo $O(nlogn)$} 
-
-$O(nlog n)$ también es un tiempo de ejecución común, y en el Capítulo 5 veremos uno de los principales motivos de su prevalencia: es el tiempo de ejecución de cualquier algoritmo que divide su entrada en dos piezas de igual tamaño, resuelve cada pieza recursivamente, y luego combina las dos soluciones en tiempo lineal.\\
-
-La clasificación es quizás el ejemplo más conocido de un problema que puede ser resuelto de esta manera. Específicamente, el algoritmo Mergesort divide el conjunto de números de entrada en dos pedazos de igual tamaño, ordena cada mitad recursivamente, y luego fusiona las dos mitades ordenadas en una sola lista de salida ordenada. Acabamos de ver que la fusión se puede hacer en tiempo lineal; y en el Capítulo 5 discutiremos cómo analizar la recursión para obtener un límite de $O(n*log n)$ en el tiempo de ejecución.\\
-
-Uno también encuentra con frecuencia $O(n*log n)$ como un tiempo de ejecución simplemente, porque hay muchos algoritmos cuyo paso más caro es ordenar la entrada. Por ejemplo, supongamos que se nos da un conjunto de $n$ marcas de tiempo $x_1, x_2,. . . , x_n$ en que copias de un archivo llegaron a un servidor, y nos gustaría encontrar el más grande intervalo de tiempo entre la primera y la última de estas marcas de tiempo durante las cuales no llego ninguna copia del archivo. Una solución simple a este problema es primero ordenar el sellos de tiempo $x_1, x_2,. . . , x_n$ y luego procesarlos en orden, determinando los tamaños de las brechas entre cada número y su sucesor en orden ascendente. La mayor de estas brechas es el subintervalo deseado. Tenga en cuenta que este algoritmo requiere $O(n*log n)$ tiempo para ordenar los números, y luego gasta tiempo constante en trabajar en cada número en orden ascendente. En otras palabras, el resto de la algoritmo después de la clasificación sigue la receta básica para el tiempo lineal que discutimos más temprano.\\
-
-\subsubsection*{Tiempo cuadrático} 
-Aquí hay un problema básico: supongamos que le dan $n$ puntos en el plano, cada uno especificado por coordenadas $(x,y)$, y le gustaría encontrar el par de puntos que están más cerca entre sí. El algoritmo de fuerza bruta natural para este problema enumeraría todos los pares de puntos, calcularía la distancia entre cada par, y luego elegiría el par para el que esta distancia es más pequeña.\\
-
-¿Cuál es el tiempo de ejecución de este algoritmo? El número de pares de puntos es $C(n,2)=n(n-1)/2$, y dado que esta cantidad está limitada por $(1/2)(n^2)$, es $O(n^2)$. Más crudamente, el número de pares es $O(n^2)$ porque multiplicamos el número de formás de elegir el primer miembro del par (a lo sumo $n$) por el número de formás de elegir el segundo miembro del par (también en la mayoría $n$). La distancia entre los puntos \((x_{i},y_{i})\) y \((x_{j},y_{j})\) Se puede calcular mediante la fórmula
-\(\sqrt{(x_{i}-x_{j})^2+(y_{i}-y_{j})^2}\) en tiempo constante, por lo que el tiempo total de ejecución es $O(n^2)$. Este ejemplo ilustra una forma muy común en la que surge un tiempo de ejecución de $O(n^2)$: realizar una búsqueda sobre todos los pares de elementos de entrada y gastar un tiempo constante por par.\\
-
-El tiempo cuadrático también surge naturalmente de un par de bucles anidados: un algoritmo consiste en un bucle con iteraciones $O(n)$, y cada iteración del bucle inicia un bucle interno que toma $O(n)$ el tiempo. Al multiplicar estos dos factores de n, se obtiene el tiempo de ejecución. 
-El algoritmo de fuerza bruta para encontrar el par de puntos más cercano se puede escribir de manera equivalente con dos bucles anidados:\\
-
-
-\begin{lstlisting}
-   For cada punto de entrada (xi, yi)
-     For cada otro punto de entrada (xj, yj)
-       Computar distancia d=sqrt((xi-xj)^2+(yi-yj)^2)
-           Si d es menor que el minimo actual, actualice el minimo a d
-     Endfor
-   Endfor
-\end{lstlisting}
-
-Observe cómo el bucle ``interno'', sobre $(xj,yj)$, tiene iteraciones $O(n)$, cada una de las cuales toma un tiempo constante; y el bucle ``externo'', sobre $(xi,yi)$, tiene $O(n)$ iteraciones, cada una invocando el bucle interno una vez.\\
-
-Es importante notar que el algoritmo que hemos estado discutiendo para el problema del par más cercano realmente es solo el enfoque de fuerza bruta: el espacio de búsqueda natural para este problema tiene el tamaño $O(n^2)$, y simplemente lo estamos enumerando. Al principio, uno siente que hay una cierta inevitabilidad sobre este algoritmo cuadrático, tenemos que medir todas las distancias, ¿no? Pero de hecho esto es una ilusión. En el Capítulo 5 describimos un algoritmo muy inteligente que encuentra el par de puntos más cercano en el plano en solo $O(nlogn)$ tiempo, y en el Capítulo 13 mostramos cómo se puede usar la aleatorización para reducir el tiempo de ejecución a $O(n)$.\\
-
-\subsubsection*{Tiempo cúbico} 
-
-Conjuntos más elaborados de bucles anidados a menudo conducen a algoritmos que se ejecutan en tiempo $O(n3)$. Considere, por ejemplo, el siguiente problema. Nos dan conjuntos $S1, S2, ..., Sn$, cada uno de los cuales es un subconjunto de ${1, 2,. . . , n}$, y nos gustaría saber si algún par de estos conjuntos es disjunto; en otras palabras, no tiene elementos en común.\\
-
-¿Cuál es el tiempo de ejecución necesario para resolver este problema? Supongamos que cada conjunto $Si$ está representado de tal manera que los elementos de $Si$ se pueden enumerar en tiempo constante por elemento, y también podemos verificar en tiempo constante $si$ un número dado p pertenece a $Si$. La siguiente es una forma directa de abordar el problema.\\
-
-
-\begin{lstlisting}
-For par de conjuntos S[i] y S[j]
-    Determine si S[i] y S[j] tienen un elemento en comun
-Endfor
-\end{lstlisting}
-\paragraph{}
-Este es un algoritmo concreto, pero razonar sobre su tiempo de ejecución ayuda a
-abrirlo (al menos conceptualmente) en tres bucles anidados.\\
-
-\begin{lstlisting}
-For each set S[i]
-  For each other set S[j]
-    For each element p of S[i]
-      Determine whether p also belongs to S[j]
-    Endfor
-    If no element of Si belongs to S[j] then
-      Report that S[i] and S[j] are disjoint
-    Endif
-  Endfor
-Endfor
-\end{lstlisting}
-\paragraph{}
-Cada uno de los conjuntos tiene un tamaño máximo $O(n)$, por lo que el ciclo más interno toma tiempo $O(n)$. Looping sobre los conjuntos Sj implica $O(n)$ iteraciones alrededor de este ciclo más interno; y haciendo un bucle sobre los conjuntos Si implica $O(n)$ iteraciones alrededor de esto. Al multiplicar estos tres factores de $n$ juntos, obtenemos el tiempo de ejecución de $O(n3)$. Para este problema, existen algoritmos que mejoran el tiempo de ejecución $O(n3)$, pero son bastante complicados. Además, no está claro si los algoritmos mejorados para este problema son prácticos en entradas de tamaño razonable.\\
-
-\subsubsection*{Tiempo $O(n^k)$} 
-
-Del mismo modo que obtuvimos un tiempo de ejecución de $O(n^2)$ realizando una búsqueda de fuerza bruta sobre todos los pares formados a partir de un conjunto de $n$ elementos, obtenemos un tiempo de ejecución de $O(n^k)$ para cualquier constante $k$ cuando buscamos todos los subconjuntos de tamaño k.\\
-
-Considere, por ejemplo, el problema de encontrar conjuntos independientes en un grafo, que discutimos en el Capítulo 1. Recuerde que un conjunto de nodos es independiente si no hay dos unidos por una arista. Supongamos, en particular, que para una constante fija $k$, nos gustaría saber si un grafo de entrada $n$ dado nodo $G$ tiene un conjunto independiente de tamaño $k$. El algoritmo natural de fuerza bruta para este problema enumeraría todos los subconjuntos de $k$ nodos, y para cada subconjunto $S$ verificaría si hay una arista que une a dos miembros de $S$. Es decir, \\
-\paragraph{}
-\begin{lstlisting}
-For each subset S of k nodes
-	Check whether S constitutes an independent set
-      If S is an independent set 
-          then Stop and declare success
-      Endif
-Endfor
-If no k-node independent set was found 
-	then Declare failure
-Endif
-\end{lstlisting}
-\paragraph{}
-
-Para comprender el tiempo de ejecución de este algoritmo, debemos considerar dos cantidades. Primero, el número total de subconjuntos de elementos $k$ en un conjunto de $n$ elementos es\\
-
-
-
-\begin{figure}[h] 
-  \centering
-    \includegraphics[width=0.5\textwidth]{Imagenes-Seccion2/form_2_3.PNG}
-\end{figure}
-
-
-Como estamos tratando k como una constante, esta cantidad es $O(n^k)$. Por lo tanto, el bucle externo en el algoritmo anterior se ejecutará para iteraciones $O(n^k)$ ya que prueba todos los subconjuntos k-nodos de los n nodos del grafo.\\
-
-Dentro de este ciclo, necesitamos probar si un conjunto dado $S$ de $k$ nodos constituye un conjunto independiente. La definición de un conjunto independiente nos dice que debemos verificar, para cada par de nodos, si hay una arista que los une. Por lo tanto, esta es una búsqueda sobre pares, como vimos anteriormente en la discusión del tiempo cuadrático; requiere mirar $C(k,2)$, es decir, $O(k^2)$, pares y pasar tiempo constante en cada uno.\\
-
-Por lo tanto, el tiempo total de ejecución es $O(k^2.n^k)$. Dado que estamos tratando $k$ como una constante aquí, y dado que las constantes se pueden eliminar en notación $O(·)$, podemos escribir este tiempo de ejecución como $O(n^k)$.\\
-
-El conjunto independiente es un ejemplo principal de un problema que se cree que es
-computacionalmente difícil, y en particular se cree que ningún algoritmo para encontrar conjuntos independientes de $k$-nodos en grafos arbitrarios puede evitar tener cierta dependencia de $k$ en el exponente. Sin embargo, como discutiremos en el Capítulo 10 en el contexto de un problema relacionado, incluso una vez que hayamos admitido que la búsqueda de fuerza bruta sobre los subconjuntos de $k$-elementos es necesaria, puede haber diferentes formás de resolver esto que conducen a diferencias significativas en la eficiencia del cálculo.\\
-
-
-\subsubsection*{Más allá del tiempo polinómico} 
-
-El ejemplo anterior del problema del conjunto independiente nos inicia rápidamente en el camino hacia tiempos de ejecución que crecen más rápido que cualquier polinomio. En particular, dos tipos de límites que surgen con mucha frecuencia son 2n y n!, y ahora discutimos por qué esto es así.\\
-
-Supongamos, por ejemplo, que se nos da un grafo y queremos encontrar un conjunto independiente de tamaño máximo (en lugar de probar la existencia de uno con un número dado de nodos). Nuevamente, las personas no conocen los algoritmos que mejoran significativamente en la búsqueda de fuerza bruta, que en este caso se vería de la siguiente manera.
- 
-\begin{lstlisting}
-For each subset S of nodes
-	Check whether S constitutes an independent set
-	If S is a larger independent set than the largest seen so far then
-		Record the size of S as the current maximum
-	Endif
-Endfor
-\end{lstlisting}
-
-Esto es muy parecido al algoritmo de fuerza bruta para conjuntos independientes de k-nodos, excepto que ahora estamos iterando sobre todos los subconjuntos del grafo. El número total de subconjuntos de un conjunto de n elementos es $2^n$, y por lo tanto, el bucle externo en este algoritmo se ejecutará durante 2n iteraciones mientras intenta todos estos subconjuntos. Dentro del ciclo, estamos comprobar todos los pares de un conjunto S que puede ser tan grande como n nodos, por lo que cada iteración del
-ciclo toma como máximo $O(n^2)$ tiempo. Al multiplicar estos dos, obtenemos un tiempo de ejecución de $O(n^2.2^n)$.\\
-
-Por lo tanto, vea que $2^n$ surge naturalmente como un tiempo de ejecución para un algoritmo de búsqueda que debe considerar todos los subconjuntos. En el caso de Independent Set, algo al menos casi este ineficiente parece ser necesario; pero es importante tener en cuenta que $2^n$ es el tamaño del espacio de búsqueda para muchos problemas, y para muchos de ellos podremos encontrar polinomios tiempo altamente eficiente algoritmos. Por ejemplo, un algoritmo de búsqueda de fuerza bruta para el
-Intervalo Problema de programación que vimos en el Capítulo 1 sería muy similar al Algoritmo anterior: pruebe todos los subconjuntos de intervalos, y encuentre el subconjunto más grande que tiene no se superpone. Pero en el caso del problema de programación de intervalos, en contraposición al problema del conjunto independiente, veremos (en el Capítulo 4) cómo encontrar una solución óptima en el tiempo $O(n log n)$. Este es un tipo recurrente de dicotomía en el estudio de algoritmos: dos algoritmos pueden tener una búsqueda muy similar espacios, pero en un caso puede eludir el algoritmo de búsqueda de fuerza bruta, y en el otro no lo es.\\
-
-La función $n!$ crece incluso más rápido que $2^n$, por lo que es aún más amenazante como un límite en el rendimiento de un algoritmo. Buscar espacios de tamaño $n!$ tienden a surgir por una de dos razones. ¡Primero $N$! es la cantidad de formás de unir $n$ elementos con $n$ otros elementos; por ejemplo, es el número de posibles emparejamientos perfectos de $n$ hombres con n mujeres en un ejemplo del apareamiento estable Problema. Para ver esto, tenga en cuenta que hay $n$ opciones de cómo podemos hacer coincidir El primer hombre; habiendo eliminado esta opción, hay $n-1$ opciones de cómo puede coincidir con el segundo hombre; habiendo eliminado estas dos opciones, hay $n-2$ elecciones de cómo podemos emparejar al tercer hombre; Etcétera. Multiplicando todas estas opciones, obtenemos $n(n-1)(n-2)...(2)(1)=n!$\\
-
-A pesar de este enorme conjunto de posibles soluciones, pudimos resolver el problema de apareamiento estable en $O(n^2)$ iteraciones del algoritmo de propuesta.
-En el Capítulo 7, veremos un fenómeno similar para la adaptación bipartita Problema que discutimos anteriormente; si hay n nodos en cada lado del dado grafo bipartito, puede haber hasta n! formás de emparejarlos. Sin embargo, por un algoritmo de búsqueda bastante sutil, podremos encontrar el bipartito más grande coincidencia en el tiempo $O(n^3)$.\\
-
-La función $n!$ también surge en problemas donde el espacio de búsqueda consiste
-de todas las maneras de organizar $n$ elementos en orden. Un problema básico en este género es el Problema del vendedor ambulante: dado un conjunto de $n$ ciudades, con distancias entre todas las parejas, ¿cuál es el recorrido más corto que visita todas las ciudades? Suponemos que el el vendedor comienza y termina en la primera ciudad, entonces el quid del problema es la búsqueda implícita sobre todos los pedidos de las restantes $n-1$ ciudades, lo que lleva a un espacio de búsqueda de tamaño $(n-1)!$. En el Capítulo 8, veremos que Traveling Salesman es otro problema que, como Independent Set, pertenece a la clase de problemas NP-complete y se cree que no tiene una solución
-eficiente.\\
-
-\subsubsection*{Tiempo sublineal}
-
-Finalmente, hay casos en los que uno encuentra tiempos de ejecución que son asintóticamente más
-pequeños que lineales. Dado que toma tiempo lineal solo leer la entrada, estas situaciones tienden a
-surgir en un modelo de computación donde la entrada se puede ``consultar'' indirectamente en lugar de
-leer por completo, y el objetivo es minimizar la cantidad de consultas que se deben hacer.\\
-
-Quizás el ejemplo más conocido de esto es el algoritmo de búsqueda binaria. Dada una matriz
-ordenada A de n números, nos gustaría determinar si un número dado p pertenece a la matriz.
-Podríamos hacer esto leyendo toda la matriz, pero nos gustaría hacerlo de manera mucho más
-eficiente, aprovechando el hecho de que la matriz está ordenada, probando cuidadosamente las
-entradas particulares. En particular, sondeamos la entrada del medio de A y obtenemos su valor,
-digamos que es q, y comparamos q con p. Si q = p, hemos terminado. Si $q>p$, entonces para que p
-pertenezca a la matriz A, debe estar en la mitad inferior de A; entonces ignoramos la mitad superior de
-A
-ahora y aplicar recursivamente esta búsqueda en la mitad inferior. Finalmente, si $q<p$, entonces
-aplicamos el razonamiento análogo y la búsqueda recursiva en la mitad superior de A.\\
-
-El punto es que, en cada paso, hay una región de A donde posiblemente podría estar p; y
-estamos reduciendo el tamaño de esta región en un factor de dos con cada sonda. Entonces, ¿cuán grande es la región ``activa'' de las sondas A después de k? Comienza en tamaño n, por lo que después de k sondas tiene un tamaño máximo de $n(1/2)^k$.\\
-
-Dado esto, ¿cuánto tiempo tomará para que el tamaño de la región activa se reduzca a una
-constante? Necesitamos que k sea lo suficientemente grande para que $(1/2)^k=O(1/n)$, y para hacer
-esto podemos elegir $k=log n$. Por lo tanto, cuando $k=log n$, el tamaño de la región activa se ha
-reducido a una constante, en cuyo punto la recursión toca fondo y podemos buscar el resto de la matriz
-directamente en tiempo constante.\\
-
-Por lo tanto, el tiempo de ejecución de la búsqueda binaria es $O(log n)$, debido a esta
-contracción sucesiva de la región de búsqueda. En general, $O(log n)$ surge como un límite de tiempo
-siempre que se trata de un algoritmo que realiza una cantidad constante de trabajo para descartar una
-fracción constante de la entrada. El hecho crucial es que $O(log n)$ tales iteraciones son suficientes para
-reducir la entrada a un tamaño constante, en cuyo punto el problema generalmente se puede resolver
-directamente\\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%55
 
 \section{Una Estructura de Datos más Compleja: Colas de Prioridad}
 
@@ -2045,7 +1984,7 @@ Nuestra intuición para el método ávido vino de desear que nuestro recurso vol
 
 \textbf{Demostración}. Vamos a probar esta afirmación por inducción. Para $r=1$, la afirmación es claramente cierta: el algoritmo comienza seleccionando la solicitud $i_1$ con un tiempo mínimo de finalización.\\
 
-Ahora, $r>1$. Asumiremos como nuestra hipótesis de inducción que la afirmación es verdadera para $r-1$, y trataremos de probarlo para $r$. Como se muestra en la Figura 4.3, la hipótesis de inducción nos permite suponer que $f(i_{r-1}) ≤ f(j_{r-1})$. Para que el intervalo $r-esimo$ del algoritmo no termine antes también, tendría que ``quedarse atrás " como se muestra. Pero hay una razón simple por la que esto no podría suceder: en lugar de elegir un intervalo de finalización posterior, el algoritmo ávido siempre tiene la opción (en el peor caso) de elegir $j_r$ y así cumplir el paso de inducción.\\
+Ahora, $r>1$. Asumiremos como nuestra hipótesis de inducción que la afirmación es verdadera para $r-1$, y trataremos de probarlo para $r$. Como se muestra en la Figura 4.3, la hipótesis de inducción nos permite suponer que $f(i_{r-1}) ≤ f(j_{r-1})$. Para que el intervalo $r-esimo$ del algoritmo no termine antes también, tendría que ``quedarse atrás `` como se muestra. Pero hay una razón simple por la que esto no podría suceder: en lugar de elegir un intervalo de finalización posterior, el algoritmo ávido siempre tiene la opción (en el peor caso) de elegir $j_r$ y así cumplir el paso de inducción.\\
 
 Podemos hacer preciso este argumento de la siguiente manera. Sabemos (dado que $O$ consiste en intervalos compatibles) que $f(j_{r-1}) ≤ s(j_r)$. Combinando esto con la hipótesis de inducción $f(i_{r-1}) ≤ f(j_{r-1})$, obtenemos $f(i_{r-1}) ≤ s(j_r)$. Por lo tanto, el intervalo $j_r$ está en el conjunto $R$ de los intervalos disponibles en el momento en que el algoritmo ávido selecciona $i_r$. El algoritmo ávido selecciona el intervalo disponible con el menor tiempo de finalización; dado que el intervalo $j_r$ es uno de estos intervalos disponibles, tenemos $f(i_r) ≤ f(j_r)$. Con esto se completa el paso inductivo.  $\blacksquare$\\
 
@@ -2181,7 +2120,7 @@ Primero especificamos alguna notación que será útil para hablar sobre el algo
 \end{lstlisting}
 
 \subsubsection*{Analizando el algoritmo}
-Para razonar acerca de la optimalidad del algoritmo, primero observamos que el cronograma que produce no tiene `` espacios vacíos " -tiempos cuando la máquina no está funcionando pero todavía hay trabajos pendientes. El tiempo que transcurre durante un intervalo se denomina tiempo de inactividad: hay trabajo por hacer, pero por alguna razón la máquina está inactiva. La planificación producida por nuestro algoritmo no solo no tiene tiempo de inactividad; también es muy fácil ver que hay un horario óptimo con esta propiedad. No escribiremos una prueba para esto.\\
+Para razonar acerca de la optimalidad del algoritmo, primero observamos que el cronograma que produce no tiene `` espacios vacíos `` -tiempos cuando la máquina no está funcionando pero todavía hay trabajos pendientes. El tiempo que transcurre durante un intervalo se denomina tiempo de inactividad: hay trabajo por hacer, pero por alguna razón la máquina está inactiva. La planificación producida por nuestro algoritmo no solo no tiene tiempo de inactividad; también es muy fácil ver que hay un horario óptimo con esta propiedad. No escribiremos una prueba para esto.\\
 
 \textbf{(4.7)} Existe un horario óptimo sin tiempo de inactividad.\\
 
@@ -3554,7 +3493,7 @@ Para el resto de este capítulo, consideramos otros dos algoritmos de programaci
 
 \subsubsection*{El problema}
 
-Los diccionarios en la Web parecen ser cada vez más útiles: a menudo parece más fácil sacar un diccionario en línea marcado que obtener un diccionario físico de la estantería. Y muchos diccionarios en línea ofrecen funciones que no puede obtener de una impresa: si está buscando una definición y escriba una palabra que no contenga, digamos, ocurrencia, volverá y preguntará: significa ocurrencia? "¿Cómo hace esto? ¿Realmente sabía lo que tenía en mente?\\
+Los diccionarios en la Web parecen ser cada vez más útiles: a menudo parece más fácil sacar un diccionario en línea marcado que obtener un diccionario físico de la estantería. Y muchos diccionarios en línea ofrecen funciones que no puede obtener de una impresa: si está buscando una definición y escriba una palabra que no contenga, digamos, ocurrencia, volverá y preguntará: significa ocurrencia? ``¿Cómo hace esto? ¿Realmente sabía lo que tenía en mente?\\
 
 Transmitamos la segunda pregunta a un libro diferente y pensemos un poco en la primera. Para decidir lo que probablemente quiso decir, sería natural buscar en el diccionario la palabra más ``similar'' a la que escribió. Para hacer esto, debemos responder la pregunta: ¿Cómo debemos definir la similitud entre dos palabras o cadenas? ?\\
 
@@ -4144,18 +4083,18 @@ Cuando establecimos las definiciones fundamentales, optamos por el tiempo polin�
 
 Cuando se empezó a investigar seriamente la complejidad computacional, se hicieron algunos progresos iniciales para demostrar que algunos problemas extremadamente difíciles no podían resolverse con algoritmos eficientes. Pero para muchos de los principales problemas computacionales discretos (que se plantean en la optimización, la inteligencia artificial, la combinatoria, la lógica, etc.), la cuestión era demasiado difícil de resolver y ha permanecido abierta desde entonces: No conocemos algoritmos polinómicos para estos problemas y no podemos demostrar que no exista ningún algoritmo polinómico.
 
-Frente a esta ambigüedad formal, que se va haciendo más dura a medida que pasan los años, las personas que trabajan en el ámbito del estudio de la complejidad han logrado avances significativos. Se ha caracterizado una gran clase de problemas en esta "zona gris", y se ha demostrado que son equivalentes en el siguiente sentido: un algoritmo en tiempo polinómico para cualquiera de ellos implicaría la existencia de un algoritmo en tiempo polinómico para todos ellos. Estos son los problemas NP-completos, un nombre que tendrá más sentido cuando avancemos un poco más. Hay literalmente miles de problemas NP-completos, que surgen en numerosas áreas, y la clase parece contener una gran fracción de los problemas fundamentales cuya complejidad no podemos resolver. Así que la formulación de NP-completo, y la prueba de que todos estos problemas son equivalentes, es algo poderoso: dice que todas estas cuestiones abiertas son en realidad una única cuestión abierta, un único tipo de complejidad que aún no comprendemos del todo.
+Frente a esta ambigüedad formal, que se va haciendo más dura a medida que pasan los años, las personas que trabajan en el ámbito del estudio de la complejidad han logrado avances significativos. Se ha caracterizado una gran clase de problemas en esta ``zona gris", y se ha demostrado que son equivalentes en el siguiente sentido: un algoritmo en tiempo polinómico para cualquiera de ellos implicaría la existencia de un algoritmo en tiempo polinómico para todos ellos. Estos son los problemas NP-completos, un nombre que tendrá más sentido cuando avancemos un poco más. Hay literalmente miles de problemas NP-completos, que surgen en numerosas áreas, y la clase parece contener una gran fracción de los problemas fundamentales cuya complejidad no podemos resolver. Así que la formulación de NP-completo, y la prueba de que todos estos problemas son equivalentes, es algo poderoso: dice que todas estas cuestiones abiertas son en realidad una única cuestión abierta, un único tipo de complejidad que aún no comprendemos del todo.
 
-Desde un punto de vista pragmático, NP-completo significa esencialmente "computacionalmente difícil a todos los efectos prácticos, aunque no podamos demostrarlo". Descubrir que un problema es NP-completo proporciona una razón de peso para dejar de buscar un algoritmo eficiente: da igual que se busque un algoritmo eficiente para cualquiera de los famosos problemas computacionales que ya se sabe que son NP-completos, para los que mucha gente ha intentado encontrar algoritmos eficientes y ha fracasado.
+Desde un punto de vista pragmático, NP-completo significa esencialmente ``computacionalmente difícil a todos los efectos prácticos, aunque no podamos demostrarlo". Descubrir que un problema es NP-completo proporciona una razón de peso para dejar de buscar un algoritmo eficiente: da igual que se busque un algoritmo eficiente para cualquiera de los famosos problemas computacionales que ya se sabe que son NP-completos, para los que mucha gente ha intentado encontrar algoritmos eficientes y ha fracasado.
 
 \section{Polynomial-Time Reductions}
-Our plan is to explore the space of computationally hard problems, eventually arriving at a mathematical characterization of a large class of them. Our basic technique in this exploration is to compare the relative difficulty of different problems; we'd like to formally express statements like, "Problem $X$ is at least as hard as problem Y." We will formalize this through the notion of reduction: we will show that a particular problem $X$ is at least as hard as some other problem $Y$ by arguing that, if we had a "black box" capable of solving $X$, then we could also solve $Y$. (In other words, $X$ is powerful enough to let us solve $Y$.)
+Our plan is to explore the space of computationally hard problems, eventually arriving at a mathematical characterization of a large class of them. Our basic technique in this exploration is to compare the relative difficulty of different problems; we'd like to formally express statements like, ``Problem $X$ is at least as hard as problem Y." We will formalize this through the notion of reduction: we will show that a particular problem $X$ is at least as hard as some other problem $Y$ by arguing that, if we had a ``black box" capable of solving $X$, then we could also solve $Y$. (In other words, $X$ is powerful enough to let us solve $Y$.)
 
 To make this precise, we add the assumption that $X$ can be solved in polynomial time directly to our model of computation. Suppose we had a black box that could solve instances of a problem $X$; if we write down the input for an instance of $X$, then in a single step, the black box will return the correct answer. We can now ask the following question:
 
 (*) Can arbitrary instances of problem $Y$ be solved using a polynomial number of standard computational steps, plus a polynomial number of calls to a black box that solves problem $X$ ?
 
-If the answer to this question is yes, then we write $Y \leq_{P} X$; we read this as " $Y$ is polynomial-time reducible to $X$," or " $X$ is at least as hard as $Y$ (with respect to polynomial time)." Note that in this definition, we still pay for the time it takes to write down the input to the black box solving $X$, and to read the answer that the black box provides. This formulation of reducibility is very natural. When we ask about reductions to a problem $X$, it is as though we've supplemented our computational model with a piece of specialized hardware that solves instances of $X$ in a single step. We can now explore the question: How much extra power does this piece of hardware give us?
+If the answer to this question is yes, then we write $Y \leq_{P} X$; we read this as `` $Y$ is polynomial-time reducible to $X$," or `` $X$ is at least as hard as $Y$ (with respect to polynomial time)." Note that in this definition, we still pay for the time it takes to write down the input to the black box solving $X$, and to read the answer that the black box provides. This formulation of reducibility is very natural. When we ask about reductions to a problem $X$, it is as though we've supplemented our computational model with a piece of specialized hardware that solves instances of $X$ in a single step. We can now explore the question: How much extra power does this piece of hardware give us?
 
 An important consequence of our definition of $\leq_{P}$ is the following. Suppose $Y \leq_{P} X$ and there actually exists a polynomial-time algorithm to solve $X$. Then our specialized black box for $X$ is actually not so valuable; we can replace it with a polynomial-time algorithm for $X$. Consider what happens to our algorithm for problem $Y$ that involved a polynomial number of steps plus a polynomial number of calls to the black box. It now becomes an algorithm that involves a polynomial number of steps, plus a polynomial number of calls to a subroutine that runs in polynomial time; in other words, it has become a polynomial-time algorithm. We have therefore proved the following fact.
 
@@ -4171,7 +4110,7 @@ Statement (8.2) is transparently equivalent to (8.1), but it emphasizes our over
 
 \begin{figure}
     \centering
-\includegraphics[width=\textwidth]{Imagenes-Seccion8/2023_01_31_032b090513e1f42dd22ag-04.jpg}    \caption{A graph whose largest independent set has size 4 , and whose smallest vertex cover has size 3. that $Y \leq{ }_{P} X$, then the hardness has "spread" to $X$; $X$ must be hard or else it could be used to solve $Y$.}
+\includegraphics[width=\textwidth]{Imagenes-Seccion8/2023_01_31_032b090513e1f42dd22ag-04.jpg}    \caption{A graph whose largest independent set has size 4 , and whose smallest vertex cover has size 3. that $Y \leq{ }_{P} X$, then the hardness has ``spread" to $X$; $X$ must be hard or else it could be used to solve $Y$.}
     \label{fig:8_1}
 \end{figure}
 
@@ -4188,9 +4127,9 @@ In Chapter 1 , we posed the problem of finding the largest independent set in a 
 
 Given a graph $G$ and a number $k$, does $G$ contain an independent set of size at least $k$ ?
 
-In fact, from the point of view of polynomial-time solvability, there is not a significant difference between the optimization version of the problem (find the maximum size of an independent set) and the decision version (decide, yes or no, whether $G$ has an independent set of size at least a given $k$ ). Given a method to solve the optimization version, we automatically solve the decision version (for any $k$ ) as well. But there is also a slightly less obvious converse to this: If we can solve the decision version of Independent Set for every $k$, then we can also find a maximum independent set. For given a graph $G$ on $n$ nodes, we simply solve the decision version of Independent Set for each $k$; the largest $k$ for which the answer is "yes" is the size of the largest independent set in $G$. (And using binary search, we need only solve the decision version for $O(\log n)$ different values of $k$.) This simple equivalence between decision and optimization will also hold in the problems we discuss below.
+In fact, from the point of view of polynomial-time solvability, there is not a significant difference between the optimization version of the problem (find the maximum size of an independent set) and the decision version (decide, yes or no, whether $G$ has an independent set of size at least a given $k$ ). Given a method to solve the optimization version, we automatically solve the decision version (for any $k$ ) as well. But there is also a slightly less obvious converse to this: If we can solve the decision version of Independent Set for every $k$, then we can also find a maximum independent set. For given a graph $G$ on $n$ nodes, we simply solve the decision version of Independent Set for each $k$; the largest $k$ for which the answer is ``yes" is the size of the largest independent set in $G$. (And using binary search, we need only solve the decision version for $O(\log n)$ different values of $k$.) This simple equivalence between decision and optimization will also hold in the problems we discuss below.
 
-Now, to illustrate our basic strategy for relating hard problems to one another, we consider another fundamental graph problem for which no efficient algorithm is known: Vertex Cover. Given a graph $G=(V, E)$, we say that a set of nodes $S \subseteq V$ is a vertex cover if every edge $e \in E$ has at least one end in $S$. Note the following fact about this use of terminology: In a vertex cover, the vertices do the "covering," and the edges are the objects being "covered." Now, it is easy to find large vertex covers in a graph (for example, the full vertex set is one); the hard part is to find small ones. We formulate the Vertex Cover Problem as follows.
+Now, to illustrate our basic strategy for relating hard problems to one another, we consider another fundamental graph problem for which no efficient algorithm is known: Vertex Cover. Given a graph $G=(V, E)$, we say that a set of nodes $S \subseteq V$ is a vertex cover if every edge $e \in E$ has at least one end in $S$. Note the following fact about this use of terminology: In a vertex cover, the vertices do the ``covering," and the edges are the objects being ``covered." Now, it is easy to find large vertex covers in a graph (for example, the full vertex set is one); the hard part is to find small ones. We formulate the Vertex Cover Problem as follows.
 
 Given a graph $G$ and a number $k$, does $G$ contain a vertex cover of size at most $k$?
 
@@ -4217,7 +4156,7 @@ To sum up, this type of analysis illustrates our plan in general: although we do
 We now pursue this strategy for a number of other problems.
 
 \subsection{Reducing to a More General Case: Vertex Cover to Set Cover}
-Independent Set and Vertex Cover represent two different genres of problems. Independent Set can be viewed as a packing problem: The goal is to "pack in" as many vertices as possible, subject to conflicts (the edges) that try to prevent one from doing this. Vertex Cover, on the other hand, can be viewed as a covering problem: The goal is to parsimoniously "cover" all the edges in the graph using as few vertices as possible.
+Independent Set and Vertex Cover represent two different genres of problems. Independent Set can be viewed as a packing problem: The goal is to ``pack in" as many vertices as possible, subject to conflicts (the edges) that try to prevent one from doing this. Vertex Cover, on the other hand, can be viewed as a covering problem: The goal is to parsimoniously ``cover" all the edges in the graph using as few vertices as possible.
 
 Vertex Cover is a covering problem phrased specifically in the language of graphs; there is a more general covering problem, Set Cover, in which you seek to cover an arbitrary set of objects using a collection of smaller sets. We can phrase Set Cover as follows.
 
@@ -4257,7 +4196,7 @@ Just as Set Cover is a natural generalization of Vertex Cover, there is a natura
 
 Given a set $U$ of $n$ elements, a collection $S_{1}, \ldots, S_{m}$ of subsets of $U$, and $a$ number $k$, does there exist a collection of at least $k$ of these sets with the property that no two of them intersect?
 
-In other words, we wish to "pack" a large number of sets together, with the constraint that no two of them are overlapping.
+In other words, we wish to ``pack" a large number of sets together, with the constraint that no two of them are overlapping.
 
 As an example of where this type of issue might arise, imagine that we have a set $U$ of $n$ non-sharable resources, and a set of $m$ software processes. The $i^{\text {th }}$ process requires the set $S_{i} \subseteq U$ of resources in order to run. Then the Set Packing Problem seeks a large collection of these processes that can be run simultaneously, with the property that none of their resource requirements overlap (i.e., represent a conflict).
 
@@ -4265,11 +4204,11 @@ There is a natural analogue to (8.6), and its proof is almost the same as well; 
 
 (8.7) Independent Set $\leq_{P}$ Set Packing.
 
-\section{Reductions via "Gadgets": The Satisfiability Problem}
+\section{Reductions via ``Gadgets": The Satisfiability Problem}
 We now introduce a somewhat more abstract set of problems, which are formulated in Boolean notation. As such, they model a wide range of problems in which we need to set decision variables so as to satisfy a given set of constraints; such formalisms are common, for example, in artificial intelligence. After introducing these problems, we will relate them via reduction to the graph- and set-based problems that we have been considering thus far.
 
 \subsection{The SAT and 3-SAT Problems}
-Suppose we are given a set $X$ of $n$ Boolean variables $x_{1}, \ldots, x_{n}$; each can take the value 0 or 1 (equivalently, "false" or "true"). By a term over $X$, we mean one of the variables $x_{i}$ or its negation $\overline{x_{i}}$. Finally, a clause is simply a disjunction of distinct terms
+Suppose we are given a set $X$ of $n$ Boolean variables $x_{1}, \ldots, x_{n}$; each can take the value 0 or 1 (equivalently, ``false" or ``true"). By a term over $X$, we mean one of the variables $x_{i}$ or its negation $\overline{x_{i}}$. Finally, a clause is simply a disjunction of distinct terms
 
 $$
 t_{1} \vee t_{2} \vee \cdots \vee t_{\ell} .
@@ -4301,12 +4240,12 @@ There is a special case of SAT that will turn out to be equivalently difficult a
 
 Given a set of clauses $C_{1}, \ldots, C_{k}$, each of length 3, over a set of variables $X=\left\{x_{1}, \ldots, x_{n}\right\}$, does there exist a satisfying truth assignment?
 
-Satisfiability and 3-Satisfiability are really fundamental combinatorial search problems; they contain the basic ingredients of a hard computational problem in very "bare-bones" fashion. We have to make $n$ independent decisions (the assignments for each $x_{i}$ ) so as to satisfy a set of constraints. There are several ways to satisfy each constraint in isolation, but we have to arrange our decisions so that all constraints are satisfied simultaneously.
+Satisfiability and 3-Satisfiability are really fundamental combinatorial search problems; they contain the basic ingredients of a hard computational problem in very ``bare-bones" fashion. We have to make $n$ independent decisions (the assignments for each $x_{i}$ ) so as to satisfy a set of constraints. There are several ways to satisfy each constraint in isolation, but we have to arrange our decisions so that all constraints are satisfied simultaneously.
 
 \subsection{Reducing 3-SAT to Independent Set}
 We now relate the type of computational hardness embodied in SAT and 3SAT to the superficially different sort of hardness represented by the search for independent sets and vertex covers in graphs. Specifically, we will show that 3-SAT $\leq_{P}$ Independent Set. The difficulty in proving a thing like this is clear; 3-SAT is about setting Boolean variables in the presence of constraints, while Independent Set is about selecting vertices in a graph. To solve an instance of 3-SAT using a black box for Independent Set, we need a way to encode all these Boolean constraints in the nodes and edges of a graph, so that satisfiability corresponds to the existence of a large independent set.
 
-Doing this illustrates a general principle for designing complex reductions $Y \leq_{P} X$ : building "gadgets" out of components in problem $X$ to represent what is going on in problem $Y$.
+Doing this illustrates a general principle for designing complex reductions $Y \leq_{P} X$ : building ``gadgets" out of components in problem $X$ to represent what is going on in problem $Y$.
 
 (8.8) $3-$ SAT $\leq_{P}$ Independent Set.
 
@@ -4324,7 +4263,7 @@ Figure 8.3 The reduction from 3-SAT to Independent Set.
 \begin{itemize}
   \item One way to picture the 3-SAT instance was suggested earlier: You have to make an independent $0 / 1$ decision for each of the $n$ variables, and you succeed if you manage to achieve one of three ways of satisfying each clause.
 
-  \item A different way to picture the same 3-SAT instance is as follows: You have to choose one term from each clause, and then find a truth assignment that causes all these terms to evaluate to 1 , thereby satisfying all clauses. So you succeed if you can select a term from each clause in such a way that no two selected terms "conflict"; we say that two terms conflict if one is equal to a variable $x_{i}$ and the other is equal to its negation $\overline{x_{i}}$. If we avoid conflicting terms, we can find a truth assignment that makes the selected terms from each clause evaluate to 1 .
+  \item A different way to picture the same 3-SAT instance is as follows: You have to choose one term from each clause, and then find a truth assignment that causes all these terms to evaluate to 1 , thereby satisfying all clauses. So you succeed if you can select a term from each clause in such a way that no two selected terms ``conflict"; we say that two terms conflict if one is equal to a variable $x_{i}$ and the other is equal to its negation $\overline{x_{i}}$. If we avoid conflicting terms, we can find a truth assignment that makes the selected terms from each clause evaluate to 1 .
 
 \end{itemize}
 
@@ -4352,15 +4291,15 @@ Reducibility among problems was the first main ingredient in our study of comput
 
 Recall that in Chapter 1, when we first encountered the Independent Set Problem, we asked: Can we say anything good about it, from a computational point of view? And, indeed, there was something: If a graph does contain an independent set of size at least $k$, then we could give you an easy proof of this fact by exhibiting such an independent set. Similarly, if a 3-SAT instance is satisfiable, we can prove this to you by revealing the satisfying assignment. It may be an enormously difficult task to actually find such an assignment; but if we've done the hard work of finding one, it's easy for you to plug it into the clauses and check that they are all satisfied.
 
-The issue here is the contrast between finding a solution and checking a proposed solution. For Independent Set or 3-SAT, we do not know a polynomial-time algorithm to find solutions; but checking a proposed solution to these problems can be easily done in polynomial time. To see that this is not an entirely trivial issue, consider the problem we'd face if we had to prove that a 3-SAT instance was not satisfiable. What "evidence" could we show that would convince you, in polynomial time, that the instance was unsatisfiable?
+The issue here is the contrast between finding a solution and checking a proposed solution. For Independent Set or 3-SAT, we do not know a polynomial-time algorithm to find solutions; but checking a proposed solution to these problems can be easily done in polynomial time. To see that this is not an entirely trivial issue, consider the problem we'd face if we had to prove that a 3-SAT instance was not satisfiable. What ``evidence" could we show that would convince you, in polynomial time, that the instance was unsatisfiable?
 
 \subsection{Problems and Algorithms}
-This will be the crux of our characterization; we now proceed to formalize it. The input to a computational problem will be encoded as a finite binary string $s$. We denote the length of a string $s$ by $|s|$. We will identify a decision problem $X$ with the set of strings on which the answer is "yes." An algorithm $A$ for a decision problem receives an input string $s$ and returns the value "yes" or "no"-we will denote this returned value by $A(s)$. We say that $A$ solves the problem $X$ if for all strings $s$, we have $A(s)=$ yes if and only if $s \in X$.
+This will be the crux of our characterization; we now proceed to formalize it. The input to a computational problem will be encoded as a finite binary string $s$. We denote the length of a string $s$ by $|s|$. We will identify a decision problem $X$ with the set of strings on which the answer is ``yes." An algorithm $A$ for a decision problem receives an input string $s$ and returns the value ``yes" or ``no"-we will denote this returned value by $A(s)$. We say that $A$ solves the problem $X$ if for all strings $s$, we have $A(s)=$ yes if and only if $s \in X$.
 
 As always, we say that $A$ has a polynomial running time if there is a polynomial function $p(\cdot)$ so that for every input string $s$, the algorithm $A$ terminates on $s$ in at most $O(p(|s|))$ steps. Thus far in the book, we have been concerned with problems solvable in polynomial time. In the notation above, we can express this as the set $\mathcal{P}$ of all problems $X$ for which there exists an algorithm $A$ with a polynomial running time that solves $X$.
 
 \subsection{Efficient Certification}
-Now, how should we formalize the idea that a solution to a problem can be checked efficiently, independently of whether it can be solved efficiently? A "checking algorithm" for a problem $X$ has a different structure from an algorithm that actually seeks to solve the problem; in order to "check" a solution, we need the input string $s$, as well as a separate "certificate" string $t$ that contains the evidence that $s$ is a "yes" instance of $X$.
+Now, how should we formalize the idea that a solution to a problem can be checked efficiently, independently of whether it can be solved efficiently? A ``checking algorithm" for a problem $X$ has a different structure from an algorithm that actually seeks to solve the problem; in order to ``check" a solution, we need the input string $s$, as well as a separate ``certificate" string $t$ that contains the evidence that $s$ is a ``yes" instance of $X$.
 
 Thus we say that $B$ is an efficient certifier for a problem $X$ if the following properties hold.
 
@@ -4371,20 +4310,20 @@ Thus we say that $B$ is an efficient certifier for a problem $X$ if the followin
 
 \end{itemize}
 
-It takes some time to really think through what this definition is saying. One should view an efficient certifier as approaching a problem $X$ from a "managerial" point of view. It will not actually try to decide whether an input $s$ belongs to $X$ on its own. Rather, it is willing to efficiently evaluate proposed "proofs" $t$ that $s$ belongs to $X$-provided they are not too long-and it is a correct algorithm in the weak sense that $s$ belongs to $X$ if and only if there exists a proof that will convince it.
+It takes some time to really think through what this definition is saying. One should view an efficient certifier as approaching a problem $X$ from a ``managerial" point of view. It will not actually try to decide whether an input $s$ belongs to $X$ on its own. Rather, it is willing to efficiently evaluate proposed ``proofs" $t$ that $s$ belongs to $X$-provided they are not too long-and it is a correct algorithm in the weak sense that $s$ belongs to $X$ if and only if there exists a proof that will convince it.
 
-An efficient certifier $B$ can be used as the core component of a "bruteforce" algorithm for a problem $X$ : On an input $s$, try all strings $t$ of length $\leq p(|s|)$, and see if $B(s, t)=$ yes for any of these strings. But the existence of $B$ does not provide us with any clear way to design an efficient algorithm that actually solves $X$; after all, it is still up to us to find a string $t$ that will cause $B(s, t)$ to say "yes," and there are exponentially many possibilities for $t$.
+An efficient certifier $B$ can be used as the core component of a ``bruteforce" algorithm for a problem $X$ : On an input $s$, try all strings $t$ of length $\leq p(|s|)$, and see if $B(s, t)=$ yes for any of these strings. But the existence of $B$ does not provide us with any clear way to design an efficient algorithm that actually solves $X$; after all, it is still up to us to find a string $t$ that will cause $B(s, t)$ to say ``yes," and there are exponentially many possibilities for $t$.
 
 \subsection{NP: A Class of Problems}
 We define $\mathcal{N P}$ to be the set of all problems for which there exists an efficient certifier. ${ }^{1}$ Here is one thing we can observe immediately.
 
 (8.10) $\mathcal{P} \subseteq \mathcal{N} \mathcal{P}$
 
-${ }^{1}$ The act of searching for a string $t$ that will cause an efficient certifier to accept the input $s$ is often viewed as a nondeterministic search over the space of possible proofs $t$; for this reason, $\mathcal{N} \mathcal{P}$ was named as an acronym for "nondeterministic polynomial time." Proof. Consider a problem $X \in \mathcal{P}$; this means that there is a polynomial-time algorithm $A$ that solves $X$. To show that $X \in \mathcal{N} \mathcal{P}$, we must show that there is an efficient certifier $B$ for $X$.
+${ }^{1}$ The act of searching for a string $t$ that will cause an efficient certifier to accept the input $s$ is often viewed as a nondeterministic search over the space of possible proofs $t$; for this reason, $\mathcal{N} \mathcal{P}$ was named as an acronym for ``nondeterministic polynomial time." Proof. Consider a problem $X \in \mathcal{P}$; this means that there is a polynomial-time algorithm $A$ that solves $X$. To show that $X \in \mathcal{N} \mathcal{P}$, we must show that there is an efficient certifier $B$ for $X$.
 
-This is very easy; we design $B$ as follows. When presented with the input pair $(s, t)$, the certifier $B$ simply returns the value $A(s)$. (Think of $B$ as a very "hands-on" manager that ignores the proposed proof $t$ and simply solves the problem on its own.) Why is $B$ an efficient certifier for $X$ ? Clearly it has polynomial running time, since $A$ does. If a string $s \in X$, then for every $t$ of length at most $p(|s|)$, we have $B(s, t)=$ yes. On the other hand, if $s \notin X$, then for every $t$ of length at most $p(|s|)$, we have $B(s, t)=$ no.
+This is very easy; we design $B$ as follows. When presented with the input pair $(s, t)$, the certifier $B$ simply returns the value $A(s)$. (Think of $B$ as a very ``hands-on" manager that ignores the proposed proof $t$ and simply solves the problem on its own.) Why is $B$ an efficient certifier for $X$ ? Clearly it has polynomial running time, since $A$ does. If a string $s \in X$, then for every $t$ of length at most $p(|s|)$, we have $B(s, t)=$ yes. On the other hand, if $s \notin X$, then for every $t$ of length at most $p(|s|)$, we have $B(s, t)=$ no.
 
-We can easily check that the problems introduced in the first two sections belong to $\mathcal{N P}$ : it is a matter of determining how an efficient certifier for each of them will make use of a "certificate" string $t$. For example:
+We can easily check that the problems introduced in the first two sections belong to $\mathcal{N P}$ : it is a matter of determining how an efficient certifier for each of them will make use of a ``certificate" string $t$. For example:
 
 \begin{itemize}
   \item For the 3-Satisfiability Problem, the certificate $t$ is an assignment of truth values to the variables; the certifier $B$ evaluates the given set of clauses with respect to this assignment.
@@ -4404,7 +4343,7 @@ The question of whether $\mathcal{P}=\mathcal{N P}$ is fundamental in the area o
 \section{NP-Complete Problems}
 In the absence of progress on the $\mathcal{P}=\mathcal{N P}$ question, people have turned to a related but more approachable question: What are the hardest problems in $\mathcal{N P}$ ? Polynomial-time reducibility gives us a way of addressing this question and gaining insight into the structure of $\mathcal{N} \mathcal{P}$.
 
-Arguably the most natural way to define a "hardest" problem $X$ is via the following two properties: (i) $X \in \mathcal{N \mathcal { P }}$; and (ii) for all $Y \in \mathcal{N \mathcal { P }}, Y \leq_{P} X$. In other words, we require that every problem in $\mathcal{N} \mathcal{P}$ can be reduced to $X$. We will call such an $X$ an NP-complete problem.
+Arguably the most natural way to define a ``hardest" problem $X$ is via the following two properties: (i) $X \in \mathcal{N \mathcal { P }}$; and (ii) for all $Y \in \mathcal{N \mathcal { P }}, Y \leq_{P} X$. In other words, we require that every problem in $\mathcal{N} \mathcal{P}$ can be reduced to $X$. We will call such an $X$ an NP-complete problem.
 
 The following fact helps to further reinforce our use of the term hardest.
 
@@ -4428,7 +4367,7 @@ To specify this problem, we need to make precise what we mean by a circuit. Cons
 
 \end{itemize}
 
-A circuit computes a function of its inputs in the following natural way. We imagine the edges as "wires" that carry the $0 / 1$ value at the node they emanate from. Each node $v$ other than the sources will take the values on its incoming edge(s) and apply the Boolean operator that labels it. The result of this $\wedge, \vee$, or $\neg$ operation will be passed along the edge(s) leaving $v$. The overall value computed by the circuit will be the value computed at the output node.
+A circuit computes a function of its inputs in the following natural way. We imagine the edges as ``wires" that carry the $0 / 1$ value at the node they emanate from. Each node $v$ other than the sources will take the values on its incoming edge(s) and apply the Boolean operator that labels it. The result of this $\wedge, \vee$, or $\neg$ operation will be passed along the edge(s) leaving $v$. The overall value computed by the circuit will be the value computed at the output node.
 
 For example, consider the circuit in Figure 8.4. The leftmost two sources are preassigned the values 1 and 0 , and the next three sources constitute the
 
@@ -4541,9 +4480,9 @@ We noticed earlier that most of our reductions $Y \leq_{P} X$ consist of transfo
 
 \end{enumerate}
 
-(a) If $s_{Y}$ is a "yes" instance of $Y$, then $s_{X}$ is a "yes" instance of $X$.
+(a) If $s_{Y}$ is a ``yes" instance of $Y$, then $s_{X}$ is a ``yes" instance of $X$.
 
-(b) If $s_{X}$ is a "yes" instance of $X$, then $s_{Y}$ is a "yes" instance of $Y$.
+(b) If $s_{X}$ is a ``yes" instance of $X$, then $s_{Y}$ is a ``yes" instance of $Y$.
 
 In other words, this establishes that $s_{Y}$ and $s_{X}$ have the same answer.
 

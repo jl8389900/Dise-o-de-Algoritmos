@@ -1017,7 +1017,7 @@ Cálculo del máximo El cálculo del máximo de $n$ números, por ejemplo, se pu
 
 De esta manera, hacemos un trabajo constante por elemento, para un tiempo de ejecución total de $O(n)$.
 
-Por ejemplo, un algoritmo que se ejecuta en un conmutador de alta velocidad en Internet puede ver un flujo de paquetes volando por delante de él, y puede tratar de calcular lo que quiera a medida que este flujo pasa, pero sólo puede realizar una cantidad constante de trabajo computacional en cada paquete, y no puede guardar el flujo con el fin de hacer exploraciones posteriores a través de él. Para estudiar este modelo de cálculo se han desarrollado dos subáreas diferentes de algoritmos: los algoritmos en línea y los algoritmos de flujo de datos.
+Por ejemplo, un algoritmo que se ejecuta en un conmutador de alta velocidad en Internet puede ver un flujo de paquetes volando a través de él, y puede tratar de calcular lo que quiera a medida que este flujo pasa, pero sólo puede realizar una cantidad constante de trabajo computacional en cada paquete, y no puede guardar el flujo con el fin de hacer exploraciones posteriores a través de él. Para estudiar este modelo de cálculo se han desarrollado dos subáreas diferentes de algoritmos: los algoritmos en línea y los algoritmos de flujo de datos.
 
 Fusión de dos listas ordenadas A menudo, un algoritmo tiene un tiempo de ejecución de $O(n)$, pero la razón es más compleja. Ahora describiremos un algoritmo para combinar dos listas ordenadas que estira un poco el estilo de diseño de una sola pasada, pero que sigue teniendo un tiempo de ejecución lineal.
 
@@ -1075,18 +1075,13 @@ Conjuntos más elaborados de bucles anidados a menudo conducen a algoritmos que 
 ¿Cuál es el tiempo de ejecución necesario para resolver este problema? Supongamos que cada conjunto $S_{i}$ está representado de tal forma que los elementos de $S_{i}$ se pueden enumerar en tiempo constante por elemento, y también podemos comprobar en tiempo constante si un número dado $p$ pertenece a $S_{i}$. La siguiente es una forma directa de abordar el problema.
 
 \begin{center}
-\includegraphics[width=\textwidth]{./Imagenes-Seccion2/2023_08_07_379b6f7f3185549667e3g-06}
+\includegraphics[scale=0.35]{./Imagenes-Seccion2/2023_08_07_379b6f7f3185549667e3g-06}
 \end{center}
 
 Este es un algoritmo concreto, pero para razonar sobre su tiempo de ejecución ayuda a abrirlo (al menos conceptualmente) en tres bucles anidados.
 
-\begin{center}
-\includegraphics[width=\textwidth]{./Imagenes-Seccion2/2023_08_07_379b6f7f3185549667e3g-06(2)}
-\end{center}
-
-\begin{center}
-\includegraphics[width=\textwidth]{./Imagenes-Seccion2/2023_08_07_379b6f7f3185549667e3g-07}
-\end{center}
+\includegraphics[scale=0.35]{./Imagenes-Seccion2/2023_08_07_379b6f7f3185549667e3g-06(2)}\\
+\includegraphics[scale=0.35]{./Imagenes-Seccion2/2023_08_07_379b6f7f3185549667e3g-07}
 
 Cada uno de los conjuntos tiene un tamaño máximo $O(n)$, por lo que el bucle más interno tarda $O(n)$. El bucle sobre los conjuntos $S_{j}$ implica $O(n)$ iteraciones alrededor de este bucle más interno; y el bucle sobre los conjuntos $S_{i}$ implica $O(n)$ iteraciones alrededor de este. Multiplicando estos tres factores de $n$ juntos, obtenemos el tiempo de ejecución de $O\left(n^{3}\right)$.
 
@@ -1098,7 +1093,7 @@ De la misma manera que obtuvimos un tiempo de ejecución de $O\left(n^{2}\right)
 Consideremos, por ejemplo, el problema de encontrar conjuntos independientes en un grafo, que discutimos en el Capítulo 1. Recordemos que un conjunto de nodos es independiente si no hay dos unidos por una arista. Supongamos, en particular, que para una constante fija $k$, nos gustaría saber si un grafo de entrada $G$ de $n$ nodos tiene un conjunto independiente de tamaño $k$. El algoritmo natural de fuerza bruta para este problema enumeraría todos los subconjuntos de $k$ nodos, y para cada subconjunto $S$ comprobaría si hay una arista que una dos miembros cualesquiera de $S$. Es decir,
 
 \begin{center}
-\includegraphics[width=\textwidth]{./Imagenes-Seccion2/2023_08_07_379b6f7f3185549667e3g-07(1)}
+\includegraphics[scale=0.35]{./Imagenes-Seccion2/2023_08_07_379b6f7f3185549667e3g-07(1)}
 \end{center}
 
 Para entender el tiempo de ejecución de este algoritmo, tenemos que considerar dos cantidades. En primer lugar, el número total de $k$-elemento subconjuntos en un $n$-elemento conjunto es
@@ -1148,51 +1143,59 @@ Dado esto, ¿cuánto tiempo tardará en reducirse el tamaño de la región activ
 
 Así que el tiempo de ejecución de la búsqueda binaria es $O(\log n)$, debido a esta reducción sucesiva de la región de búsqueda. En general, $O(\log n)$ surge como un límite de tiempo cada vez que estamos tratando con un algoritmo que hace una cantidad constante de trabajo con el fin de tirar una fracción constante de la entrada. El hecho crucial es que $O(\log n)$ tales iteraciones son suficientes para reducir la entrada a un tamaño constante, momento en el que el problema generalmente se puede resolver directamente.
 
-
-
-\todo[inline]{revisado hasta acá}
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%55
 
 \section{Una Estructura de Datos más Compleja: Colas de Prioridad}
 
 [SIN TRADUCIR, NO SE PRESENTA EN EL CURSO]
 
-\section{Ejercicios resueltos}
+\section*{Ejercicios Resueltos}
 
-\subsection*{Ejercicio 1} 
 
-Tome la siguiente lista de funciones y organícelas en orden ascendente según la tasa de crecimiento. Es decir, si la función $g(n)$ sigue inmediatamente a la función $f(n)$ en su lista, entonces debería ser el caso de que $f(n)$ sea $O(g(n))$.\\
+\subsection*{Ejercicio Resuelto 1}
+Toma la siguiente lista de funciones y ordénalas en orden ascendente de velocidad de crecimiento. Es decir, si la función $g(n)$ sigue inmediatamente a la función $f(n)$ en tu lista, entonces debería darse el caso de que $f(n)$ es $O(g(n))$.
 
-\begin{figure}[h] 
-  \centering
-    \includegraphics[width=0.2\textwidth]{Imagenes-Seccion2/form2_1.PNG}
-\end{figure}
+$$
+\begin{aligned}
+& f_{1}(n)=10^{n} \\
+& f_{2}(n)=n^{1 / 3} \\
+& f_{3}(n)=n^{n} \\
+& f_{4}(n)=log _{2} n \\
+& f_{5}(n)=2^{\sqrt{\log _{2} n}}
+\end{aligned}
+$$
 
-\textbf{Solución} Podemos tratar las funciones $f_1$,$ f_2$ y $f_4$ muy fácilmente, ya que pertenecen a las familias básicas de exponenciales, polinomios y logaritmos. En particular, por (2.8), tenemos $f_4 (n) = O (f_2 (n))$; y por (2.9), tenemos $f_2 (n) = O (f_1 (n))$.\\
+\subparagraph{Solución} Podemos tratar con las funciones $f_{1}, f_{2}$ y $f_{4}$ muy fácilmente, ya que pertenecen a las familias básicas de exponenciales, polinomios y logaritmos. En particular, por (2.8), tenemos $f_{4}(n)=O\left(f_{2}(n)\right)$; y por (2.9), tenemos $f_{2}(n)=O\left(f_{1}(n)\right)$. Ahora, la función $f_{3}$ no es tan difícil de tratar. Empieza siendo menor que $10^{n}$, pero una vez que $n \geq 10$, entonces claramente $10^{n} \leq n^{n}$. Esto es exactamente lo que necesitamos para la definición de la notación $O(\cdot)$: para todo $n \geq 10$, tenemos $10^{n} \leq c n^{n}$, donde en este caso $c=1$, y por tanto $10^{n}=O\left(n^{n}\right)$.
 
-Ahora, la función $f_3$ no es tan difícil de tratar. Comienza a partir de $10 ^ n$, pero una vez $n ≥ 10$, entonces claramente $10 ^ n ≤ n ^ n$. Esto es exactamente lo que necesitamos para la definición de la notación $O (·)$: para todo $n ≥ 10$, tenemos $10 ^ n ≤ cn ^ n$, donde en este caso $c = 1$, y entonces $10 ^ n = O (n ^ n)$.\\
+Por último, llegamos a la función $f_{5}$, que hay que reconocer que es un poco extraña. Una regla útil en estas situaciones es tratar de tomar logaritmos para ver si esto hace las cosas más claras. En este caso, $\log _{2} f_{5}(n)=\sqrt{\log _{2} n}=$ $\left(\log _{2} n\right)^{1 / 2}$. ¿Cómo son los logaritmos de las otras funciones? $\log f_{4}(n)=$ $\log _{2} \log _{2} n$, mientras que $\log f_{2}(n)=\frac{1}{3} \log _{2} n$. Todas ellas pueden verse como funciones de $\log _{2} n$, por lo que utilizando la notación $z=\log _{2} n$, podemos escribir
 
-Finalmente, llegamos a la función $f_5$, que es ciertamente algo extraño. Una regla práctica útil en tales situaciones es tratar de tomar logaritmos para ver si esto aclara las cosas. En este caso, $log_2 f_5 (n) = sqrt (log_2 n) = (log_2 n) ^ (1/2)$. ¿A qué se parecen los logaritmos de las otras funciones? $log f_4 (n) = log_2 log_2 n$, mientras que $log f_2 (n) = (1/3) log_2 n$. Todos estos pueden ser vistos como funciones de $log_2 n$, y entonces usando la notación $z = log2_n$, podemos escribir .
+$$
+\begin{aligned}
+& \log f_{2}(n)=\frac{1}{3} z \\
+& \log f_{4}(n)=log _{2} z \\
+& \log f_{5}(n)=z^{1 / 2}
+\end{aligned}
+$$
 
-\begin{figure}[h] 
-  \centering
-    \includegraphics[width=0.2\textwidth]{Imagenes-Seccion2/form2_2.PNG}
-\end{figure}
+Ahora es más fácil ver lo que está pasando. 
+En primer lugar, para $z \geq 16$, tenemos $\log _{2} z \leq z^{1/2}$. 
+Pero la condición $z \geq 16$ es la misma que $n \geq 2^{16}=65.536$; por lo tanto una vez $n \geq 2^{16}$ tenemos $\log f_{4}(n) \leq \log f_{5}(n)$, y así $f_{4}(n) \leq f_{5}(n)$. 
+Así, podemos escribir $f_{4}(n)=O\left(f_{5}(n)\right)$. Del mismo modo tenemos $z^{1 / 2} \leq \frac{1}{3} z$ una vez $z \geq 9$-en otras palabras, una vez que $n \geq 2^{9}=512$. 
+Para $n$ por encima de este límite tenemos $\log f_{5}(n) \leq \log f_{2}(n)$ y por lo tanto $f_{5}(n) \leq f_{2}(n)$, y así podemos escribir $f_{5}(n)=O\left(f_{2}(n)\right)$. 
+Esencialmente, hemos descubierto que $2^{\sqrt{\log _{2} n}}$ es una función cuya tasa de crecimiento se encuentra en algún lugar entre la de los logaritmos y la de los polinomios.
 
-Ahora es más fácil ver qué está pasando. Primero, para $z ≥ 16$, tenemos $log_2 z ≤  z$  $^1$ $^/$ $^2$. Pero la condición $z ≥ 16$ es igual que $n ≥ 216 = 65, 536$; por lo tanto, una vez $n ≥ 2 ^1$ $^6$ tenemos $log f_4 (n) ≤ log f_5 (n)$, y así $f_4 (n) ≤ f_5 (n)$. Por lo tanto, podemos escribir $f_4 (n) = O (f_5 (n))$. Similarmente, tenemos $z^1$ $^/$ $^ 2$ $≤ (1/3)z$ una vez $z ≥ 9$ -en otras palabras, una vez $n ≥ 29 = 512$. Para n arriba de este límite tenemos $log f_5 (n) ≤ log f_2 (n)$ y por lo tanto $f_5 (n) ≤ f_2 (n)$, y entonces podemos escribir $f_5 (n) = O (f_2 (n))$. Esencialmente, hemos descubierto que $2$ $\sqrt log_2 (n))$ es una función cuya tasa de crecimiento se encuentra en algún lugar entre la de los logaritmos y polinomios.\\
+Como hemos intercalado $f_{5}$ entre $f_{4}$ y $f_{2}$, con esto terminamos la tarea de ordenar las funciones.
 
-\subsection*{Ejercicio 2} 
+\subsection*{Ejercicio Resuelto 2}
+Sean $f$ y $g$ dos funciones que toman valores no negativos, y supongamos que $f=O(g)$. Demostrar que $g=\Omega(f)$.
 
-Sean $f$ y $g$ dos funciones que toman valores no negativos, y supongamos que $f=O(g)$. Muestre que $g=\Omega(f)$.\\\\
-\textbf{Solución} Este ejercicio es una manera de formalizar la intuición de que $O(.)$ y $\Omega(·)$ son en cierto sentido opuestos. De hecho, no es difícil de probar; es solo cuestión de deshacer las definiciones.\\
-Se nos da que, para algunas constantes $c$ y $n0$, tenemos $f(n)≤cg(n)$ para todo $n≥n0$. Dividiendo ambos lados por $c$, podemos concluir que $g(n)≥(1/c).f(n)$ para todo $n≥n0$. Pero esto es exactamente lo que se requiere para demostrar que $g=\Omega(f)$: hemos establecido que $g(n)$ es al menos un múltiplo constante de $f(n)$ (donde la constante es $1/c$), para todos los suficientemente grandes $n$ (al menos $n0$).\\
+\subparagraph{Solución} Este ejercicio intenta de formalizar la intuición de que $O(\cdot)$ y $\Omega(\cdot)$ son, en cierto sentido, opuestos. De hecho, no es difícil de demostrar; sólo es cuestión de ``desenrollar'' las definiciones.
 
+Se nos da que, para algunas constantes $c$ y $n_{0}$, tenemos $f(n) \leq c g(n)$ para todo $n \geq n_{0}$. Dividiendo ambos lados por $c$, podemos concluir que $g(n) \geq \frac{1}{c} f(n)$ para todo $n \geq n_{0}$. Pero esto es exactamente lo que se requiere para demostrar que $g=\Omega(f)$ : hemos establecido que $g(n)$ es al menos un múltiplo constante de $f(n)$ (donde la constante es $\frac{1}{c}$ ), para todo $n$ suficientemente grande (al menos $n_{0}$ ).
 
 \chapter{Grafos}
 \label{ch:grafos}
 
-\todo{empiezo a revisar acá de nuevo}
 
 En este libro nos centramos en los problemas de carácter discreto. Al igual que las matemáticas continuas se ocupan de ciertas estructuras básicas como los números reales, los vectores y las matrices, las matemáticas discretas han desarrollado estructuras combinatorias básicas que se encuentran en el centro de la materia. Una de las más fundamentales y expresivas es el grafo.
 
